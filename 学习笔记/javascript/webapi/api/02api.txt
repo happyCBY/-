@@ -1,0 +1,47 @@
+onmouseover   鼠标进入事件
+onmouseout   鼠标移除事件
+
+document.getElementsById("node_small").getElementsByTagName("a") [0];
+获取id名为node_small下的第一个a标签
+
+通过name属性值获取元素-----表单标签
+getElementsByName
+返回值为伪数组
+
+根据类样式的名字来获取元素
+getElementsByClassName-----------h5方法
+返回值为伪数组   iE8以下不支持
+
+获取元素的其他方式
+1.点击按钮弹出对话框
+根据选择器的方式获取元素--id选择器--标签--类
+document.querySelector(id);
+
+document.querySelectorAll(id);
+
+！！！！获取元素的方式总结
+1.根据id属性的值获取元素，返回来的是一个元素对象
+document.getElementById("id属性的值")
+
+2.根据标签名字获取元素，返回来的是一个伪数组，里面保存了多个DOM对象
+document.getElementsByTagName("标签的名字")
+
+================================================
+---------以下的几个，有的浏览器不支持--------------
+================================================
+
+3.根据name属性的值获取元素，返回来的是一个伪数组，里面保存了多个DOM对象
+document.getElementsByName("name属性的值")
+
+4.根据类样式的名字来获取元素，返回来的是一个伪数组，里面保存了多个DOM对象
+document.getElementsByClassName("类样式的名字")
+
+5.根据选择器获取元素，返回来的是一个元素对象
+document.querySelector("选择器的名字")
+
+6.根据选择器获取元素，返回来的是一个伪数组，里面保存了多个DOM对象
+document.querySelectorAll("选择器的名字")
+
+
+---
+获取焦点事件

@@ -1,0 +1,38 @@
+1.函数中this的指向，与函数声明无关，与函数调用有关
+2.如果函数是通过对象调用，那么函数内部this就是该对象(谁调用函数，this就是谁):否则this指向window
+3.构造函数中的this,指向每次创建的对象
+
+
+*普通函数中的this是谁?-----window
+案例:
+function f1() {
+console.log(this);
+}
+f1();
+
+* 对象.方法中的this是谁?----当前的实例对象
+this.sayHi=function () {
+    console.log(this);
+    };
+}
+
+* 定时器方法中的this是谁?----window
+setInterval(function () {
+  console.log(this);
+},1000);
+
+* 构造函数中的this是谁?-----实例对象
+function Person() {
+    console.log(this);
+}
+* 原型对象方法中的this是谁?---实例对象
+Person.prototype.eat=function () {
+      console.log(this);
+};
+严格模式:
+"use strict";
+function f1() {
+    console.log(this);
+}
+f1();  返回underfined
+window.f1(); 返回window

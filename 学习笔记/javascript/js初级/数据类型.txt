@@ -1,0 +1,165 @@
+﻿js是动态语言，变量的类型是可以改变的
+
+原始数据类型: Number String Boolean null Undefined Object
+基本类型(简单类型),值类型: Number String Boolean
+复杂类型(引用类型): object
+空类型: undefined null
+值类型的值在哪一块空间中存储？值类型之间传递时是什么？
+值类型的值在栈中存储
+值类型之间传递的是值
+
+引用类型的值在哪一块空间中存储？引用类型之间传递的是什么？
+引用类型的值在栈和堆中存储
+引用类型之间传递的是地址
+
+1.String 字符串
+2.Number 数字
+3.Boolean 布尔值
+4.Null 空值
+5.Undefined 未定义
+6.Object 对象
+
+12345属于基本数据类型
+6属于引用数据类型
+
+instanceof  判断一个变量(对象)是不是属于某种类型，是返回true 不是返回flase
+语法:
+变量 instanceof 类型名字
+
+typeof a返回一个a变量的数据类型
+typeof null 返回object 一个空对象
+var nll = null;
+consolo.log(String(nll))输出为null
+
+==============
+======注意====
+转换数据类型不会改变原来元素的数据类型，只是返回值为转换后的类型
+==============
+
+============================================================
+String
+
+js中字符串需要用引号引起来
+使用双引号或单引号都可以，但是不要混着用
+引号不能嵌套，但是单引号可以嵌套双引号，双引号不能嵌套双引号，单引号不能嵌套单引号
+但是可以“ /”/” ”
+
+a.tostring() 转换为string 类型数据输出，a的原始数据类型不会改变
+例如：
+a=1;
+a.tostring();
+typeof a 输出的类型还是number
+
+
+当a为null或undefined时tostring()方法会报错
+String(a);可以将null和undefined转成string
+
+！！！！！！！！！！！！！！！！！！！！！！！
+转换为string
+1. tostring()  undefined和null没有tostring()方法
+2. String(a)  可以将null和undefined转成string
+3. 变量+字符串
+
+！！！！！！！！！！！！！！！！！！！！！！！
+String注意事项:
+1.字符串的拼接:使用+可以用多个字符串放在一起形成一个字符串
+2.如果有一个是字符串，一个是数字，那么结果也是拼接，不是相加
+3.如果有一个是数字的字符串，一个是数字，用-/*/除号，此时会发生计算
+4.如果一个不是数字的字符串，一个是数字，用-号，此时会输出NaN
+5.一般变量有意义的话用tostring,变量没有意义的话用string例如变量的类型为null或undefined
+
+=======================================================
+Number
+
+NaN是number类型
+
+Number.MAX_VALUE显示数字的最大值
+如果使用Number表示的数字超过了最大值，则会返回一个Infinity来表示正无穷
+NaN是一个特殊的数字，表示Not A Number
+用js进行浮点数运算,可能得到一个不精准的小数
+比如0.1+0.2 = 0.30000000000004
+
+
+
+不要用小数去验证小数
+不要用NaN去验证NaN
+验证一个数是否是NaN用isNaN
+
+
+======================================
+转换为Number
+
+1.Number(a)  转换与String相似
+
+Number() 可以将一个只包含数字的字符串转为数字，如果字符串中包含了字母或其他字符则输出为NaN
+a = "123as"       时Number(a)=NaN
+a = "123.567as123"时Number(a)=NaN
+a = "123.567"     时Number(a)=123.567
+a = "as123"       时Number(a)=NaN
+a = ""            时Number(a)=0
+
+
+a中包含非数字内容时或者a=undefined时输出为NaN
+如果字符串是一个空串或全是空格或false，a=null,，则输出为0
+a为true时输出为1
+
+2.parseInt()可以将一个字符串的有效整数内容取出来然后转成Number
+a = "123as"时 parseInt(a) = 123
+a = "123.567as123"时parseInt(a) = 123
+a = "123.567"时 parseInt(a) = 123
+a = "as123" 时parseInt(a) = NaN
+
+parseInt(a,b) b代表要转成的进制数
+parseInt(a,10)将a转成10进制
+
+3.parseFloat()可以将一个字符串的有效浮点数内容取出来然后转成Number
+a = "123as"       时parseFloat(a) = 123
+a = "123.567as123"时parseFloat(a) = 123.567
+a = "123.567"     时 parseFloat(a) = 123.567
+a = "as123"       时parseFloat(a) = NaN
+
+对非String类型a使用parseInt()或parseFloat()它会先转换成String类型，然后再操作
+a = true 时parseInt(a) = NaN
+a = true 时parseFloat(a)= NaN
+a = undefined 时parseInt(a) = NaN parseFloat(a)= NaN
+a = null 时parseInt(a) = NaN parseFloat(a)= NaN
+
+4.数字型的字符串 -  *  %  /数字:   隐式转换
+
+数字转化成16进制，将数字前面加个0x
+数字转化为8进制，数字前加个0 有些浏览器当成8进制有些当成10进制
+数字转化为2进制，数字前加个0b 但是有些浏览器不支持
+
+
+
+===============================================
+
+boolean:布尔值
+Boolean(1):true
+Boolean(0):flase
+Boolean(10):true
+Boolean(-10):true
+Boolean("a"):true
+Boolean(""):flase
+Boolean(null):flase
+Boolean(undefined):flase
+
+
+转换为boolean类型:
+1.Boolean(值):强制转换成boolean类型的值
+2.!!(变量): 隐式转换
+=================================================================
+
+基本包装类型: number string boolean
+基本包装类型本身是基本类型，但是在执行代码的过程中，如果这种类型的变量调用了属性或者方法，那么这种类型就不是基本类型了，而是变成基本包装类型，这个变量也变成基本包装类型对象
+案例1
+var flag = new Boolean(false);
+var resule = flag&&true;/var resule = true&&flag;
+console.log(resule);  返回  true/ 对象flag
+总结:如果是 对象&&true 返回是true
+     如果是 true&&对象 返回时对象
+
+案例2
+var num = 10;             基本类型
+var num1 = Number("10");  基本类型
+var num2 = new Number(0); 基本包装类型

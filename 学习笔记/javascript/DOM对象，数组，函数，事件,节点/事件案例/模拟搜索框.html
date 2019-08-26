@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #text {
+            color: #ccc;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var text = document.getElementById('text');
+            text.onblur = function () {
+                if (this.value.length == 0) {
+                    this.value = "请输入搜索内容";
+                    this.style.color = "#ccc";
+                }
+            }
+            text.onfocus = function () {
+                this.value = "";
+                this.style.color = "#000";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <input type="search" id="text" value="请输入搜索内容">
+</body>
+
+</html>

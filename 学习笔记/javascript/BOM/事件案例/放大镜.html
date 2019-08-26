@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>哈哈</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            width: 350px;
+            height: 350px;
+            margin: 100px;
+            border: 1px solid #ccc;
+            position: relative;
+            /* overflow: hidden; */
+        }
+
+        .big {
+            width: 400px;
+            height: 400px;
+            position: absolute;
+            top: 0;
+            left: 360px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            /* display: none; */
+        }
+
+        .mask {
+            width: 175px;
+            height: 175px;
+            background: rgba(255, 255, 0, 0.4);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            cursor: move;
+            display: none;
+        }
+
+        .small {
+            position: relative;
+        }
+        img {
+            vertical-align: middle;
+        }
+    </style>
+    <!--导入外部的js文件-->
+    <script src="js/common.js"></script>
+</head>
+
+<body>
+    <div class="box" id="box">
+        <div class="small">
+            <!--小层-->
+            <img src="image/small.png" width="350" alt="" />
+            <div class="mask"></div>
+            <!--遮挡层-->
+        </div>
+        <!--小图-->
+        <div class="big">
+            <!--大层-->
+            <img src="image/big.jpg" width="800" alt="" />
+            <!--大图-->
+        </div>
+        <!--大图-->
+    </div>
+
+
+    <script>
+        var box = document.querySelector("#box");
+        var small = document.querySelector(".small");
+        var small_img = document.querySelector("img");
+        var mask = document.querySelector(".mask");
+        var big = document.querySelector(".big");
+        var big_img = big.querySelector("img");
+        var num = big_img.offsetWidth/small_img.offsetWidth;
+        console.log(num);
+
+        box.onmouseover = function () {
+            mask.style.display = "block";
+            big.style.display = "block";
+        }
+        small.onmousemove = function (e) {
+            // 让鼠标居于遮挡板位置的中心
+            var getLeft = evt.getPageX(e)  - parseInt(getStyle(mask, "width")) / 2;
+            var getTop = evt.getPageY(e) - parseInt(getStyle(mask, "height")) / 2;
+            //消除margin带来的影响
+            getLeft -= 100;
+            getTop -= 100;
+            // 设置遮罩移动范围
+            getLeft = getLeft>=0? getLeft:0;
+            getTop = getTop>=0? getTop:0;
+            getLeft = getLeft>=small.offsetWidth-mask.offsetWidth?small.offsetWidth-mask.offsetWidth:getLeft;
+            getTop = getTop>=small.offsetHeight-mask.offsetHeight?small.offsetHeight-mask.offsetHeight:getTop;
+            //让遮罩跟着鼠标移动
+            mask.style.left = getLeft + "px";
+            mask.style.top = getTop + "px";
+            //以一定比例放大遮罩里面的图片内容并显示在大div中
+            big_img.style.marginLeft = -(getLeft*num)+"px";
+            big_img.style.marginTop =  -(getTop*num)+ "px";
+        }
+        box.onmouseout = function () {
+            mask.style.display = "none";
+            big.style.display = "none";
+        }
+
+    </script>
+
+</body>
+
+</html>

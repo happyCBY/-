@@ -1,0 +1,38 @@
+闭包的概念: 函数A中有一个函数B，函数B可以访问到函数A定义的变量或者方法，此时就形成了闭包
+闭包的模式: 函数模式闭包，对象模式闭包
+闭包的优缺点: 缓存数据
+闭包的作用: 缓存数据，延长作用域链
+案例: 函数模式的闭包
+function f1() {
+    var num = 10;
+    function f2() {
+        console.log(num);
+
+    }
+    f2();
+}
+f1();
+案例: 对象模式的闭包
+function f1() {
+    var num = 10;
+    var obj = {
+        age: num
+    }
+    console.log(obj.age);
+}
+f1();
+闭包的作用:优点是缓存数据，缺点是数据不能被及时的释放
+局部变量在函数调用完毕就会自动释放
+闭包后，里面的作用域链就会延长，下面的案例就是个例子
+闭包的应用案例: 实现了数据的缓存
+function f1() {
+    var num = 10;
+    return function(){
+        num++;
+        return num;
+    }
+}
+var ff = f1();
+console.log(ff());
+console.log(ff());
+console.log(ff());

@@ -1,0 +1,61 @@
+1.过渡:
+使用 transition标签包裹一个其他标签，注意只能是一个
+在style里面设置样式
+.fade-enter {}  //设置标签显示的开始状态
+.fade-enter-to {} //设置标签显示的最后一帧
+.fade-enter-actice {} //设置过渡属性，将会让标签从.fade-enter() 设置的样式过渡到.fade-enter-to {} 设置的样式，显示完最后一帧标签就会回到原本设置的样式，也就是说当标签 从.fade-enter() 的样式到.fade-enter-to {}样式过渡成功后，.fade-enter() ，.fade-enter-to {}，.fade-enter-actice {} 这三个类选择器将会失效
+.fade-leave-to{} //设置标签隐藏的最后一帧样式
+.fade-leave-active {} //设置过渡属性，将会让标签从要过渡之前的样式 过渡到 .fade-leave-to{} 设置的样式为止，然后标签隐藏
+注意: fade是自定义的名字 -enter -enter-to等等是vue将会识别这是vue过渡的Css样式
+
+例:
+<style>
+    .app {
+        border: 1px solid red;
+        width: 300px;
+    }
+    .fade-enter-active {
+        transition: all 10s;
+    }
+
+    .fade-enter {
+        opacity: 1;
+        width: 1000px;
+        height: 500px;
+        color: red;
+        border: 1px solid red;
+    }
+
+    .fade-enter-to {
+        opacity: 1;
+        width: 200px;
+        color: red;
+        border: 20px solid red;
+    }
+
+    .fade-leave-active {
+        transition: all 2s;
+    }
+
+
+    .fade-leave-to {
+        /* opacity: 0; */
+        width: 500px;
+        height: 100px;
+    }
+</style>
+
+<div id="app">
+    <transition name="fade">
+        <div class="app" v-if="show">显示/隐藏</div>
+    </transition>
+    <input type="button" value="切换模式" @click="show = !show">
+</div>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            show: true
+        }
+    })
+</script>

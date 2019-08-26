@@ -1,0 +1,11 @@
+浏览器的顶级对象: window  -----皇上
+页面的顶级对象: document  -----总管太监
+页面中的内容都是属于浏览器的，也就是window,window层级比document大
+
+因为页面中的所有内容都属于window ，window是可以省略的
+document.write('哈哈');
+实际上是window.document.write('哈哈');
+window.write('哈哈')这样是不行的，不能间接调用
+
+window.name;返回的不是underfined 返回为空，轻易不要用name做变量
+console.log(top); 输出和 console.log(window) 一样，是为了防止window被占用

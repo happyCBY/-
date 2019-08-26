@@ -1,0 +1,298 @@
+1、模块化相关规范
+(1)浏览器端模块化规范: AMD CMD 不过快要被淘汰了
+(2)服务器端模块化规范: commonJS
+(3)大一统模块化规(服务器和浏览器): es6模块化规范
+es6模块化规范找中定义:
+*每个js文件都是一个独立的模块
+*导入模块成员用 import 关键字
+*暴露模块成员用 export 关键字
+(4) 在node中安装 babel 插件， node支持commonJS,对es6模块化支持的不是很好，所以使用babel插件 支持 es6的模块化
+打开终端，输入命令：npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/node
+安装完毕之后，再次输入命令安装：npm install --save @babel/polyfill
+在项目目录中创建babel.config.js文件。
+编辑js文件中的代码如下：
+const presets = [
+    ["@babel/env",{
+        targets:{
+            edge:"17",
+            firefox:"60",
+            chrome:"67",
+            safari:"11.1"
+        }
+    }]
+]
+//暴露
+module.exports = { presets }
+
+(5) es6模块化默认导入导出
+默认导出:  export default { 要导出的数据 } ，注意这里的export default 在一个js文件里面只能有一个，不能定义多个
+let a = 5;
+let b = 10;
+let c = 20;
+function show (){
+    console.log("show");
+}
+export default {
+    a,
+    b,
+    show
+}
+默认导入: import 自定义接收导入数据对象名 from 导入模块路径  相当于之前学习的  var 自定义接收导入数据对象名 = require("导入模块路径")
+import m1 from "./m1"
+console.log(m1);
+
+(6)es6模块化按需导入导出
+按需导出: export let 属性/函数名 = 值
+export let c = 10;
+export let say = function(){ console.log("say") }
+
+按需导入: import {属性名/方法名} from 导入模块地址
+import {c}  from "./m1"
+console.log(c)
+
+注意: 按需导入导出和默认导入导出是可以共存的，且可以使用多次按需导出
+导入:
+export let c = 10;
+export let say = function(){ console.log("say") }
+export default {
+    a,
+    b,
+    show
+}
+导出:
+//这里的 c as imc 是给c起别名，以后c就用imc来代替使用
+import m1,{c as imc ,say}  from "./m1"
+console.log(m1)
+console.log(c)
+
+(7)直接导入并执行模块: 顾名思义就是模块A不用向外暴露接口，在模块B中直接执行模块A里面的代码，就如之前学到的 require(模块路径名)
+语法: import 模块路径名
+例：
+模块A
+console.log("我是模块A")
+模块B
+import 模块A的路径名  //执行结果: 我是模块A
+
+2.webpack
+(1)webpack的安装和使用
+创建一个空文件夹，注意文件夹路径名不能包含中文字符
+用npm init -y 创建 package.json 文件
+安装: npm install webpack webpack-cli -D
+配置: 在根目录下新建一个webpack.config.js文件 在文件里面配置:
+module.exports = {
+    //设置编译模式 是开发环境还是上线环境
+    mode: "development/production"  //开发环境和上线环境，开发环境下webpack打包不会将代码压缩会提高编译速度
+    entry: "输入文件的路径",
+    output: {
+        path: "输出文件存放路径",
+        filename: "输出文件的名称"
+    }
+
+}
+
+在package.json文件中的 scripts里面添加:
+scripts: {
+    "dev":webpack  //scripts里面的节点下的脚本可以使用npm run 节点名 执行
+}
+
+执行: 在终端中使用 npm run dev 命令，启动webpack进行打包,webpack.config.js会自动找到src文件夹中的index.js文件，并打包，如果webpack.config.js文件没有配置输出路径，webpack会默认创建一个dist文件夹，将打包的文件输出到dist文件夹
+
+(2)webpack自动化打包
+步骤:
+1、安装webpack-dev-server 插件，npm install webpack-dev-server -D
+2、配置: 在package.json文件中的 scripts 属性下把之前设置的 dev: "webpack" 改成 dev: "webpack-dev-server"
+3、使用: 将 src-->index.html 中，script脚本的引用路径修改为 "/ webpack.config.js文件下设置的输出文件名称 "
+4、运用 npm run dev命令，重新执行一遍命令
+5、在浏览器中访问 http://localhost:8080，查看打包结果
+
+注意:webpack-dev-server 会启动一个实时打包的http服务器
+webpack-dev-server 打包生成的输出文件，默认放到了项目根目录中，而且是虚拟的，看不见的，输出文件名字和在webpack.config.js文件下设置的输出文件名称一致
+
+(3)配置html-webpack-plugin插件生成预览页面
+步骤:
+1、下载插件 cnpm i html-webpack-plugin -D
+2、在webpack.config.js中配置该插件
+//引入 html-webpack-plugin 模块
+var htmlWebpackPlugin = require("html-webpack-plugin")
+var hwp = new htmlWebpackPlugin({
+    template:'./src/index.html', //目标元素，要根据哪个文件来生成
+    filename:'index.html'  // 这个是配置在内存中生成的文件的名字
+})
+3、在webpack.config.js中暴露 配置对象，新增配置节点
+module.exports = {
+    //plugins数组是webpack打包期间会用到的一些插件列表
+    plugins:[hwp]
+}
+
+(4) 配置自动打包的相关参数
+1、运行完 npm run dev 后自动打开浏览器显示预览页面， 在package.json文件中的 scripts 设置dev属性:
+//open 打包完成后自动打开浏览器页面
+//--host 配置ip地址
+//port 配置端口
+"scripts":{
+    "dev": "webpack-dev-server --open --host 127.0.0.1 --port 8080"
+}
+(5)webpack中的加载器
+1、通过loader打包非js模块
+在实际开发过程中，webpack默认只能打包处理以 .js 后缀名结尾的模块，其他非 .js 后缀名结尾的模块，webpack默认处理不了，
+需要调用loader加载器才能正常打包
+
+loader的调用过程:
+将要被打包的模块文件 -->判断是否为js模块 -->是 判断是否包含js高级语法 --> 是 判断是否配置了babel -->是 调用loader/否 报错
+                                                                   -->否 webpack处理
+                                       --> 否 判断是否配置了对应的loader --> 是 调用loader
+                                                                        --> 否 报错
+
+(6)打包处理css文件
+步骤:
+1、下载style-loader、css-loader加载器 npm i style-loader css-loader -D
+2、在webpack.config.js配置
+module:{
+    rules:[
+        //text表示匹配文件的类型，这里是匹配 以.css为后缀名的文件 ,use 代表对应调用的loader
+        { test:/\.css$/, use:['style-loader','css-loader'] }
+    ]
+}
+注意: use数组中指定的loader顺序是固定的，多个loader的调用顺序是从后往前调用，在这里 首先调用的是 css-loader加载器，再调用 style-loader加载器
+
+(7)打包处理less文件
+步骤:
+1、下载 npm i less-loader less -D
+2、在webpack.config.js文件中的module --> roles数组中，添加 loader规则如下
+module:{
+    rules:[
+        //text表示匹配文件的类型，这里是匹配 以.css为后缀名的文件 ,use 代表对应调用的loader
+        { test:/\.css$/, use:['style-loader','css-loader'] }
+        { test:/\.less$/, use:['style-loader','css-loader','less-loader'] }
+    ]
+}
+
+(8)打包处理scss文件
+步骤:
+1、下载 npm i sass-loader node-sass -D
+2、在webpack.config.js文件中的module --> roles数组中，添加 loader规则如下
+module:{
+    rules:[
+        //text表示匹配文件的类型，这里是匹配 以.css为后缀名的文件 ,use 代表对应调用的loader
+        { test:/\.css$/, use:['style-loader','css-loader'] },
+        // text表示匹配文件的类型，这里是匹配 以.less为后缀名的文件 ,use 代表对应调用的loader
+        { test:/\.less$/, use:['style-loader','css-loader','less-loader'] },
+        text表示匹配文件的类型，这里是匹配 以.scss为后缀名的文件 ,use 代表对应调用的loader
+        { test:/\.scss$/, use:['style-loader','css-loader','sass-loader'] }
+    ]
+}
+(9)配置postCSS自动添加css的兼容前缀
+步骤:
+1、下载 npm i postcss-loader autoprefixer -D
+2、在项目根目录创建postcss的配置文件 postcss.config,js，并初始化设置:
+const autoprefixer = require("autoprefixer") //导入自动添加前缀的插件
+module.exports = {
+    plugins: [ autoprefixer ] //挂载插件
+}
+3、在webpack.config.js文件中的module --> rules数组中，修改Css的loader 规则:
+module:{
+    rules:[
+        //text表示匹配文件的类型，这里是匹配 以.css为后缀名的文件 ,use 代表对应调用的loader
+        { test:/\.css$/, use:['style-loader','css-loader',"postcss-loader"] }
+    ]
+}
+
+(10) 打包样式表中的图片以及字体文件
+步骤:
+1、下载 npm install url-loader file-loader -D
+2、在 webpack.config.js文件中的module --> rules数组中 添加配置文件:
+module : {
+    rules:[
+        {
+            test:/\.jpg|png|gif|bmp|ttf|eot|svg|woff|woff2$/,
+            //limit用来设置字节数，只有小于limit值的图片，才会转换为base64图片,base64的图片加载会更快
+            use:"url-loader?limit=50864"
+        }
+    ]
+}
+
+(11) 打包js文件中的高级语法
+在编写js的时候，有时候我们会使用高版本的js语法有可能这些高版本的语法不被兼容，我们需要将之打包为兼容性的js代码
+步骤:
+1、安装babel转换器 npm install babel-loader @babel/core @babel/runtime -D
+安装babel语法插件包
+npm install @babel/preset-env @babel/plugin-transform-runtime @babel/plugin-proposal-class-properties -D
+2、配置文件:
+在项目的根目录中创建 babel.config.js文件，配置:
+module.exports = {
+    presets:["@babel/preset-env"],
+    plugins:[ "@babel/plugin-transform-runtime", "@babel/plugin-proposal-class-properties" ]
+}
+配置webpack.config.js的module中的rules数组
+module : {
+    rules:[
+        {
+            test:/\.js$/,
+            use:"babel-loader",
+            //exclude为排除项，意思是不要处理node_modules中的js文件
+            exclude:/node_modules/
+        }
+    ]
+}
+
+
+3.Vue单文件组件
+(1)单文件组成结构:
+template: 单文件模板区域
+script: 业务逻辑区域
+style: 样式区域
+例: 创建一个 demo.vue文件 里面的内容为
+<template>
+    <div>第一次使用vue</div>
+</template>
+<script>
+export default {
+    data(){
+        return {
+            num: 10
+        }
+    }
+}
+</script>
+//scoped是让防止样式冲突，每个组件中的样式都是独立的
+<style scoped>
+div{
+    color: red
+}
+</style>
+(2)安装vue文件的加载器
+步骤:
+1、安装 npm install vue-loader vue-template-compiler -D
+2、配置:  更改webpack.config.js的module中的rules数组
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const vuePlugin = new VueLoaderPlugin();
+plugins:[ htmlPlugin, vuePlugin  ],
+module : {
+    rules:[
+        ...//其他规则
+        {
+            test:/\.vue$/,
+            loader:"vue-loader",
+        }
+    ]
+}
+
+(3)在webpack中使用vue
+步骤:
+1、安装 npm install vue -S
+2、在index.js中引入vue：import Vue from "vue"
+3、创建Vue实例对象并指定el，最后使用render函数渲染单文件组件
+例:
+import Vue from "vue"
+//导入.vue的文件
+import App from  "./vue/index.vue"
+const vm = new Vue({
+    el:"#first",
+    render:h=>h(App)
+})
+
+(4) webpack 打包发布
+在 scripts 中配置 "build":"webpack -p"
+scripts :{
+    "build": "webpack -p"
+}

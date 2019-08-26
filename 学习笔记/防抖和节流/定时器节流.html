@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 300px;
+            height: 100px;
+            border: 1px solid #000;
+            margin: 100px auto;
+            padding: 100px;
+            text-align: center
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <script>
+        var div = document.querySelector('#app')
+        var num = 0
+        div.innerHTML = num
+
+        function throttle(fn, wait) {
+            var timer = null
+            return function () {
+                if(!timer) {
+                    timer = setTimeout(()=>{
+                        timer = null
+                        fn()
+                    },wait)
+                }
+
+            }
+        }
+        // 处理函数
+        function handle() {
+            num++
+            div.innerHTML = num
+        }
+        // 移动事件
+        div.addEventListener('mousemove', throttle(handle, 1000));
+    </script>
+</body>
+
+</html>

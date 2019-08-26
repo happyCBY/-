@@ -1,0 +1,56 @@
+分支结构:
+
+if分支语句:
+if {}
+if {} else{}
+if {} else if {} ... else {} 一般是对范围的判断时使用
+
+switch:分支语句 一般是对具体的值进行判断时使用
+switch(get)
+{
+    case A : break;
+    case B : break;
+    default : ;
+}
+注意问题:
+1.default后面的break是可以省略的
+2.default也是可以省略的
+3.switch语句比较的时候是用的严格比较方式===
+4.break是可以省略的，但是一但匹配到没加break的话，后面case里面执行的内容都会执行，直到遇到break.
+5.前面都没有匹配到的话就匹配default
+
+三元表达式:
+var a = b>c ? b:c;
+
+循环结构: 循环就是一件事重复不停的做，循环应该有结束条件，循环还要有计数器
+
+while(){}: 先判断后执行
+do{}while(): 先执行一次再判断执行
+
+for(表达式1;表达式2;表达式3){} 先执行表达式1，然后判断表达式2，符合条件则执行循环体并执行表达式3，
+不符合条件直接跳出循环
+for-in循环: 一般用来遍历数组和对象
+for(var 变量 in 对象)
+案例1:
+var obj = {
+    eat: function() {
+        console.log("好好"+this.name+"ss");
+    },
+    name: "w",
+    age: 18
+
+};
+for(var key in obj) {
+    console.log(obj[key]); key里面存储的是obj的属性和方法的名称
+}
+for(var 变量 in 数组)
+案例2:
+var obj = [1,2,3];
+for(var key in obj) {
+    console.log(obj[key]); key里面存储的是obj的下标
+}
+
+
+break和continue的使用:
+break:如果在循环中，遇到break,立刻跳出当前所在的循环.
+continue: 在循环中如果遇到continue直接开始下次循环

@@ -1,0 +1,26 @@
+下载：
+vue-quill-editor
+npm install quill
+在main.js中进行引入
+
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+Vue.use(VueQuillEditor)
+
+
+
+在template中使用
+ <quill-editor 
+    //在富文本编辑器中写入的文本
+    v-model="content" 
+    ref="myQuillEditor" 
+    :options="editorOption" 
+    @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
+    @change="onEditorChange($event)">
+</quill-editor>
+
+文章介绍
+https://www.cnblogs.com/ZaraNet/p/10209226.html

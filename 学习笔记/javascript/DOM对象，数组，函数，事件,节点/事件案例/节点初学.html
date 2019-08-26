@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = function () {
+            var odiv = document.getElementById('dv');
+            var node = odiv.childNodes;
+            for (var i = 0; i < node.length; i++) {
+                if (node[i].nodeName == 'P' && node[i].nodeType == 1) {
+                    node[i].style.backgroundColor = 'red';
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <input type="button" value="">
+    <div id="dv">
+        <span>这是span</span>
+        <p>这是p</p>
+        <span>这是span</span>
+        <span>这是span</span>
+        <p>这是p</p>
+        <span>这是span</span>
+        <h3>这是h3</h3>
+        <span>这是span</span>
+
+    </div>
+</body>
+
+</html>

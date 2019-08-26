@@ -1,0 +1,75 @@
+客户端使用模板引擎步骤:
+
+1.下载art-template  npm install art-template  (不需要)
+2.下载库文件 template-web.js
+3.将库文件导入到要使用的html文件中
+<script src="../template-web.js"></script>
+4.创建art模板，注意javascript不支持读取文件的功能，所以art模板是直接在html里面创建的，利用id名字来区分不同的模板
+例:
+<!-- art-template模板 -->
+<script type="text/html" id="art1">
+    <input type="text" >
+    <input type="password" >
+    <input type="submit" value = "提交">
+</script>
+5.使用template方法告诉模板引擎使用哪一个模板和哪一个数据进行拼接，第一个参数为模板的id，第二个参数是传入模板的数据，模板可以使用这些数据进行拼接，返回的是拼接好的html字符串
+例:
+<script>
+window.onload = function () {
+    var html = template("art1", { name: "张三", age: 18 });
+}
+</script>
+6. 让html和传入的数据进行拼接
+例:
+ <!-- art-template模板 -->
+<script type="text/html" id="art1">
+    <input type="text" value = "{{name}}">
+    <input type="password" value = {{age}} >
+    <input type="submit" value = "提交">
+</script>
+7. 将拼接好的模板导入到html页面中
+<script>
+window.onload = function () {
+    var html = template("art1", { name: "张三", age: 18 });
+    document.querySelector("div").innerHTML = html;
+}
+</script>
+
+============
+如果在全局作用域下定义了一个变量那么可以直接用 $imposts.变量名 调用
+
+如果没有定义的话那么我们应该手动导入变量:
+template.defaults.imports.变量名 = 导入的变量
+
+在模板中调用:
+$imports.变量名
+=====================
+在公共js里面使用模板
+步骤:
+1.将模板存储在一个变量中
+2.使用template.render("模板变量",传入的数据)方法拼接字符串
+3.将拼接好的字符串展示在页面中
+例:
+var str = `
+    {{each data}}
+        <li>
+            <a href='detail.html?id={{$value._id}}'>
+            <img src='{{$value.thumbnail}}'>
+            <span>{{$value.title}}</span>
+            </a>
+        </li>
+    {{/each}}
+    `
+$.ajax({
+    type:'get',//get或post
+    url:'/home/hot_article',//请求的地址
+    success:function(data){//成功的回调函数
+        console.log(data[0]._id);
+        console.log(str);
+
+        var html = template.render(str,{data});
+        console.log(html);
+
+        $(".hot_recommend").html(html);
+    }
+})

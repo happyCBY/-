@@ -1,0 +1,23 @@
+1.css中选择器和{}之间必须包含空格
+例: .demo {}
+2.属性名与之后的:之间不允许包含空格，:与属性值必须包含空格
+例:
+.demo {
+	font-size: 25px;
+}
+3.如果有多个选择器并排，每个选择器尽量独占一行
+例:
+.demo,
+p,
+span {
+	color: red;
+}
+4.选择器的嵌套层级不大于3级，位置靠后的限定条件应尽可能精确
+
+
+浏览器前缀:
+-webkit-  Google Chrome,  Safari,  Android Browser
+-moz-  Firefox
+-o-  Opera
+-ms-  ie  edge
+-khtml-  kongqueror

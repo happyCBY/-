@@ -1,0 +1,3 @@
+﻿a.currentStyle.width:只有ie支持
+getComperedStyle(a,null)  获取的样式没有设置则获取真实的值 不支持ie8及以下
+

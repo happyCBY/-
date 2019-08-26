@@ -1,0 +1,67 @@
+﻿块级元素就是一个人单独占一行或多行,可以对其设置宽度、高度、对齐等属性，用于网
+页布局和搭建。
+常见的块级元素有:<h1>...<h6>、<p>、<div>、<ul>、<ol>、<li>  <div>是最典型的块元素
+<p>里面不能包含div
+
+行内元素不占有独立的区域，仅仅靠自身的字体大小和图片尺寸来支撑结构，一般不可以
+设置宽度，高度，对齐等属性，常用于控制页面中文本的样式
+常见的行内元素有<a>、<strong>、<b>、<em>、<i>、<ins>、<u>、<del>、<s>
+<span>等，其中<span>标签是最典型的行内元素。
+可以设置margin和padding的水平方向距离，一般不设置垂直方向距离(设置的距离会和设置的值有偏差)
+行内元素只能放文本或者行内元素，不能放块级元素（a特殊，a链接可以嵌套块元素，但是不能嵌套自己）
+
+例如：
+<span>你好</span>可以
+<span><span>你好</span></span>可以
+<span><div></div></span>不行
+
+a里面不能放a
+
+行内块元素：<img/><input/><td>
+他们有不单独占有一行，但是可以对他们设置宽高和对齐属性
+
+display: none: 不保留位置
+visibility: hidden 保留位置
+
+
+行内，块级，行内块元素转换
+display: block 转换为块级元素
+display: inline 转换为行内元素
+display: inline-block 转换为行内块元素
+display: flex 伸缩布局模式
+min-width:xpx  宽缩到xpx时不再缩放
+max-width:xxp 宽放大到xpx时不再放大
+flex-direction: row|column; 
+flex-direction: row-reverse|column-reverse; 设置伸缩布局是以行排列分还是以列排列分 row(行),column(列)默认水平排列 ,row-reverse水平反转排列(原本是123排列，设置后变成321排列)column-reverse垂直反转排列 	
+
+
+justify-content: 调整主轴水平对齐、
+值:
+flex-start:默认值，项目位于容器的开头，让子元素从父容器的开头排序
+flex-end  项目位于容器的结尾，让子元素从父容器的后面排序 盒子顺序不变
+center 项目位于容器的中心，让子元素在父亲中间显示
+space-between 项目位于各行之间留有空白容器内，左右盒子贴近父盒子，中间的平均分布空白间距
+space-around 项目位于各行之前、之间、之后都留有空白的容器内，相当于给每个盒子添加左右margin外边距(先把大盒子等分，然后每个小盒子居于等分盒子的中间)
+
+
+align-items: 调整垂直水平对齐、
+值:(变为垂直方向这样排列)
+flex-start:默认值，项目位于容器的开头，让子元素从父容器的开头排序
+flex-end  项目位于容器的结尾，让子元素从父容器的后面排序 盒子顺序不变
+center 项目位于容器的中心，让子元素在父亲中间显示
+stretch:默认值 项目被拉伸以适应容器，让子元素拉伸适用于父元素(子元素不给高度的情况下)
+
+
+flex-wrap控制是否换行
+值:
+nowrap: 默认值，规定灵活的项目不拆行，或者不拆列，不换行则收缩显示，强制一行内显示
+wrap: 规定灵活的项目在必要的时候拆行或者拆列
+wrap-reverse: 规定灵活的项目在必要的时候拆行或者拆列，但是是以相反的顺序
+
+
+align-content堆栈
+
+flex-flow是flex-direction flex-wrap的简写形式
+flex-flow: flex-direction flex-wrap;
+
+order控制子项目的排列顺序，数值越小的排在越前面，可以为负值，默认是0

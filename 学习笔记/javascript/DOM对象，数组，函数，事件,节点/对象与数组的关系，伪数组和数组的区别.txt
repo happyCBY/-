@@ -1,0 +1,51 @@
+对象与数组的区别:
+
+
+区别1 =========================================
+
+在说区别之前，需要先提到另外一个知识，就是JavaScript的原型继承。所有JavaScript的内置构造函数都是继承自 Object.prototype。在这个前提下，可以理解为使用 new Array() 或 [] 创建出来的数组对象，都会拥有 Object.prototype 的属性值。
+
+var obj = {};// 拥有Object.prototype的属性值
+var arr = [];
+//使用数组直接量创建的数组，由于Array.prototype的属性继承自 Object.prototype，
+//那么，它将同时拥有Array.prototype和Object.prototype的属性值
+
+可以得到对象和数组的第一个区别：对象没有数组Array.prototype的属性值
+
+==============================================
+
+区别二========================================
+
+数组具有一个最基本特征：索引，这是对象所没有的，下面来看一段代码：
+
+var obj = {};
+var arr = [];
+
+obj[2] = 'a';
+arr[2] = 'a';
+
+console.log(obj[2]); // 输出 a   console.log(obj[0]); 输出的是underfined
+console.log(arr[2]); // 输出 a   console.log(arr[0]); 输出的是underfined
+console.log(obj.length); // 输出 undefined
+console.log(arr.length); // 输出 3
+
+obj[2]与arr[2]的区别？
+
+obj[2]输出'a'，是因为对象就是普通的键值对存取数据
+而arr[2]输出'a' 则不同，数组是通过索引来存取数据，arr[2]之所以输出'a'，是因为数组arr索引2的位置已经存储了数据
+
+obj.length与arr.length的区别？
+
+obj.length并不具有数组的特性，并且obj没有保存属性length，那么自然就会输出undefined
+而对于数组来说，length是数组的一个内置属性，数组会根据索引长度来更改length的值。
+
+为什么arr.length输出3，而不是1呢？
+
+这是由于数组的特殊实现机制，对于普通的数组，如果它的索引是从0开始连续的，那么length的值就会等于数组中元素个数
+而对于上面例子中arr，在给数组添加元素时，并没有按照连续的索引添加，所以导致数组的索引不连续，那么就导致索引长度大于元素个数，那么我们称之为稀疏数组。
+
+===============================================
+
+数组与伪数组的区别:
+
+伪数组是一个对象，数组是数组，伪数组和数组一样有长度有索引，但是伪数组不能调用数组的方法

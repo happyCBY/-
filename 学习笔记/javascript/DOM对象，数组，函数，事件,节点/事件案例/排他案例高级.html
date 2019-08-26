@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .all {
+            width: 500px;
+            margin: 0 auto;
+        }
+        #changecolor span {
+            display: inline-block;
+            width: 100px;
+            height: 50px;
+            background-color: red;
+        }
+        #changetext div {
+            display: none;
+            width: 400px;
+            height: 200px;
+            background-color: pink;
+            margin: 30px 0;
+        }
+        .current {
+            background-color: gray !important;
+        }
+        .changeBlock {
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="all">
+        <section id = "changecolor">
+            <span class="current">我是第1个盒子</span>
+            <span>我是第2个盒子</span>
+            <span>我是第3个盒子</span>
+            <span>我是第4个盒子</span>
+        </section>
+        <section id="changetext">
+            <div class="changeBlock">我是第一个盒子</div>
+            <div>我是第二个盒子</div>
+            <div>我是第三个盒子</div>
+            <div>我是第四个盒子</div>
+        </section>
+    </div>
+    <script>
+        var changecolor = document.getElementById('changecolor');
+        var span = changecolor.getElementsByTagName('span');
+        var changetext  = document.getElementById('changetext');
+        var div = changetext.getElementsByTagName('div');
+        for(var i = 0;i< span.length;i++) {
+            span[i].setAttribute('index',i);
+            span[i].onclick = function() {
+                for(var i = 0;i< span.length;i++) {
+                    span[i].removeAttribute('class');
+                }
+                this.className = 'current';
+                for(var i = 0;i< span.length;i++) {
+                    div[i].removeAttribute('class');
+                }
+                div[this.getAttribute('index')].className = 'changeBlock';
+            }
+        }
+    </script>
+</body>
+</html>

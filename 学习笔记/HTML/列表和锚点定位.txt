@@ -1,0 +1,20 @@
+﻿自定义列表：一般用于名词的解释
+<dl>
+  <dt>
+    <dd>
+有序列表：ul里面最好只嵌套li,li里面可以嵌套其他
+<ul>
+  <li>
+无序列表：一般用于导航
+<ol>
+  <li>
+外部链接：<a href = "www.baidu.com"/>;
+
+内部链接：<a href = "one.html"/>;
+
+锚点定位：<a href = "#one"/>;
+
+跨页面锚点:<a href = "one.html#one"/>
+
+  
+

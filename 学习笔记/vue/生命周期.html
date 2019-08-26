@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<body>
+  <div id="app">
+    <h1>{{ message }}</h1>
+    <input type="text" v-model="message">
+    <button @click="fn">按钮点击</button>
+  </div>
+  <script src="./vue.js"></script>
+  <script type="text/javascript">
+    //如何触发beforeUpdate,updated --> 在控制台执行app.message = '其他的值'
+    //如何触发beforeDestroy destroyed --> 在控制台执行app.$destory()
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: "hello vue"
+      },
+      methods: {
+        fn() {
+          console.log('methods方法执行了');
+        }
+      },
+      //组件创建之前
+      beforeCreate() {
+        console.log(app);
+
+        console.log('beforeCreate 组件创建之前状态 初始化之后，数据监听之前');
+        console.log( "el : " + this.$el);
+        console.log("data : " + this.$data);
+        console.log("message: " + this.message);
+        this.fn();
+        console.log('>==========================================<');
+      },
+      //组件创建完毕
+      created() {
+        console.log(app);
+        console.log('created 组件创建完毕状态 初始化之后，数据监听之后，dom元素产生之前');
+        console.log("el : " + this.$el);
+        console.log("data : " + this.$data);
+        console.log("message: " + this.message);
+        this.fn();
+        console.log('>==========================================<');
+      },
+      // 组件挂载之前
+      beforeMount() {
+        console.log(app);
+        console.log('beforeMount 组件挂载之前状态 初始化之后，数据监听之后 dom元素产生之后 渲染之前');
+        console.log("el : " + (this.$el));
+        console.log(this.$el);
+        console.log( "data : " + this.$data);
+        console.log("message: " + this.message);
+        console.log(document.querySelector('#app h1').innerHTML);
+        this.fn();
+        console.log('>==========================================<');
+      },
+      // 组件挂载完毕
+      mounted() {
+        console.log(app);
+        console.log('mounted 组件挂载完毕状态 初始化之后，数据监听之后 dom元素产生之后 渲染之后');
+        console.log("el : " + this.$el);
+        console.log(this.$el);
+        console.log( "data : " + this.$data);
+        console.log("message: " + this.message);
+        console.log(document.querySelector('#app h1').innerHTML);
+        this.fn();
+        console.log('>==========================================<');
+      },
+      // 组件更新之前
+      beforeUpdate() {
+        console.log(app);
+        console.log('beforeUpdate 组件更新之前状态');
+        console.log("el : " + this.$el);
+        console.log(this.$el);
+        console.log("data : " + this.$data);
+        console.log("message: " + this.message);
+        console.log(document.querySelector('#app h1').innerHTML);
+        this.fn();
+        console.log('>==========================================<');
+      },
+      // 组件更新完毕
+      updated() {
+        console.log('updated 组件更新完毕状态');
+        console.log("el : " + this.$el);
+        console.log(this.$el);
+        console.log( "data : " + this.$data);
+        console.log("message: " + this.message);
+        console.log(document.querySelector('#app h1').innerHTML);
+        this.fn();
+        console.log('>==========================================<');
+      },
+      // 组件销毁之前
+      beforeDestroy() {
+        console.log('beforeDestroy 组件销毁之前状态');
+        console.log("%c%s", "color:red", "el : " + this.$el);
+        console.log(this.$el);
+        console.log("data : " + this.$data);
+        console.log("message: " + this.message);
+        this.fn();
+        console.log('>==========================================<');
+      },
+      // 组件销毁完毕
+      destroyed() {
+        console.log('destroyed 组件销毁完毕状态');
+        console.log("el : " + this.$el);
+        console.log(this.$el);
+        console.log("data : " + this.$data);
+        console.log("message: " + this.message);
+        this.fn();
+        console.log('>==========================================<');
+      }
+    })
+  </script>
+</body>
+
+</html>

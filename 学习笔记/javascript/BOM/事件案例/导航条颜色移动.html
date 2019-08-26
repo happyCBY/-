@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="common.css">
+    <style>
+        #ul_id  {
+            position: relative;
+            width: 0;
+            margin: 100px auto;
+        }
+        #ul_id li {
+
+            float: left;
+            width: 100px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border: 1px solid red;
+            box-sizing: border-box;
+        }
+        #ul_id .current {
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: green;
+            z-index: -1;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <ul id = "ul_id">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li class="current"></li>
+    </ul>
+    <script>
+        var getul_id = document.querySelector("#ul_id");
+        var get_li = document.querySelectorAll("li");
+        getul_id.style.width = (get_li.length-1)*get_li[0].offsetWidth + "px";
+        var num = 0;
+        for(var i = 0; i < get_li.length-1;i++) {
+            get_li[i].index = i;
+            get_li[i].onmouseover = function() {
+                move(getul_id.lastElementChild,this.offsetLeft);
+            }
+            get_li[i].onmouseout = function() {
+                move(getul_id.lastElementChild,num);
+            }
+            get_li[i].onclick = function() {
+                num = this.offsetLeft;
+            }
+        }
+        function move(element,target) {
+            clearInterval(element.timer);
+            element.timer = setInterval(function(){
+                var speed = (target - element.offsetLeft)/10;
+                speed = speed>0? Math.ceil(speed): Math.floor(speed);
+                if(speed!=0) {
+                    element.style.left = element.offsetLeft+speed+"px";
+                }
+                else {
+                    clearInterval(element.timer);
+                }
+            },30);
+        }
+    </script>
+</body>
+</html>

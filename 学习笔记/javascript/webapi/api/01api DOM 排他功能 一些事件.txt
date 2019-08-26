@@ -1,0 +1,136 @@
+JavaScript分三个部分
+ECMAScripe标准：JS的基本语法
+DOM：Document  Obeject Model----文档对象模型-----操作页面的元素
+BOM: Browser Object Model-------浏览器对象模型----操作的是浏览器
+
+================================================
+DOM
+页面中的每个标签，都是一个元素（element），每个元素都可以看成一个对象
+文档：一个页面就是一个文档
+元素（element：页面中的所有的标签都是元素，元素可以看成是对象
+节点：页面中所有的内容都是节点：标签属性文本
+页面就是文档，文档中有根元素（html
+                         |-----head
+DOM树:document---html--  |          |-----div
+   |                     |-----body-|（其他标签）
+   |                                |-----a
+   |
+由文档及文档中的所有的元素（标签）组成的一个树形结构图
+DOM的作用
+操作页面元素的标签
+
+==================================================
+通过事件来进行动态效果的实现
+简单例子
+    <button onclick="alert('hahahha')">弹框</button>
+    通过onclick事件
+以后的写法
+    <input type="button" value="我是更高级的弹窗" id="btn">
+    <script>
+        document.getElementById("btn").onclick=function (){
+            alert("哈哈哈高级弹窗");
+        };
+    </script>
+
+事件
+有触发和响应，事件源
+按钮被点击，弹出对话框
+按钮---->事件源
+点击---->事件名字
+点击了---->触发
+弹框------->响应
+
+
+html js  分离
+1.从文档中找到id的值（id值为唯一
+2.document.getElementById("id属性的值");-------->返回的是一个元素对象   引号不能丢
+例子
+function f2() {
+    alert("开始分离");
+}
+var btnObj=document.getElementById("btn");
+btnObj.onclick=f2();------这样是调用了函数，页面一加载完函数就执行完了
+btnObj.onclick=f2;--------这样在onclick事件中存储了f2的代码，只有触发了onclick后才会执行这个函数，也就是点击之后
+但是这样的缺点是，如果其他js文件中有同名函数，会覆盖
+所以最后采用以下方法
+document.getElementById("btn").onclick=function (){
+            alert("哈哈哈高级弹窗");
+}
+
+//根据id属性的值从文档中获取这个元素
+var btnObj=document.getElementById("btn");
+//为当前这个按钮元素（对象），注册点击事件，添加事件处理函数（匿名函数）
+btnObj.onclick=function (){
+            alert("哈哈哈高级弹窗");
+}
+<input type="button" value="我是更高级的弹窗" id="btn">
+错误
+cannot set  property "onclick" of null----不准确的错误信息
+错误的原因
+是因为代码按顺序执行时，js的代码执行时找不到btn，因为html还没执行到
+解决方案
+1.将js代码写到HTML后面
+2.写window.onload{}
+
+====================
+双标签中有文字的都可以用innerText来插入文字
+
+根据标签名字获取标 签
+document.getElementsByTagName("标签的名字");-------返回来的是伪数组
+改变批量p标签的文字
+var pObjs=document.getElementsByTagName("p");
+for(var i = 0;i<pObjs.length;i++) {
+    pObjs[i].innerText="我是变化的文字";
+}
+注意：
+document.getElementsByTagName("p");
+document指的是整个文档，所以这个语法获得的是整个文档中的p标签
+若是要选取特定的区域的标签则写法如下面
+document.getElementById("btn").getElementsByTagName("p");
+在某个元素的事件中，改变的是自己的属性，那么可以用this替换元素的名字
+例子
+var btnObj = document.getElementById("btn");
+btnObj.onclick = function(){
+    this.value="jjjkldj";//改变本身的属性值
+}
+
+===============================================
+----排他功能
+
+补充：在一群input中找到想要的文本输入框标签
+<input type="text" />
+<input type="text" />
+<input type="button" /
+<input type="text" />
+<input type="text" />
+<input type="text" />
+<input type="text" />
+var inputs=document.getElementsByTagName("input");
+for(var i = 0;i<inputs.length;i++) {
+    if(inputs[i].type=="button") {
+        需要的代码
+    }
+}
+
+//点击图片标签,设置图片标签的src路径为超链接中大图的路径
+
+document.getElementById("im").onclick=function () {
+    this.src=document.getElementById("ak").href;
+    return false;//点击a只改变img的图片显示，不会跳转
+    //不加return 就会跳转
+};
+
+在表单标签中。如果属性和值只有一个，并且值是这个属性本省，例如checkded="checked",selected那么在写jsDOM操作是，只要把这个属性值设置为布尔类型就可以了
+document.getElementById("rai").checked=true;----这里的值只有ture和false，只要不为false和空，返回的都是ture
+
+补充：texrtarea 的readonly只读属性 字看起来和原来的一样
+disable属性时不可用属性  input能设置，textarea也能设置，但是字体会变灰
+
+凡是css中这个属性是多个单词的写法，在js代码的DOM操作时，把-干掉，后面的单词的首字母大写即可
+
+在js代码中dom操作时，设置元素的类样式用classname
+
+获取body标签
+document.body
+
+阻止超链接的默认跳转 return:false 在事件中写

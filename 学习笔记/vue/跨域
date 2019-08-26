@@ -1,0 +1,22 @@
+在vue.config.js 中
+module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000/', //要跨域的服务器地址
+        changeOrigin: true,
+        ws: true,
+      }
+    }
+  }
+}
+
+
+注意！！！！！！！！服务器一定要有这个路由，否则的话会报 404错误
+发送请求
+axios.get("http://localhost:8080/api/abc")
+
+服务器中
+app.get('/api/abc',(req,res)=>{
+    res.send('hello express');
+})

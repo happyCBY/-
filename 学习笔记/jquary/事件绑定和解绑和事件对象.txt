@@ -1,0 +1,42 @@
+单个事件注册:
+$("div").click(function(){});
+多个事件注册:
+1.on()方法在匹配元素上绑定一个或多个事件,并且可以注册jQuery没封装的事件（例如 input）
+$("div").on({
+    mouseenter: function(){},
+    click: function(){}
+});
+如果注册事件处理的方法相同则可以使用下面这种方法:
+$("div").on("enter click",function(){})
+
+2.on可以实现事件委托: 注意，事件是绑定在父元素身上，但是触发只能被子元素触发
+$("div").on("click","p",function(){})
+
+3.on可以给未来动态创建的元素绑定事件
+$("div").on("click","p",function(){});
+$("div").append($(<p>后来创建的</p>));
+
+===========================================
+事件的解绑:
+.off("事件名x"); 解除x事件
+.off(); 解绑所有事件
+.off("事件名","标签名"); 解绑委托事件
+===========================================
+一次性事件:
+.one("事件名","函数名"); 事件只触发一次
+
+===========================================
+自动调用事件:
+方法一:
+$("div").click(function(){});
+$("div").click();
+方法二:
+$("div").trigger("click");
+方法三:  triggerHandler与上面不同的是，它不会触发元素的默认行为
+$("div").triggerHandler("click");
+===========================================
+事件对象: event
+$("div").click(function(event){});
+事件对象的常用方法:
+event.stopPropagation(): 阻止事件冒泡
+event.preventDafauil() 或者 return false: 阻止事件默认行为

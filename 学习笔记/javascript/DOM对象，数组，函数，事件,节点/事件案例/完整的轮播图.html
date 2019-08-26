@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        #banner {
+            position: relative;
+            overflow: hidden;
+            width: 600px;
+            height: 350px;
+            margin: 100px auto;
+        }
+
+        #pic img {
+            width: 600px;
+            height: 350px;
+            vertical-align: middle;
+        }
+
+        #pic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1200px;
+            height: 300px;
+        }
+
+        #pic li {
+            float: left;
+        }
+
+        #squer {
+            position: absolute;
+            overflow: hidden;
+            bottom: 10px;
+            left: 50%;
+            width: 100px;
+            height: 20px;
+            border-radius: 10px;
+            transform: translateX(-50%);
+            background-color: #33333380;
+            padding: 0 6px 0 17px;
+
+        }
+
+        #squer li {
+            float: left;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 11px;
+            margin-top: 3px;
+        }
+
+        #left,
+        #right {
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background-color: #00000080;
+            color: #ffffff80;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        #left {
+            left: 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        #right {
+            right: 0;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .current {
+            background-color: red !important;
+        }
+    </style>
+    <script src="js/common.js">
+
+    </script>
+</head>
+<body>
+    <div id="banner">
+        <div>
+            <ul id="pic">
+                <li><img src="image/1-small.jpg" alt=""></li>
+                <li><img src="image/cangjingkong.jpg" alt=""></li>
+                <li><img src="image/default.jpg" alt=""></li>
+                <li><img src="image/mm.png" alt=""></li>
+            </ul>
+        </div>
+        <ul id="squer">
+            <li class="current"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <input type="button" value="<" id="left">
+        <input type="button" value=">" id="right">
+    </div>
+        <script>
+            var banner = my$('banner');
+            var left = my$('left');
+            var right = my$('right');
+            var squer = my$('squer');
+            var squer_li = squer.getElementsByTagName('li');
+            var pic = my$('pic');
+            pic.innerHTML = pic.innerHTML + pic.innerHTML;
+            var pic_li = pic.getElementsByTagName('li');
+            pic.style.width = pic_li.length * pic_li[0].offsetWidth + "px";
+            var count = 0;
+            var banner_timer = null;
+            var pic_timer = null;
+            //给小点点设置排他功能
+            for (var i = 0; i < squer_li.length; i++) {
+                squer_li[i].index = i;
+                squer_li[i].onmousemove = function () {
+
+                    count = this['index'];
+                    squer_move(count);
+                    left_right(pic, -this['index'] * pic_li[0].offsetWidth);
+                }
+            }
+            banner_timer = setInterval(function () {
+                if (count == 4) {
+                    pic.style.left = "0px";
+                    count = 0;
+                }
+                count++;
+                left_right(pic, -count * pic_li[0].offsetWidth);
+
+            }, 2000);
+            //banner移入，banner图片停止，左右按钮显示
+            banner.onmouseover = function () {
+                left.style.display = "block";
+                right.style.display = "block";
+                clearInterval(banner_timer);
+            }
+            //banner移出，banner图片运动，左右按钮隐藏
+            banner.onmouseout = function () {
+                left.style.display = "none";
+                right.style.display = "none";
+                banner_timer = setInterval(function () {
+                    if (count == 4) {
+                        pic.style.left = "0px";
+                        count = 0;
+                    }
+                    count++;
+                    left_right(pic, -count * pic_li[0].offsetWidth);
+                }, 2000);
+            }
+            right.onclick = function () {
+
+                if (count == 4) {
+                    pic.style.left = "0px";
+                    count = 0;
+                }
+                count++;
+                left_right(pic, -count * pic_li[0].offsetWidth);
+            }
+            left.onclick = function () {
+                if (count == 0) {
+                    count = 4;
+                    pic.style.left = -count * pic_li[0].offsetWidth + "px";
+                }
+                count--;
+                left_right(pic, -count * pic_li[0].offsetWidth);
+            }
+            //图片运动
+            function left_right(element, seat) {
+                clearInterval(pic_timer);
+                pic_timer = setInterval(function () {
+                    var speed = (seat - element.offsetLeft) / 6;
+                    speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+                    if (element.offsetLeft != seat) {
+                        element.style.left = element.offsetLeft + speed + "px";
+                    }
+                    else {
+                        clearInterval(pic_timer);
+
+                    }
+                }, 30);
+                squer_move(count);
+            }
+            //小点点移动
+            function squer_move(num) {
+                for (var i = 0; i < squer_li.length; i++) {
+                    squer_li[i].className = "";
+                }
+                if (num == 4) {
+                    squer_li[0].className = "current";
+                    return;
+                }
+                squer_li[num].className = "current";
+            }
+        </script>
+
+</body>
+
+</html>

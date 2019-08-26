@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        #div {
+
+            width: 750px;
+            margin: 100px auto;
+            border: 1px solid red;
+            overflow: hidden;
+        }
+        #div ul {
+            width: 900px;
+        }
+        #div li {
+            float: left;
+            width: 160px;
+            height: 250px;
+            border: 1px solid pink;
+        }
+
+        #div li:nth-of-type(1) {
+            background-color: red;
+        }
+
+        #div li:nth-of-type(2) {
+            background-color: pink;
+        }
+
+        #div li:nth-of-type(3) {
+            background-color: blue;
+        }
+
+        #div li:nth-of-type(4) {
+            background-color: #ccc;
+        }
+
+        #div li:nth-of-type(5) {
+            background-color: green;
+        }
+    </style>
+    <script src="js/common.js">
+
+    </script>
+</head>
+
+<body>
+    <div id="div">
+            <ul >
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+    </div>
+
+    <script>
+        var ul = document.querySelector("div");
+        li = ul.querySelectorAll("li");
+        for (var i = 0; i < li.length; i++) {
+            li[i].onmouseover = function () {
+                for (var i = 0; i < li.length; i++) {
+                    move(li[i], { 'width': 100 });
+                }
+                move(this, { "width": 400 });
+            }
+            li[i].onmouseout = function () {
+
+                for (var i = 0; i < li.length; i++) {
+                    move(li[i], { 'width': 160 });
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

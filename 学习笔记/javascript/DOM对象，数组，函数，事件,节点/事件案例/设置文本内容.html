@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            function setTextContent(element,text) {
+                if((typeof element.textContent) == 'underfined'){
+                    element.innerText = text;
+                }
+                else {
+                    element.textContent = text;
+                }
+            }
+            function getTextContent(element,text) {
+                if((typeof element.textContent) == 'underfined'){
+                    return element.textContent;
+                }
+                else {
+                    return element.textContent;
+                }
+            }
+            var btn = document.getElementById('btn');
+            var area = document.getElementById('area');
+            btn.onclick = function() {
+                var str = prompt("请输入你要输入的文字");
+
+                setTextContent(area,str);
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="改变文字" id = "btn">
+    <textarea id="area"></textarea>
+</body>
+</html>

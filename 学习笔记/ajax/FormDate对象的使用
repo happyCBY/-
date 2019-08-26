@@ -1,0 +1,67 @@
+FormDate的作用  注意FormDate不能用于get请求中
+1.模拟HTML表单,将HTML表单映射为表单对象，自动将表单对象中的数据拼接成请求参数的格式，不用设置setRequestHeader
+2.可以实现异步上传二进制文件
+注意： 用FormDate上传数据，在服务器端需要使用formidable插件，创建formidable对象来接收上传的数据
+例:
+//客户端
+var btn = document.querySelector("#btn");
+var form = document.querySelector("#form")
+btn.onclick = function(){
+    //创建formdate表单对象
+    var formdate = new FormData(form);
+
+    var xml = new XMLHttpRequest();
+
+    xml.open("post","http://localhost:3000/formdate");
+
+    xml.send(formdate);
+
+    xml.onload = function(){
+        console.log(xml.responseText);
+    }
+}
+
+//服务器端
+const formidable = require('formidable');
+app.post('/formdate', (req, res) => {
+	// 创建formidable表单解析对象
+	const form = new formidable.IncomingForm();
+	// 解析客户端传递过来的FormData对象
+	form.parse(req, (err, fields, files) => {
+
+		res.send(fields);
+	});
+});
+======================================
+获得表单提交数据:
+form.get("x")   //form为FormDate对象，x为要获得的表单名字
+删除表单提交的数据
+form.delete("x") //x为要删除的表单的名字
+修改表单提交的数据
+form.set("x","y") //x为要修改的表单的名字，y为要修改的值，注意，如果x的名字不存在，则会创建出一个x表单属性
+添加表单数据
+form.append("x","y") //x为新添加属性的名字，y为新添加属性的值，注意，如果x名字已经存在，仍会添加该属性，而在服务器端接收的时候会接收最后一个该名字对应的属性值
+
+set和append最大的不同就是:set会覆盖原有的值，而append则会保留两个值
+
+=====================================
+上传文件: form表单要设置 enctype="multipart/form-data" 属性才能上传二进制文件
+
+上传文件进度条设置:
+file.onchange = function(){
+    var xml = new XMLHttpRequest();
+    //往formdate对象里面添加属性
+    form.append("file",this.files[0]);
+
+    xml.open("post","http://localhost:3000/progress");
+    //xml.upload.onprogress在文件上传时会不断触发
+    xml.upload.onprogress = function(ev){
+        //ev.loaded为已经上传文件大小，ev.total为文件总大小
+        span.innerHTML = ev.loaded/ev.total*100+"%";
+        aside.style.width = ev.loaded/ev.total*div.offsetWidth+"px";
+    }
+    xml.send(form);
+    xml.onload = function(result){
+        console.log(result);
+    }
+}

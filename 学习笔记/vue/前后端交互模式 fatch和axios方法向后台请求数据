@@ -1,0 +1,139 @@
+1.前后端交互模式
+***原生ajax
+***基于jQuery的ajax
+***fetch
+***axios
+2.URL的地址格式
+（1）传统地址格式: 协议://域名(或者id地址):端口(默认为80端口，可以省略)/路径?参数#锚点(用来定位页面中的某个位置)
+例:
+http://ithema:80
+http://ithema:80/index.html
+http://ithema:80/index.html?id=6
+http://ithema:80/index.html?id=6#add
+
+（2）Restful形式的URL :
+HTTP请求方式:
+get、post、put、delete   增/删/改/查
+符合规则的Restful地址:
+http://ithema:80/index.html  GET
+http://ithema:80/index.html  POST
+http://ithema:80/index.html/123(参数) PUT
+http://ithema:80/index.html/123(参数) DELETE
+
+
+2.fatch基本用法
+(1)基本用法
+fetch("请求路径").then(data=>{
+    //data.text()返回的是一个promise对象，主要为了接收服务器端返回的数据
+    return data.text();
+}).then(set=>{
+    //set为服务器端 res.send返回回来的数据
+    console.log(set);
+})
+(2)添加参数
+fetch("请求路径",{
+    //设置对应的请求信息
+    //method设置请求方式
+    method: get/post/put/delete/...,
+===========================================================
+    //body 设置post/put等参数传递,普通格式
+    body: "name=zs&id=4",
+    //headers 设置请求头
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+===========================================================
+    //发送JSON数据类型的数据
+    body: JSON.stringify({name = "zs"})
+    headers: {
+        "Content-Type": "application/json"
+    }
+    服务器端设置:
+    const bodyParser = require("body-parser");
+    app.use(bodyParser.json());
+===========================================================
+}).then(data=>{
+    //data.text()返回的是一个promise对象，主要为了接收服务器端返回的数据,返回的数据类型为普通类型
+    return data.text();
+    //data.json()和text作用一样也是接收服务器端返回的数据，返回的数据类型为json数据类型，相当于JSON.parse(responseText)
+    //return data.json();
+}).then(set=>{
+    //set为服务器端 res.send返回回来的数据
+    console.log(set);
+})
+
+
+
+========================================================================
+3.axios基本用法
+
+//注意获得服务端响应数据方法ret=>{console.log(ret.data)} 是固定的，不能改变ret
+axios.get("路径").then(ret=>{console.log(ret.data)});
+
+(1)get方式传递参数  delete方式传参和get方式差不多
+***axios.get("/axios?name=zs").then(ret=>{console.log(ret.data)});
+***axios.get("/axios/123").then(ret=>{console.log(ret.data)});
+//一次性传多个参数
+***axios.get("/axios",{
+    //params里面可以包裹多个参数
+    params: {
+        name: "zs"
+    }
+}).then(ret=>{console.log(ret.data)});
+
+(2)post方式传递参数 put方式和post传参方式差不多
+//注意post传参默认为json类型的数据格式
+***axios.post("/axios",{
+    name: "zs",
+    age: 18
+}).then(ret=>{
+    console.log(ret.data);
+})
+//使用 URLSearchParams方式添加参数
+var body = new URLSearchParams();
+body.append("name","张三");
+axios.post("/post",body).then(ret=>{
+    console.log(ret.data);
+})
+
+(3)axios的全局配置
+//设置超时时间，如果服务器端响应事件超过设置的时间时就会报错
+axios.defaults.timeout = "自定义时间";
+//设置默认的地址，在axios里面只写请求的路由没有写协议域名端口时会默认将设置的默认地址和写入的路由地址拼接起来起来再发送请求,
+
+axios.defaults.baseURL = "http://localhost:3000/";
+//设置请求头信息，如果想要跨域的话，服务器端也要设置相应的请求头信息
+例:
+客户端:
+axios.defaults.headers['mytoken'] = "123456";
+服务器端:
+res.header('Access-Control-Allow-Headers', 'mytoken');
+
+
+(4)请求/响应拦截器
+请求拦截器:
+axios.interceptors.request.use(function(config(自定义名称，一般推荐用config)) {
+    //config里面包含发送请求的各种信息，如:
+    //请求地址: config.url
+    //请求参数: config.method
+    //请求参数: config.data
+    //请求头: config.headers
+    //注意最后要将config返回,没有返回的话将不会发送请求
+    //用法: 我们可以根据请求地址设置不同修改config里面各个属性，从而修改请求信息
+    return config
+},function(err){
+    console.log("出错了")
+})
+
+响应拦截器:
+axios.interceptors.response.use(function(res){
+    //res里面包含服务器端传回的数据 如
+    //响应数据 res.data
+    //响应状态码 res.status
+    //响应报文头 res.headers
+    //注意最后要将res返回，不然 在 .then(ret=>{  })  里面的ret就没有内容了
+    //用法: 可以直接return res.data，那么在 .then(ret=>{  })  里面的ret就是服务器端返回的内容了
+    return res
+},function(err){
+    console.log("出错了")
+});

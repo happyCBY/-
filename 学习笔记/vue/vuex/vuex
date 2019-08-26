@@ -1,0 +1,136 @@
+vuex是实现组件全局状态（数据）管理的一种机制，可以方便的实现组件之间的数据共享
+
+1、使用vuex同一管理的好处
+能够在vuex中集中管理共享的数据，易于开发和后期的维护
+能够高效的实现组件之间的数据传值，调高开发效率
+存储在vuex的数据都是响应式的，能够实时保持数据与页面的同步
+
+2、vue基本使用步骤
+(1) npm i vuex --save 下载vuex
+(2) 创建store.js文件 导入vuex  import Vuex from 'vuex'
+(3) 导出 vuex创建的对象
+export default new Vuex.store({
+    store: {
+
+    }
+})
+(4) 在需要使用的地方先导入 store.js文件 import store from './store.js'
+在创建的vue对象中使用
+var vm = new Vue({
+    el: "#app"
+    store,
+})
+
+2、核心概念概述
+Vuex中主要核心概念:
+(1) State  State 提供唯一的公共数据源，所有共享的数据都要统一放到Store的State中进行存储
+组件访问state中的数据:
+***第一种方式   $store.state.(state中要访问的属性名)
+***第二种方法
+从vuex中导入mapState函数 import {mapState} from 'vuex'
+通过将全局数据，映射为当前组件的计算属性
+computed: {
+    ...mapState({ 'count' })
+}
+=====================================================================
+(2)Mutation 用于变更store中的数据
+第一种方法:
+export default new Vuex.Store({
+    state: {
+        count: 1,
+        age: 18
+    },
+    mutations: {
+        adds(state){
+            state.count++
+        },
+        sub(state){
+            state.count--
+        }
+    }
+})
+
+在其他地方调用 mutations中的方法:  this.$store.commit('sub')
+------------------------------------------------------------
+在调用Mutation中的方法时传递参数
+export default new Vuex.Store({
+    state: {
+        count: 1,
+        age: 18
+    },
+    mutations: {
+        addN(){
+            console.log(arguments)
+        }
+    }
+})
+
+在其他地方调用: this.$store.commit('sub',3,4,5)
+
+注意！传递的参数可以写多个，但是！mutations中方法接收参数只能接收一个， arguments中只有默认的state和传递的参数 3，如果真想传递多个参数可以将他们写成一个对象或者数组进行传递
+
+第二种方法:
+从vuex中加载 mapMutations函数
+在其他地方调用: ...mapMutations(['subN','addN'])  相当于在methods中添加了store中mutations中定义的subN和addN 两个方法的映射 可以直接使用this.subN和this.addN来调用 store中的方法了
+methods:{
+    ...mapMutations(['subN']),
+    click: function(){
+        this.subN(3)
+    }
+}
+
+=====================================================================
+(3)Action 用于处理异步任务 比如定时器，虽然是处理异步任务，但本质还是得调用mutations里面的方法
+在store的actions中 创建方法
+actions: {
+    addAsync(content,step){
+        setTimeout(function(){
+            //用来调用 mutations 中的方法, 传入参数 content 可以看成是 store创建的对象
+            //调用 mutations中的方法 step是用户传递的参数
+            content.commit('add',step)
+        },1000)
+    }
+}
+第一种方法:
+在其他地方调用actions中的方法: this.$store.dispatch('addAsync','3')
+第二种方法:
+从 vuex中加载 mapActions 函数  import { mapActions } from 'vuex'
+在 methods 中: ...mapActions(['add','sub'])
+使用时就当普通methods方法使用: this.add(20)
+====================================================================
+(4)Getter
+getter用于对Store中的数据进行加工处理成新的数据,不会修改原数据，类似 computed
+State 中的数据发生变化时，Getter的数据也会发生变化
+案例:
+state: {
+    num:5
+},
+getters: {
+    addnum: function(state){
+        return state.num+=5
+    }
+}
+第一种方法调用:
+this.$store.getters.addnum
+第二种方法调用:
+从vuex中加载 mapGetters import { mapGetters } from 'vuex'
+在computed中: ...mapGetters(['addnum'])
+调用: this.addnum
+
+=================================================
+总结:
+调用 state 中的属性
+this.$store.state.属性名
+...mapState([属性名]) this.属性名
+
+调用 mutations 中的方法
+this.$store.commit('方法名',参数)
+...mapMutations([方法名]) this.方法名('参数')
+
+调用 actions 中的异步方法
+this.$store.dispatch('方法名'，参数)
+...mapActions(['方法名']) this.方法名('参数')
+
+调用 getter 中的属性
+this.$store.getter.属性名
+...mapGetters(['属性名']) this.属性名

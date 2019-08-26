@@ -1,0 +1,57 @@
+函数的角色:  以后定义函数最好是用表达式来定义
+1.函数声明
+function f1(){
+    console.log("1");
+}
+f1();
+函数声明如果放在if-else语句中，在ie8浏览器下会出问题
+if(true) {
+    function f1(){
+        console.log("1");
+    }
+}
+else {
+    function f1(){
+        console.log("0");
+    }
+}
+在ie下输出的是0
+
+=============================================
+函数是对象，但对象不一定是函数
+
+对象中有 __proto__原型
+函数中有 prototype原型
+
+如果一个东西中既有 __proto__原型又有prototype原型 说明它既是函数又是对象
+函数中有 prototype 和 __proto__ 原型
+对象中有的只有 __proto__ 原型
+
+所以说函数是对象，但是对象不一定是函数
+
+========================================
+所有的函数实际上都是由Function的构造函数创建出来的实例对象
+证明:
+var f1 = function(){};
+console.dir(f1);
+console.log(a.__proto__ == Function.prototype); 返回true
+var f2 = new Function();
+console.dir(f2);
+他们输出里面的__proto__是一样的
+
+而Functiom是Object创建出来的对象实例
+
+
+
+
+
+
+
+
+
+
+2.函数表达式
+var f2 = function(){
+    console.log("0");
+}
+f2();

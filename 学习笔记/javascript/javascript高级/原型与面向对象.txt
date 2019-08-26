@@ -1,0 +1,122 @@
+使用原型添加方法: 函数.prototype.方法名 = function(){}; 注意，不能用对象.prototype.方法名 = function(){}来创造方法
+案例:
+function Animal() {
+    this.name = "dog";
+    this.age  = "6";
+}
+Animal.prototype.sayhi = function() {
+    console.log(name);
+}
+===================================
+     这里原型的方法可以包装成下面这种形式,但是要注意一点，这样写的话要自己手动添加构造器，不手动添加的话构造器就会消失掉,另外！原型中的方法也可以相互调用
+     Animal.prototype = {
+         constructor: Animal,
+         sayhi:function(){
+                console.log("我要吃好吃的");
+                this.eat();
+             },
+         eat:function(){
+                 console.log("我要吃好吃的");
+             }
+        }
+==================================
+Animal.prototype.eat = function() {
+    console.log("我要吃好吃的");
+}
+var per1 = new Animal("dd");
+
+实例对象中有两个属性(这两个属性是通过构造函数获取的)，还有一个__proto__属性，存了原型创建的方法
+构造函数中并没有name和age这两个属性
+
+实例对象中有一个属性，__proto__,也是对象，叫原型，不是标准的属性，浏览器使用的，ie8没有这个属性
+构造函数中有一个属性，__prototype__，也是对象，叫原型，是标准属性，程序员用的
+
+原型实际上就是指__proto__或者prototype,都是原型对象，构造函数里面有原型对象，原型对象里面有个构造器(constructor)指向构造函数
+
+===========================================
+原型的作用:
+1.是为了共享数据，节省内存空间
+
+===========================================
+
+
+=========================================
+构造函数，原型对象和实例对象之间的关系:
+构造函数创建里实例对象，实例对象里面肉眼可见的存了没有用原型对象定义的方法和属性，
+构造函数里面的原型对象 prototype 里面有个构造器constructor指向了构造函数，它里面的方法能被实例对象所共享(实例对象里面的__proto__对象指向了构造函数的prototype,所以他们共用一个空间，所以prototype里面的constructor所拥有的方法和属性都能被实例对象所调用)
+
+
+===================================
+什么样的数据是需要写在原型中？
+1.需要共享的属性写在原型中，不需要共享的属性写在构造函数中
+
+构造函数里面声明的变量和方法如果和原型对象里面声明的对象和方法名字重复了，用户调用这些重复的方法和属性会调用哪一个？
+答: 程序会先从构造函数里边找这个方法或属性，如果有直接调用，如果没有则去原型对象里边找，原型对象里边也没有的话则报错
+
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+！！！！！通过原型对象我们可以往系统内置函数里面添加方法啦！！！！！！！！！
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+==============================================
+原型链: 是一种关系，实例对象和原型对象的方法关系是通过原型(__proto__)来联系的
+
+原型的指向是可以改变的:
+实例对象的原型__proto__指向的是该对象所在的构造函数的原型对象
+构造函数的原型对象改变了，那么实例化出来的对象的原型__proto__指向也会改变
+案例1:
+function Animal(name) {
+}
+Animal.prototype.sayhi = function() {
+    console.log("anlmal");
+}
+function Student() {
+}
+Student.prototype.sz = function(){
+    console.log("student");
+}
+Student.prototype = new Animal();
+var student = new Student();
+student.sayhi();  可以调用
+student.sz();     报错
+
+总结:实例对象和原型对象之间的关系是通过__proto__原型来联系起来的，这个关系就是原型链
+
+=====================================================
+实例对象的__proto__指向的是构造函数的prototype，构造函数的prototype的__proto__指向的是object的 prototype, object的 prototype的 __proto__指向null
+function Student() {
+}
+Student.prototype.sz = function(){
+    console.log("student");
+}
+var student = new Student();
+console.log(student.__proto__ == Student.prototype);                        true
+console.log(student.__proto__ .__proto__ == Student.prototype.__proto__);   true
+console.log(Student.prototype.__proto__ == Object.prototype );              true
+console.log(Object.prototype.__proto__);                                    null
+
+改变原型指向对象并添加方法或属性时要先指向再添加方法
+
+案例1:
+function Person() {
+    this.name = "zxj";
+}
+function Student() {
+    this.name = "cby0;"
+}
+var per = new Person();
+Student.prototype = per;
+Student.prototype.sayhi = function() {
+    console.log("hh");
+}
+var str = new Student();
+console.dir(Person);
+console.dir(per);
+console.dir(str);
+这时候sayhi方法并没有在Person中，它存在new Person这个对象里
+=====================================================
+面向对象的特性: 封装，基础，多态    封装
+封装: 就是包装                     封装
+一个值存储在一个变量中---封装       封装
+一堆重复的代码放在一个函数中        封装
+一系列函数放在一个对象中            封装
+一些功能相似的对象放在一个js文件    封装

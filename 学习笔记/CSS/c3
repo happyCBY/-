@@ -1,0 +1,4 @@
+outline-offset 属性对轮廓进行偏移，并在超出边框边缘的位置绘制轮廓。
+例: outline-offset:15px; 在距离盒子四边边框绘制一个轮廓
+outline 设置轮廓线的宽度 样式(实线或虚线等) 颜色
+例:outline:2px solid red;

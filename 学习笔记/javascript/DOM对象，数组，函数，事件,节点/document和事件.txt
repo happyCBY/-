@@ -1,0 +1,244 @@
+document是从整个文档里面获得
+==========================================================
+获得元素的方式:
+document.getElementById('id名'); 返回一个id属性为'id名'的对象
+document.getElementsByTagName('标签名'); 返回一个伪数组  里面包含多个DOM对象
+document.getElementByName('name属性的值'); 返回一个伪数组 里面包含多个DOM对象
+document.getElementByClassName('class的值');---->h5的，低版本浏览器不支持 返回一个伪数组 里面包含多个DOM对象
+document.querySelector('选择器名'); ---》h5  返回一个对象    有多个选择器一样的话，选中第一个
+案例:
+document.querySelector('div p>li:first-child') 只要在样式里面可以写的，都可以写在'选择器名'里面
+
+document.querySelectorAll('选择器名'); ---》h5  返回一个伪数组    把所有选择器名相符的元素选中
+
+
+
+
+document.body 获得的是元素
+document.title 获得的是title里面的值
+document.documentElement 获得的是html
+==============================================================
+innerHTML: 获得或设置双标签中的文字
+
+innerText: 获得或设置双标签中的文字
+textContent: 获得或设置双标签中的文字 ------------> ie8不支持
+
+innerText和textContent功能基本一样，用来互补浏览器的兼容问题
+
+innerText和innerHTML的区别
+innerText主要用于设置文本内容，设置标签内容，是没有标签效果的
+innerHTML主要作用在标签内设置新的html标签内容，是有标签效果的
+
+innerText可以获得标签中的文本内容，但是标签中如果还有标签，那么最里边的标签的文本内容也能获取,但是标签的内容
+不能获得
+innerHTML可以获得标签中的文本内容,同时获得标签内容
+================
+案例1
+<div id="area">
+    年后
+    <p>但是</p>
+</div>
+var btn = document.getElementById('btn');
+var area = document.getElementById('area');
+btn.onclick = function() {
+    console.log(area.innerText);
+}
+结果返回
+        年后
+        但是
+================
+================
+案例2
+<div id="area">
+    年后
+    <p>但是</p>
+</div>
+var btn = document.getElementById('btn');
+var area = document.getElementById('area');
+btn.onclick = function() {
+    console.log(area.innerHTML);
+}
+返回
+        年后
+        <p>但是</p>
+================
+总结:想要设置标签内容，使用innerHTML,想要设置文本内容，用innerText或者 textContent或者
+innerHTML，推荐使用 innerHTML
+
+
+
+在某个元素的事件中，自己事件的this就是这个元素的对象
+=========================================================
+排他案例:
+var btn = document.getElementsByTagName('input');
+for(var i = 0;i < btn.length;i++) {
+    btn[i].onclick = function(){
+        for(var j = 0;j<btn.length;j++){
+            btn[j].value = '怀孕了';
+        }
+        this.value = '没怀孕';
+    }
+}
+无效案例:
+var btn = document.getElementsByTagName('input');
+for(var i = 0;i < btn.length;i++) {
+    btn[i].onclick = function(){
+        for(var j = 0;j<btn.length;j++){
+            btn[j].value = '怀孕了';
+        }
+        btn[i].value = '没怀孕';
+    }
+}
+原因:事件是在触发的时候执行的，for循环是在页面加载的时候执行的，这时候
+for(var i = 0;i < btn.length;i++) {循环体}已经执行完毕，i的值为btn.length，
+所以btn[i]会报错
+
+=======================================================
+小图片转大图片案例1
+ var a = document.getElementsByTagName('a')[0];
+var img = a.getElementsByTagName('img')[0];
+a.onclick = function() {
+    img.src = a.href;
+}
+文件路径由:  file:///C:/Users/cby/Desktop/培训联系/a.html
+变成:file:///C:/Users/cby/Desktop/培训联系/image/1.jpg
+小图片转大图片案例2
+var a = document.getElementsByTagName('a')[0];
+var img = a.getElementsByTagName('img')[0];
+a.onclick = function() {
+    img.src = a.href;
+    return false;
+}
+文件路径不变
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+事件有三个阶段:
+1.事件的捕获阶段: 由外向内        -----3
+2.事件的目标阶段: 点击的那个事件  -----2
+3.事件的冒泡阶段: 由内向外        -----1
+
+案例1
+var odiv = document.getElementById("dv");
+var odiv2 = document.getElementById("dv2");
+var p = document.getElementById("p");
+var arr = [odiv,odiv2,p];
+arr.forEach(function(ele,index) {
+    ele.addEventListener('click',function() {
+        console.log(this.id+"========"+arguments[0].eventPhase);
+    },false);
+});
+点击p触发p的点击事件后输出的为:
+p========2
+dv2========3
+dv========3
+这时dv和dv2是事件冒泡阶段,p是事件目标阶段
+<div id="dv" >  <div id = "dv2">  <p id="p"></p>  </div> </div>
+------------------------------------------------------------------
+案例2
+var odiv = document.getElementById("dv");
+var odiv2 = document.getElementById("dv2");
+var p = document.getElementById("p");
+var arr = [odiv,odiv2,p];
+arr.forEach(function(ele,index) {
+    ele.addEventListener('click',function() {
+        console.log(this.id+"========"+arguments[0].eventPhase);
+    },true);
+});
+点击p触发p的点击事件后输出的为:
+dv========1
+dv2========1
+p========2
+这时dv和dv2是事件捕获阶段,p是事件目标阶段
+<div id="dv" >  <div id = "dv2">  <p id="p"></p>  </div> </div>
+
+总结:当addEventListener(type,object,false/ture)第三个参数为false时，此时处于事件冒泡阶段，函数事件由内到外执行(从被触发的那个事件开始逐级执行到最外层的事件)，事件处理函数arguments[0].eventPhase值为2(事件目标阶段,)或3(目标冒泡阶段)。第三个参数为true时，函数事件由外到内执行(从最外层事件逐级执行到被触发的那个事件),事件处理函数arguments[0].eventPhase值为2(事件目标阶段,)或1(事件处理阶段)，事件冒泡和事件处理是不会同时发生的
+一般默认都是使用冒泡阶段，很少用捕获阶段
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+
+===============================
+鼠标事件
+===============================
+1.onclick: 鼠标点击事件
+开关灯
+2.onmousemove: 鼠标移动事件事件
+
+案例:
+var img = my$('img');
+document.onmousemove = function(e) { //鼠标移动的横纵坐标
+    var x = e.clientX;  //获得鼠标在可视区的横坐标
+    var y = e.clientY;  //获得鼠标在可视区的纵坐标
+    img.style.left = x+'px';
+    img.style.top = y+'px';
+}
+<img src="image/0.jpg" alt="" id = "img">
+3.onmouseover: 鼠标移入事件 不兼容ie
+  onmouseenter: 鼠标移入事件，不发生冒泡，并且兼容ie
+4.onmouseout: 鼠标移出事件
+onmouseleave: 鼠标移出事件，不发生冒泡，并且兼容ie
+移入高亮
+
+5.onfocus: 获得焦点事件
+6.onblur: 失去焦点事件
+模拟搜索框
+
+7.onscroll: 滚动条事件，当页面滚动时发生
+
+8.onmouseup: 鼠标弹起事件
+9.onmousedown: 鼠标按下事件
+10.oncontextmenu: 禁用鼠标右键
+11.onselectstart: 禁止文本被鼠标选中
+12.ondblclick: 双击事件
+13.onsubmit: 提交表单事件
+14.oninput: 文本框输入的时候触发
+15.compositionend: 选择字/词完成输入时触发
+16.compositionstart: 输入开始时触发
+17.oninput： input标签里面value值发生改变时触发
+18.onhashchange: 当地址栏的哈希值改变的时候触发  (location.hash获得地址栏的哈希值)
+
+双击禁止选中文字
+window.getSelection?window.getSelection()removeAllRanges():document.selection.empty();
+====================================
+键盘事件
+====================================
+1.onkeyup 键盘抬起事件   键盘按下去，抬起时发生
+2.onkeydown 键盘按下事件  键盘按下去时发生 能够识别功能键
+3.onkeypress 键盘按下事件 键盘按下去时发生 不能够识别功能键 例如ctrl shift
+onkeyup和onkeydown不区分字母大小写
+onkeypress 区分字母大小写
+三个事件的执行顺序 down -->  press  -->  up
+
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+window事件:
+1.window.onload: 当页面元素加载与引入外部资源都加载完毕后(引入的js，css，图片视频，音频)执行该事件，window.onload只能写一次，如果有多个window.onload,会取最后一个为准，如果用addEventListener则不受限制
+document.onDOMContentLoaded: DOMContentLoaded是页面元素加载后完毕，不包含图片 falsh,css等就可以执行，加载速度比load更快一些
+2.window.onresize： 重置浏览器屏幕大小时发生改变的时候触发事件，window.innerWidth输出屏幕尺寸
+
+3.pageshow重新加载页面时触发(刷新，前进，后退) e.pageshow 返回值是true时，就说明页面是缓存中加载过来的
+4.resize 当页面大小发生办法时触发
+
+==================================================
+===window.scroll(x,y)让页面滚动到(x,y)坐标的位置，这是一个方法===
+==================================================
+
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+触摸事件:
+touchstart: 手指触摸到一个DOM元素时触发
+touchmove: 手指在 DOM元素 上滑动时触发
+touchend: 手指离开DOM元素时触发
+
+touch事件的特有元素:
+
+e.touches 正在触摸屏幕的所有手指的一个列表
+e.targetTouches 正在触摸当前DOM元素上的手指的一个列表
+e.changedTouches 手指状态发生改变的列表 从无到有 或者 从有到无
+他们都是伪数组，最经常使用的是targetTouches
+
+
+click: 移动端click事件会有300ms延时问题，原因是双击两下屏幕，屏幕回到原来大小
+
+过渡完成事件:
+transitionend 过渡效果执行完毕后触发的事件

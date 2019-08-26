@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        #banner {
+            position: relative;
+            overflow: hidden;
+            width: 600px;
+            height: 350px;
+            margin: 100px auto;
+        }
+
+        #pic img {
+            width: 600px;
+            height: 350px;
+            vertical-align: middle;
+        }
+
+        #pic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1200px;
+            height: 300px;
+        }
+
+        #pic li {
+            float: left;
+        }
+
+        #squer {
+            position: absolute;
+            overflow: hidden;
+            bottom: 10px;
+            left: 50%;
+            width: 100px;
+            height: 20px;
+            border-radius: 10px;
+            transform: translateX(-50%);
+            background-color: #33333380;
+            padding: 0 6px 0 17px;
+
+        }
+
+        #squer li {
+            float: left;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 11px;
+            margin-top: 3px;
+        }
+
+        #left,
+        #right {
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background-color: #00000080;
+            color: #ffffff80;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        #left {
+            left: 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        #right {
+            right: 0;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .current {
+            background-color: red !important;
+        }
+    </style>
+    <script src="js/common.js">
+
+    </script>
+</head>
+
+<body>
+    <div id="banner">
+        <div>
+            <ul id="pic">
+                <li><img src="image/1-small.jpg" alt=""></li>
+                <li><img src="image/cangjingkong.jpg" alt=""></li>
+                <li><img src="image/default.jpg" alt=""></li>
+                <li><img src="image/mm.png" alt=""></li>
+            </ul>
+        </div>
+        <ol id="squer">
+
+        </ol>
+        <input type="button" value="<" id="left">
+        <input type="button" value=">" id="right">
+    </div>
+    <script>
+        // 获得相框
+        var banner = my$('banner');
+
+        //获得移动的图片
+        var pic_ul = my$('pic');
+        var pic_li = pic_ul.children;
+        //获得圆形小按钮
+
+        var squer = my$('squer')
+
+        //获得左移动按钮
+
+        var left = my$('left');
+
+        //获得右移动按钮
+
+        var right = my$('right');
+        //设定一个定时器
+        var timer = null;
+        var banner_timer = null;
+        //设置全局下标
+        var pic_num = 0;
+        //克隆第一张照片
+        var pic_ul_first = pic_li[0].cloneNode(true);
+        pic_ul.appendChild(pic_ul_first);
+        //给ul宽度
+        pic_ul.style.width = pic_li[0].offsetWidth * pic_li.length + 'px';
+
+        //创建ol中li小按钮
+        for (var i = 0; i < pic_li.length; i++) {
+            var ol_li = document.createElement('li');
+            squer.appendChild(ol_li);
+        }
+        // 一开始让第一个小圆点显示红色
+        squer.firstElementChild.className = "current";
+
+        var squer_li = squer.children;
+        //小圆点让图片动起来
+        for (var i = 0; i < squer_li.length; i++) {
+            squer_li[i].setAttribute("index", i);
+            squer_li[i].onmouseover = function () {
+                pic_num = this.getAttribute("index");
+                little_changeColor(squer_li, pic_num);
+                move(pic_ul, -pic_num * pic_li[0].offsetWidth);
+            }
+        }
+        //左边按钮点击事件
+        left.onclick = left_click;
+        //右边按钮点击事件
+        right.onclick = right_click;
+        //banner自己动
+        banner_timer = setInterval(right_click, 1000);
+        //鼠标移动到相框上触发事件
+        banner.onmouseover = function () {
+            left.style.display = 'block';
+            right.style.display = 'block';
+            clearInterval(banner_timer);
+        }
+        //鼠标移出相框触发事件
+        banner.onmouseout = function () {
+            left.style.display = 'none';
+            right.style.display = 'none';
+            banner_timer = setInterval(right_click, 1000);
+        }
+        //图片移动
+        function move(element, long) {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                var speed = (long - element.offsetLeft) / 10;
+                speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+                if (speed != 0) {
+                    element.style.left = element.offsetLeft + speed + "px";
+                }
+                else {
+                    clearInterval(timer);
+                }
+            }, 10);
+        }
+        //小圆点变色
+        function little_changeColor(element, pic) {
+            for (var i = 0; i < element.length; i++) {
+                element[i].removeAttribute('class');
+            }
+            if (pic == pic_li.length - 1) {
+                pic = 0;
+            }
+            element[pic].className = "current";
+        }
+        //左按钮点击事件
+        function left_click() {
+            if (pic_num == 0) {
+                pic_num = pic_li.length - 1;
+                pic_ul.style.left = -pic_li[0].offsetWidth * pic_num + 'px';
+            }
+            pic_num--;
+            move(pic_ul, -pic_li[0].offsetWidth * pic_num);
+            little_changeColor(squer_li, pic_num);
+        }
+        //右按钮点击事件
+        function right_click() {
+            if (pic_num == pic_li.length - 1) {
+                pic_num = 0;
+                pic_ul.style.left = 0;
+            }
+            pic_num++;
+            move(pic_ul, -pic_li[0].offsetWidth * pic_num);
+            little_changeColor(squer_li, pic_num);
+        }
+
+    </script>
+</body>
+</html>

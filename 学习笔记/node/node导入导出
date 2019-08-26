@@ -1,0 +1,26 @@
+1.导出 通过将模块里面的对象和方法设置为exports的对象和方法进行导出
+方法1：通过exports导出
+const name = "张三";    const定义一个常量，不能修改这个属性
+let sayhi = function(){  let 是定义块级域里面的方法和属性
+    console.log("你好");
+}
+exports.name = name;
+方法2：通过module.exports导出
+const name = "张三";    const定义一个常量，不能修改这个属性
+let sayhi = function(){  let 是定义块级域里面的方法和属性
+    console.log("你好");
+}
+module.exports.name = name;
+
+两种方法指向同一块内存空间，但当内存空间发生改变的时候，以module.exports指向的内存空间为准
+例:
+const name = "张三";    const定义一个常量，不能修改这个属性
+let sayhi = function(){  let 是定义块级域里面的方法和属性
+    console.log("你好");
+}
+module.exports.name = name;
+exports = {} exports的地址改变了，module.exports的地址不变，require导入的时候取的是module.exports指向的地址
+
+2.导入 通过require方法将某个模块的方法和属性导入
+let a = require('引入的js的路径名');
+a.name; 调用这个方法

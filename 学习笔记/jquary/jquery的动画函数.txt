@@ -1,0 +1,32 @@
+显示隐藏:
+1.show([speed],[easing],[fn]) 显示元素， speed为速度，easing切换效果(先快后慢)，fn回调函数，当全部隐藏后执行fn，它们都可以省略
+2.hide([speed],[easing],[fn]) 隐藏元素
+3.toggle([speed],[easing],[fn]) 切换显示/隐藏，隐藏调用时显示，显示调用时隐藏
+//一般情况下都不加参数
+滑动:
+1.slideDown([speed],[easing],[fn]) 下拉滑动
+2.slideUp([speed],[easing],[fn])  上拉滑动
+3.slideToggle([speed],[easing],[fn]) 切换滑动
+淡入淡出:
+1.fadeIn([speed],[easing],[fn]) 淡入
+2.fadeOut([speed],[easing],[fn]) 淡出
+3.fadeToggle([speed],[easing],[fn]) 淡入淡出切换
+4.fadeTo(speed,opacity,[easing],[fn])  改变颜色透明度 opacity值为0~1，speed和opacity必须要写
+自定义动画:
+animate(json,[speed],[easing],[fn]) josn为一个对象，里面存储你要改变的样式，speed为执行时间,fn为回调函数一般用来判断动画是否执行完毕
+
+动画或效果队列:
+动画或者效果一旦触发就会执行，如果多次触发，就造成多个动画或者效果排队执行
+
+结束动画:
+step();
+案例
+var odiv = $('div');
+$("input").hover(function () {
+    odiv.stop().slideToggle(1000 );
+});
+注意:一定要写在效果或者动画之前
+======================================
+事件切换:
+hover(f1); 鼠标经过和离开都会触发f1
+hover(f1,f2); 鼠标经过执行f1,离开执行f2

@@ -1,0 +1,79 @@
+$.ajax使用方法:
+$.ajax({
+    //请求的方式
+    type: "get",
+
+    //请求的地址 如果在浏览器输入的 协议域名端口号和地址相同的话，可以把协议域名和端口号删掉，例如下面这个可以写成/base
+    url: "http://localhost:3000/base",
+
+    //设置传入参数的类型
+    contentType: "application/x-www-form-urlencoded",
+
+    //传入的参数 会自动转换为 name=张三&age=18这样形式的字符串 也可以直接传入字符串类型的参数例如: data: "name=张三&age=18",如果要传json类型的字符串的时候要先把传入的参数用JSON.stringify转换为json类型的字符串，然后设置contentType为: application/json属性
+    data: {
+        name: "张三",
+        age: 18
+    },
+
+    //告诉$.ajax这个方法不要解析参数，默认为true
+    processData: false,
+
+    //在发送请求前要做的事情  return false时不发送请求 可以用在验证表单信息
+    beforeSend: function(){return false},
+
+    //预期服务器端会返回的数据类型
+    dataType: string
+
+    //允许跨域携带cookie信息
+    xhrFields: {
+            withCredentials: true
+    },
+
+    //这个对象用于设置 Ajax 相关回调函数的上下文。也就是说，让回调函数内 this 指向这个对象（如果不设定这个参数，那么 this 就指向调用本次 AJAX 请求时传递的 options 参数）。比如指定一个 DOM 元素作为 context 参数，这样就设置了 success 回调函数的上下文为这个 DOM 元素。
+    context:object，
+    例如:$.ajax({ url: "test.html", context: document.body, success: function(){
+        $(this).addClass("done");  //这里的this指向就是document.body
+      }});
+
+    //请求成功时调用的方法 data为服务器端响应的数据 如果传入的时json数据类型的字符串，$.ajax会自动转换为json对象
+    success: function(data){},
+
+
+    //请求失败时调用的方法
+    error: function(data){}
+});
+==========================
+$(表单名).serialize() 返回拼接好的字符串
+==========================
+全局事件，只要有ajax请求被发送就会触发对应的全局事件
+
+注意全局事件一定要绑定在document身上
+
+ajaxStart事件: 在请求发送之前触发
+例:
+ $(document).on("ajaxStart",function(){
+    console.log("我还没发送");
+
+})
+
+ajaxComplete: 在请求完成时触发
+例:
+$(document).on("ajaxComplete",function(){
+    console.log("我请求完成了")
+})
+===============================
+NProgress插件   纳米进度条，用逼真的涓流动画来告诉用户正在发生的事情
+
+引入css文件
+<link rel="stylesheet" href="./js/nprogress/nprogress.css">
+引入js文件
+<script src="./js/nprogress/nprogress.js"></script>
+
+调用在ajax全局事件里面调用 NProgress.start();NProgress.done(); 实现进度条效果
+$(document).on("ajaxStart",function(){
+    NProgress.start();
+})
+
+$(document).on("ajaxComplete",function(){
+     NProgress.done();
+})

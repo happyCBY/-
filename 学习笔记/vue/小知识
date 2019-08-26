@@ -1,0 +1,31 @@
+1.Object.defineProperty 添加/修改对象的属性
+模板:
+Object.defineProperty(要设置的对象的名称, "要设置的属性", {
+    //获得属性时操作的事
+    get: function () {
+        //获得获得属性的时候，返回的属性值
+        return vm.value;
+    },
+    //设置属性时操作的事，val是设置是传入的值
+    set: function (val) {
+
+    }
+})
+
+
+2.trigger事件  用js代码触发事件
+//监听myclick事件  这里的myclick是自己命名的事件
+$("#id").on("myclick",function(){});
+//触发myclick事件
+$("#id").trigger("myclick");
+
+3.npx lessc(要执行的命令) 1.less 2.css  等价于 ./node_moudule/bin/lessc 1.less 2.css
+将 less文件转化为css文件并输出
+npx会去node_module文件下找bin目录下 找到要执行命令的名称 简写了代码
+
+4. var obj = {
+    a: 5,
+    b: 10
+}
+//这里的a:mm是给a取别名
+var {a:mm, b} = obj

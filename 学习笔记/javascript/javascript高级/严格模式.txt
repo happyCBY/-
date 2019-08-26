@@ -1,0 +1,13 @@
+"use strict";  开启严格模式
+
+
+案例:
+function f1(x,y) {
+    console.log(x+y+this);
+}
+这时的this指向为window
+"use strict";
+function f1(x,y) {
+    console.log(x+y+this);
+}
+严格模式下，这时的this指向为underfined

@@ -1,0 +1,150 @@
+网站分为两大部分：服务器端（实现网站的业务逻辑，数据库的增删改查）和客户端
+
+ip:互联网设备的唯一标识  localhost（本机域名） 127.0.0.1 （本机ip地址）
+域名：平时上网用的网址，把域名转换成ip才能访问到指定的网站服务器
+
+端口:区分不同的服务，每一个向外提供的软件都要占用一个端口，通过ip找到服务器，通过端口区分服务
+
+URL： 客户端访问服务器端的地址，统一资源定位符
+URL的组成:
+传输协议://服务器的ip或者域名:端口号/资源所在位置标识
+如: http://www.itheima.cn/news/118.html 端口号没写的话浏览器默认80端口
+
+
+http:超文本传输协议，超文本就是不仅包含文字还能包含图片，音频，视频等，提供了一种接收和发送HTML页面的方法
+报文: http请求和响应的过程中附带的数据块就叫报文，数据块包含传送的数据和一些附加的信息
+请求报文
+请求方式: post(发送数据,比较安全)|get(请求数据,一般都使用get),在网站中直接输入地址的请求方式为get
+请求地址: www.itheima.com
+
+响应报文
+响应类型: text/html
+内容长度: 20
+===========================================
+创建web网站服务器
+
+//引用http模块
+const http = require("http");
+//创建服务器对象
+const app = http.createServer();
+//用于处理url地址(如: /index和/index?name=sa)
+const url = require("url");
+//处理请求参数(如:name=zs&age=18)
+const querystring = require("querystring");
+//mine模块,根据文件的路径判断文件类型
+const mime = require("mime");
+//当客户发送请求时执行的操作
+app.on("request",(req,res)=>{
+
+    //获得请求方式
+    if(req.method=="POST"){
+        console.log(res.end("<h1>POST</h1>"));
+    }
+    else if(req.method == "GET"){
+        console.log(res.end("<h1>GET</h1>"));
+    }
+
+
+    //获得请求报文的信息
+    console.log(req.headers);
+    console.log(req.headers["accept"]); //获得报文信息中的具体某一个信息
+    //响应报文
+    /*
+    *1.HTTP状态码
+    *200:请求成功
+    *404:请求资源没有找到
+    *500:服务器端错误
+    *400:客户端请求语法错误
+    *301 重定向
+    * 2.内容类型
+    *text/html
+    *text/css
+    *application/javascript
+    *image/jpeg
+    * application/json
+    */
+    let type = mime.getType(pathname);
+    res.writeHead(200, {
+        'content-type': type+'charset=utf8',//返回纯文本,charset=utf8设置字符编码格式
+        Location: "/list"  //页面的重定向
+    }); //响应报文头
+    //告诉用户请求结束，可以跳转页面了
+    res.end();
+
+    //解析地址，获得传递的参数
+    let {pathname,query} = url.parse(req.url,true);
+    console.log(query); //获得传入的参数
+    console.log(pathname); //获得传入的路径
+
+    //获得请求的地址,当地址栏只输入http://localhost:3000 没有其他跳转页面时，req.url或获得的是/
+    if(req.url == "/index"||req.url=="/") {
+        console.log(res.end("这是index页面"));
+    }else if(req.url == "list") {
+        console.log(res.end("这是list页面"));
+
+    }else {
+        console.log(res.end("抱歉，访问的页面不存在"));
+    }
+
+    //获得post方式传入的参数
+    //data: 当请求参数传递的时候触发data事件
+    //end: 当请求参数传递结束的时候触发end事件
+    let postParams = ""; //由于post参数不是一次性传完，所以需要字符串拼接，传入一次拼接一次，直到传输完成
+    req.on('data',params=>{
+        postParams += params;
+    });
+    req.on("end",()=>{
+        console.log(querystring.parse(postParams));
+    });
+    });
+
+    //响应返回在浏览器上的内容
+    res.end("<h1>GET</h1>");
+//监听端口
+app.listen(3000);
+console.log("我监听到了");
+
+=======================================
+路由:指得是客户端请求与服务端程序代码的对应关系
+例如:
+ //路由
+    const {pathname} = url.parse(req.url,true);
+    if(req.method=="GET") {
+        console.log("这是get传参");
+
+        if(pathname=="/"||pathname=="/index"){
+            res.end("<h2>首页</h2>");
+        }else if(pathname=="/list") {
+            res.end("<h2>列表页</h2>");
+        }
+    }else if(req.method=="POST") {
+        console.log("这是post传参");
+        if(pathname=="/"||pathname=="/index"){
+            res.end("<h2>首页</h2>");
+        }else if(pathname=="/list") {
+            res.end("<h2>列表页</h2>");
+        }
+    }
+========================================
+HTML请求响应与处理
+静态资源:
+服务器不需要处理直接响应给客户端的资源就是静态资源，例如html,css,javascript,image文件
+例：
+//响应报文
+    res.writeHead("200",{
+        "content-type": "text/html;charset=utf8"
+    });
+    //处理url
+    let pathname = url.parse(req.url).pathname;
+    //静态访问地址
+    pathname = path.join(__dirname,"public",pathname);
+    fs.readFile(pathname,'utf8',(err,doc)=>{
+        console.log(err);
+        if(err==null) {
+            res.end(doc);
+        }else {
+            res.end("文件读取失败");
+        }
+    });
+动态资源:
+相同的请求地址，不同的响应资源就是动态资源，例如账号密码验证

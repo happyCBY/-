@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- placeholder属性占位符提供输入字段的提示信息 -->
+    <input type="text" placeholder="你好"> <br />
+    <!-- autofocus规定页面加载时input元素自动获得焦点，有多个autofcous时只有第一个生效 -->
+    <input type="text" autofocus> <br />
+    <!-- 在file中multiple是多文件上传,在下拉框中可以按ctrl进行多选 -->
+    <input type="file" multiple> <br />
+    <select multiple>
+        <option>123</option>
+        <option>123</option>
+        <option>123</option>
+        <option>123</option>
+    </select>
+    <!-- autocomplete提交记录保存 -->
+    <!-- autocomplete有两个值一个是off一个是on，不设置的话默认是on -->
+    <!-- 注意:首先要有提交按钮，其次要保存的框需要有name,没有提交不会记录 -->
+    <form action="">
+        <input type="text" autocomplete="on" name="username"> <br />
+        <input type="password" autocomplete name="pwd"> <br />
+        <input type="submit">
+    </form>
+    <!-- required必须填的选项,不能为空 -->
+    <form action="">
+        <input type="text" required><br />
+        <input type="submit"> <br />
+    </form>
+    <!-- accesskey使元素获得焦点的快捷键，alt+设置的字母，快速获得焦点 -->
+    <input type="text" accesskey="r">
+    <!-- disabled禁用button按钮 -->
+    <button disabled="disabled">我被禁用了</button>
+    <!-- 获得焦点 -->
+    <input type="text" autofocus >
+</body>
+
+</html>

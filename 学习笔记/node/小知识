@@ -1,0 +1,132 @@
+1.不同文件下要调用express创建的主服务器对象app使用req.app
+
+2.使用req.url的时候req.url会将get或者post或者use里接收的地址减去
+例：
+app.use("/admin",(req,res)=>{
+    console.log(req.url); //地址栏输入localhost:3000/admin/login时输出为/login
+})
+例2：
+app.use("/admin/login",(req,res)=>{
+    console.log(req.url); //地址栏输入localhost:3000/admin/login时输出为/
+
+3.使用json.stringify(对象名)可以将对象转化为字符串类型
+  使用json.parse(字符串)可以将字符串转换为对象类型
+
+4.在模板中给数据加@符号，可以让它原文输出
+
+5.谷歌插件配置地址: chrome://flags/#extensions-on-chrome-urls
+  谷歌安装插件: 更多工具-->扩展程序
+
+
+============================================
+文件上传: 必须以二进制方法进行提交
+
+6.enctype 指定表单数据得编码类型
+默认为: application/x-www-form-urlencoded
+它会将表单数据编码为: name = zhangsan&age=20 这种类型
+
+multipart/form-data 将表单数据编码为二进制类型
+
+7.formidable 模块
+
+下载 npm install formidable
+
+引入formidable模块
+const formidable = require("formidable");
+//创建表单解析对象
+const form = new formidable.IncomingForm();
+//设置文件上传路径
+form.uploadDir = "/my/dir";
+//是否保留表单上传文件得扩展名,默认是不保存
+form.keepExtensions = false;
+//对表单进行解析
+//!注意 只有当服务器端接收完post提交的表单时才会执行这个回调函数
+form.parse(req,(err,fields,files)=>{
+  //fields 存储普通请求参数,如键值对类型: name: "zhangsan"
+  //files 存储文件上传得文件信息
+})
+
+=================================
+9.javascript中读取文件
+//创建文件读取对象
+var reader = new FileReader();
+//读取文件，读取的是二进制文件，如图片文件，该方法是异步方法，不能通过返回值获得文件读取的结果，需要通过监听事件的方法获取文件读取结果
+reader.readAsDataURL('文件');
+//文件读取完成时触发
+reader.onload = function() {
+  //reader.result获得文件读取的结果
+  console.log(reader.result);
+}
+
+==============================
+10.上传多个图片
+在上传文件的那个表单控件中添加 multiple属性
+
+=============================
+dateformat 第三方模块  可以对日期进行处理
+
+下载 npm install dateformat
+
+例:
+//获得时间模块
+const datas = require("dateformat");
+//导入模板变量
+template.defaults.imports.datas = datas;
+const html = template(views,{
+    time: new Date()
+}
+
+art文件:
+{{datas(time,"yyyy-mm-dd-hh-MM")}}
+
+===============================
+数据分页 mongoose-sex-page模块
+
+下载 npm install mongoose-sex-page
+
+//引入模块
+const pagination = require("mongoose-sex-page");
+//page(x)代表当前页,size代表每页显示的信息条数,display代表用户要显示的页码数量，exec()向数据库发出查询请求
+pagination(集合的构造函数).page(x).size(y).display(z).exec();
+
+const article = await pagination(Article).find().page(page).size(2).display(3).populate("author").exec();
+
+//返回一个对象信息
+{ page: 1,    //当前页的页码
+  size: 3,    //每页显示的信息条数
+  total: 7,   //数据的总条数
+  records:    //查询的到数据
+   [ { cover: '\\uploads\\upload_2ce2cf0996267a125313a0df09cef49c.jpg',
+       _id: 5d088ea6f3b5273bfc3d56aa,
+       title: '便宜点啊',
+       author: [Object],
+       publishDate: null,
+       content: '<p>我是管理员</p>',
+       __v: 0 },
+     { cover: '\\uploads\\upload_6cd5625264101c000d6ef3f7da1202e0.jpg',
+       _id: 5d089563f73df43334578bde,
+       title: '你好我也好',
+       author: [Object],
+       publishDate: 2019-06-15T00:00:00.000Z,
+       content: '<p>的四大四大</p>',
+       __v: 0 },
+     { cover: '\\uploads\\upload_b3a96d3acccf5e34f4bc27378592a88e.jpg',
+       _id: 5d089ae478b3902fd89bb541,
+       title: '大叔大声',
+       author: [Object],
+       publishDate: 2019-06-16T00:00:00.000Z,
+       content: '<p>大叔大婶</p>',
+       __v: 0 } ],
+  pages: 3,  //总共的页码数
+  display: [ 1, 2, 3 ]  //每页显示的页码
+  }
+  =====================================
+  process.env 获取电脑的系统环境变量，他是全局变量的方法可以直接调用
+  可以在系统的环境变量中设置NODE_ENV系统环境变量，不同的值用以判断当前环境是开发环境还是生产环境
+  一般开发环境 NODE_ENV的值设置为development  生产环境中NODE_ENV的值设置为production
+  =====================================
+  morgan打印请求信息到控制台
+
+  下载 npm install morgan
+
+  app.use(morgan("dev")): 打印请求信息到控制台

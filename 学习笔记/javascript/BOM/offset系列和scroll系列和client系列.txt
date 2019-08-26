@@ -1,0 +1,52 @@
+DOM.style.width/height..  获取不到样式中设置的宽高
+
+鼠标事件对象: window.Event
+
+要使用
+DOM.offsetWidth:     获的DOM的宽   包含边框和padding
+DOM.offsetHeight:    获的DOM的高 包含边框和padding
+DOM.offsetTop:       获的DOM的top值
+DOM.offsetLeft:      获的DOM的left值
+注意获得到的属性都是数字类型
+DOM.offsetParent     获得DOM第一个有定位属性的父级,如果都没有则父级为body
+
+
+注意！
+1.如果没有父级及父级以上的盒子都没有设置定位，则使用offsetLeft/offsetTop获得的是距离浏览器两端的left和top值，
+2.如果有父级及以上盒子有设置定位，则offsetLeft/offsetTop获得是盒子距离父盒子的left和top值
+3.如果自己的定位属性是fixed，那么元素.offsetParent返回是null
+4.可以用left和margin改变offset__ 的值，但是使用translateX/Y改变不了
+==================================================================================
+scroll系列:
+DOM.scrollHeight:    获的DOM的实际的高度(不包含边框，包含padding)，如果没有内容或者内容不足元素本身的宽度显示的就是元素的高
+DOM.scrollWidth:     获的DOM的实际的宽度(不包含边框，包含padding)，如果没有内容或者内容不足元素本身的高度显示的就是元素的宽
+DOM.scrollTop:       获的DOM向上卷曲出去的值(就是滚动条滚动的距离)
+DOM.scrollLeft:      获的DOM向左卷曲出去的值(就是滚动条滚动的距离)
+
+获得浏览器向上/左卷曲的距离:
+window.pageYOffset / window.pageXOffset
+获得html向上/左卷曲的距离:
+document.documentElement.scrollTop  /  document.documentElement.scrollLeft
+获得body向上/左卷曲的距离:
+document.body.scrollTop  /  document.body.scrollLeft
+
+获得向上卷曲的距离兼容代码:
+var scrollTop = window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0(所有浏览器都不支持)
+获得向左卷曲的距离兼容代码:
+var scrollLeft = window.pageXOffset||document.documentElement.scrollLeft||document.body.scrollLeft||0(所有浏览器都不支持)
+
+//获得向上或向左卷曲出去距离的值的兼容代码:
+function getScroll() {
+    return {
+        top: window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,
+        left: window.pageXOffset||document.documentElement.scrollLeft||document.body.scrollLeft||0
+    }
+}
+======================================================================
+client系列:
+clientWidth: 可视区的宽度，不带有边框,带有padding
+clientHeight: 可视区的高度，不带有边框,带有padding
+clientTop: 获得的是上边框的宽度
+clientLeft: 获得的是左边框的宽度
+clinentX: 可视区域的横坐标
+clinentY: 可视区域的纵坐标

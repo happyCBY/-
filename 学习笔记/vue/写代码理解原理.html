@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    function Vue(options){
+      let {render,el} = options
+      var myData;//用于存组件中的数据
+      function createElement(component){
+        let {template,data} = component
+        myData = data;
+        //1. 解析模板
+        var reg = /<(.+?)>{{(.+?)}}/
+        var arr = reg.exec(template)
+        var tagName = arr[1]
+        var innerHTMLKey = arr[2]
+        //2. 构建虚拟dom vnode并返回
+        return {
+          tagName,
+          innerHTMLKey
+        }
+      } 
+      var vNode = render(createElement)
+      //3. 基于vNode生成真实的dom
+      var element = document.createElement(vNode.tagName)
+      element.innerHTML = myData[vNode.innerHTMLKey]
+      document.querySelector(el).appendChild(element)
+    }
+    
+    const App = {
+      template: `<div>{{msg}}</div>`,
+      data:{
+        msg:'hello vue'
+      }
+    }
+
+    //简单理解render,h做了什么事情，这只是一个demo
+    var vm = new Vue({
+      el:'#app',
+      render:function(h){
+        return h(App)
+      }
+    })
+  </script>
+</body>
+</html>

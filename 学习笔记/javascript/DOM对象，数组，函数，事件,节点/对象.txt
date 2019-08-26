@@ -1,0 +1,114 @@
+编程思想: 把一些生活中做事的经验融入到程序中
+面向过程: 凡事都要亲力亲为，每件事的具体过程都要知道
+面向对象: 根据需求找对象，所有的事都用对象去做，注重的是结果
+
+面向对象特性:封装，继承，多态(抽象性)
+js不是面向对象的语言，但是可以模拟面向对象的思想
+js是一门基于对象的语言
+
+对象:有属性和方法，特指的某个事物
+对象:一组无序属性的集合的键值对，属性的值可以是任意类型
+
+实例化对象: 通过构造函数创建出来，实例化的对象，实例对象必须通过实例对象来调用
+
+静态对象: 不需要创建，直接就是一个对象，方法()直接通过这个对象名字调用，静态方法必须通过大写对象来调用
+
+
+注意！！！
+1.遍历对象是不能用for循环遍历的
+
+
+js学习中的三种对象:
+1.内置对象-----------js系统自带的对象
+2.自定义对象---------自己定义的构造函数创造的对象
+3.浏览器对象
+
+
+如何创建对象:
+
+创建对象的3种方式:
+1.调用系统的构造函数创建对象
+语法:
+var obj = new Object();
+
+ 案例1:
+ var obj = new Object();
+ obj.name = "zxl";
+ obj.age = 18;
+ obj.howage = function() {
+     console.log("我今年"+obj.age(也可以这么写: this.age)+"岁"); (在当前对象方法中可以访问当前这个属性的值，可以用this来代替当前对象的名字)
+ }
+
+如何快捷的创建多个对象:把创建对象的过程封装在一个函数中(工厂模式创建对象)
+
+function create(x,y) {
+    var obj = new Object(name,age);
+    obj.name = name;
+    obj.age = age;
+    obj.sayhi = function() {
+        console.log("我叫"+this.name+",我今年"+this.obj+"岁了");
+    };
+    return obj;
+}
+var pro1 = create("hq",18);
+var pro2 = create("zxj",18);
+...
+
+2.自定义构造函数创建对象(结合第一种和需求通过工厂模式创建对象)
+
+自定义构造函数做的四件事:
+1. 在内存中申请一块空闲的空间，存储创建新的对象
+2. 把this设置为当前对象
+3. 设置对象属性和方法的值
+4. 把this这个对象返回
+
+function Person(name,age) {
+    this.name = name;
+    this.age = age;
+    this.sayhi = function() {
+        console.log("hhaha");
+    };
+}
+var per = new Person("小红",18);
+console.log(per instanceof Person); 结果为true
+
+注意！！！
+内存空间分为栈和堆，var per = new Person("小红",18); 先在堆里申请了一块空间(比如0x120这个地址)存储了:
+new Person("小红"，10);
+this.name = "小红";
+this.age = 18;
+this.sayhi = function() {
+    console.log("hhaha");
+};
+然后per这个变量指向了这个地址，就是说per这个变量实际上存储的是申请堆里面那块空间的地址(0x120)
+总结：对象占用了两块空间，一个是堆，一个是栈，堆里面存储的是对象，栈里面存储的是堆的地址
+
+3.字面量创建对象,缺点:只能创建一次性的对象
+var obj = {};
+obj.name = "w";
+obj.age = 18;
+obj.eat = function() {
+    console.log("好好");
+};
+obj.eat();
+优化后的写法
+var obj = {
+    name: "w",
+    age: 18,
+    eat: function() {
+        console.log("好好"+this.name+"");
+    }
+};
+obj.eat();
+
+
+对象的属性调用和赋值可以用下面两种方式:
+obj.name = "xxx";
+obj["name"] = "xxx";
+
+obj.name();
+obj["name]();
+
+
+json格式的数据！类似于字面量赋值的对象，一般都是成对的，是键值对
+json也是一个对象，数据都是成对的， json格式的数据无论是键还是值都用双引号括起来

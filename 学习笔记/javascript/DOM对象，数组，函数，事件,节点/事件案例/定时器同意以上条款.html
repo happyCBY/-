@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <textarea name="" id="" cols="30" rows="10">
+        我同桌在打嗝
+    </textarea>
+    <input type="button" value="笑( 5 )" id = "btn" disabled >
+    <script>
+        var btn = document.getElementById('btn');
+        var time = 5;
+        var timer = setInterval(function(){
+            if(time == 0) {
+
+                btn.disabled = false;
+            }
+            btn.value = "笑( "+time--+" )";
+            if(time<0) {
+                clearInterval(timer);
+            }
+        },1000);
+    </script>
+</body>
+</html>

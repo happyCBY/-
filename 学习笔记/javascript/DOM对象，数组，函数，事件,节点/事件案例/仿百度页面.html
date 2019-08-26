@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        #dv {
+            position: relative;
+            width: 302px;
+            margin: 100px auto;
+        }
+        #txt {
+            width: 300px;
+            height: 40px;
+            border: 1px solid #000;
+            border-radius: 20px;
+            outline: none;
+            text-indent: 2em;
+        }
+        input[type = 'button']{
+            position: absolute;
+            right: 0;
+            top: 1px;
+            width: 50px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 0 20px 20px 0;
+            border: none;
+        }
+    </style>
+    <script src="js/common.js"></script>
+    <script>
+        window.onload = function() {
+            var odiv = document.getElementById('dv');
+            var txt =  document.getElementById('txt');
+            var array = ['今天天气不错','今天天气不错','今天天气不错','昨天天气不错','昨天天气不错','昨天天气不错','明天天气更好','明天天气更好','明天天气更好']
+            txt.onkeyup = function() {
+                var getTxt = [];
+                for(var i = 0;i<array.length;i++){
+                    if(array[i].indexOf(this.value) != -1) {
+                        getTxt.push(array[i]);
+                    }
+                }
+                if(document.getElementById('dv1')) {
+                    odiv.removeChild(document.getElementById('dv1'));
+                }
+                if(getTxt.length == 0 || this.value.length == 0) {
+                    return;
+                }
+                var odiv1 = document.createElement('div');
+                    odiv1.style.width = "300px";
+                    odiv1.style.border = "1px solid #000";
+                    odiv1.id = "dv1";
+                for(var i = 0; i < getTxt.length; i++) {
+                    var pObj = document.createElement('p');
+                    pObj.innerText = getTxt[i];
+                    pObj.style.marginTop = '5px';
+                    pObj.style.marginLeft = '10px';
+                    pObj.onmouseover = function() {
+                        this.style.backgroundColor = 'red';
+                    }
+                    pObj.onmouseout = function() {
+                        this.style.backgroundColor = '';
+                    }
+                    odiv1.appendChild(pObj);
+                    odiv.appendChild(odiv1);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="dv">
+        <input type="text" id="txt">
+        <input type="button" value="搜索">
+    </div>
+</body>
+</html>

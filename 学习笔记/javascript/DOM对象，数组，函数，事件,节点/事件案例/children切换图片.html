@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/common.js"></script>
+    <style>
+        img {
+            width: 200px;
+            height: 150px;
+            opacity: .5;
+            cursor: pointer;
+        }
+        #dv {
+            text-align: center;
+        }
+        #dv .current {
+            opacity: 1;
+        }
+        #bd {
+            background-image: url(image/yg_5.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body id = "bd">
+    <div id="dv">
+        <img src="image/yg_5.jpg" alt="" class="current">
+        <img src="image/yg_6.jpg" alt="">
+        <img src="image/yg_7.jpg" alt="">
+    </div>
+    <script>
+        var odiv = my$('dv');
+        var body = my$('bd');
+        var node_img = odiv.children;
+        var src
+        for(var i=0;i < node_img.length;i++) {
+            node_img[i].onclick = function() {
+                for(var j = 0;j < node_img.length;j++) {
+                    node_img[j].removeAttribute('class');
+                }
+                this.className = 'current';
+                body.style['background-image'] = "url("+this.src+")";
+            }
+        }
+    </script>
+</body>
+</html>

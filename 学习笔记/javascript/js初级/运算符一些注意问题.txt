@@ -1,0 +1,37 @@
+字面量赋值:
+var num1=10;
+
+
+
+==不严格的相等,只比较值是否相等
+var num = 5;
+var num1 = "5";
+if(num==num1)返回true
+===严格的相等,比较值也比较类型是否相等
+var num = 5;
+var num1 = "5";
+if(num===num1)返回false
+!=不严格的不等
+var num = 5;
+var num1 = "5";
+if(num!=num1)返回false
+!==严格的不等
+var num = 5;
+var num1 = "5";
+if(num!==num1)返回true
+
+===============================================
+
+一元运算符:
+案例1
+var num = 10;
+var b = num++ + num++;
+console.log(b);  返回21    ++num先表达式返回原值，再执行num+=1,后面的num++中返回的原值是11
+案例2
+var num = 10;
+var b = ++num + num++;
+console.log(b);  返回22
+案例3
+var num = 10;
+var b = ++num + ++num;
+console.log(b);  返回23

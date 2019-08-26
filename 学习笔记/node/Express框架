@@ -1,0 +1,224 @@
+express框架的好处
+===================================
+1. 提供了方便简洁的路由定义方式
+例:
+//引用express框架
+const express = require("express");
+//创建服务器对象
+const app = express();
+//中间件
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+//获得get请求
+app.get("/",(req,res)=>{
+    //send方法的好处
+    //1. send方法会自动检测响应内容的类型
+    //2. send方法会自动设置http状态码
+    //3. send方法会自动设置响应的内容的编码
+    console.log(req.query); //获得get传入的参数内容，对象形式
+    res.send("hello,express");
+})
+app.post("/index",(req,res)=>{
+    console.log(req.body); //req.body获得post请求传入的参数，对象形式，注意要先设置中间件
+    res.send(req.body);
+});
+//监听端口
+app.listen(3000);
+console.log("网站服务器启动成功");
+==========================================
+​2. 对获取HTTP请求参数进行了简化处理
+
+​3. 对模板引擎支持程度高，方便渲染动态HTML页面
+
+​4. 提供了中间件机制有效控制HTTP请求
+
+​5. 拥有大量第三方中间件对功能进行扩展
+==========================================
+中间件:、
+中间件就是一堆方法，它会接收客户端发来的请求，会对客户端发来的请求做出响应，或者交给下一个中间件处理
+中间件有两部分组成，分别是 中间件方法和请求处理函数，其中中间件是框架提供的，请求处理函树是开发人员写的
+
+对同一个请求可以设置多个中间件,注意请求从上到下依次匹配中间件，如果匹配成功则终止匹配，必须要有next让该请求在这个中间件处理完后将请求的控制权提交给下个中间件，直到遇到结束请求的中间件
+例:
+app.get("/",(req,res,next)=>{
+    ...;
+    next();
+})
+app.get("/",(req,res)=>{
+    ...;
+})
+
+====================
+服务器对象名.use中间件用法:
+服务器对象名.use 匹配所有的请求方式，不管用户请求是什么都可以匹配到，所以该中间件一般放在其他中间件之前，可以直接传入请求处理函数，代表接收所有请求
+例:
+app.use((req,res,next)=>{
+    ...;
+    next();
+});
+第一个参数也可以传入请求地址，但是不论什么请求方式，只要是这个请求地址就接收这个请求
+app.use("/index",(req,res,next)=>{
+    ...;
+    next();
+})
+
+=======================
+中间件的运用
+1.路由保护:客户端在访问页面时必须为登录状态才能访问，未在登录状态则不能访问
+2.网站维护: 在网站维护期间可以使用use中间件接收所有请求，并且做出响应网站正在维护
+3.自定义404页面,当前面的所有中间件都没有匹配到时则匹配到404的中间件
+例:
+app.use((req,res)=>{
+    res.status(404).send("你访问的地址不存在");
+    //status定义状态码，status和send可以链式调用
+})
+=========================
+错误处理中间件
+在程序执行过程中，不可避免的会出现一些无法预料的错误，比如文件读取失败，数据连接失败等，错误处理中间件是一个集中处理错误的地方
+例:
+app.use("/",(req,res)={
+    throw new Error("发生未知错误(错误信息)");
+});
+app.use((err,req,res,next)=>{
+    res.status(500).send(err.message); //err.message获得定义的错误信息
+});
+注意，错误处理中间件只能读取同步代码出现的错误，异步代码出现的错误必须要手动返回错误
+例1:
+app.use("/",(req,res,next)={
+    fs.readFile("./js/1.js",(err,doc,next)=>{
+        if(doc!=null) {
+            next(err); //next没有传递参数代表将请求控制权交给下个中间件，如果传递了参数则代表触发错误处理中间件
+        }else {
+            console.log(doc);
+        }
+    })
+});
+app.use((err,req,res,next)=>{
+    res.status(500).send(err.message); //err.message获得定义的错误信息
+});
+try-catch 处理异步函数错误
+例2:
+const fs = require("fs");
+const promisify = require("promisify");
+const readFile = promisify(fs.readFile);
+app.use("/",async (req,res,next)={
+    try{
+        await readFile("sss");
+    }catch(e) {
+        next(e);
+    }
+});
+app.use((err,req,res,next)=>{
+    res.status(500).send(err.message); //err.message获得定义的错误信息
+});
+=========================
+构建模块化路由
+//为路由对象匹配请求路径
+//创建ru路由对象
+例1:
+const home = express.Router();
+app.use("/home",home);  //注意第一个必须是use
+//创建二级路由
+home.get("/index",(req,res)=>{
+    res.send("我是二级路由");
+});
+例2:
+home.js文件:
+const express = require("express");
+const home = express.Router();
+home.get("/index",(req,res)=>{
+    res.send("我是home");
+});
+module.exports = home;
+admin.js文件
+const express = require("express");
+const admin = express.Router();
+admin.get("/index",(req,res)=>{
+    res.send("admin");
+});
+module.exports = admin;
+use.js文件
+//导入express模块
+const express = require("express");
+//创建服务器对象
+const app = express();
+const home = require("./home");
+
+const admin = require("./admin");
+app.use("/home",home);
+app.use("/admin",admin)
+
+app.listen(3000);
+console.log("服务器启动成功");
+==================================
+获得get请求参数  获得问号传递方式的参数
+req.query
+
+获得路由参数:  获得/张三/18 类型传递的参数
+req.params();
+例:
+app.get("/index/:id",(req,res)=>{
+    res.send(req.params);
+});
+输入地址: localhost:3000/index/50
+
+///////////////////////
+获得post请求参数
+引入body-bodyParser模块，需要先去下载该模块,npm install body-parser
+const bodyParser = require("body-parser");
+配置body-parser模块
+//bodyParser.urlencoded方法会检测请求是否包含请求参数，如果包含请求参数就会接收请求参数并且会将请求参数转换为对象类型，并且会为req添加一个body属性并且会执行next()将请求提交给下一个中间件处理，后面的中间件就可以使用req.body接收请求的参数
+//extended设置为false时，使用系统自带的querystring模块处理请求参数，extended设置为true时会使用第三方模块qs对请求参数进行处理
+app.use(bodyParser.urlencoded({extended:false}));
+//设置接收参数为json类型
+app.use(bodyParser.json());
+///////////////////////
+
+
+
+=====================================
+静态资源处理
+
+1、.use(express.static('静态资源的绝对路径'));
+例:
+app.use(express.static(path.join(__dirname,"public")));
+地址栏输入: localhost:3000/index.html  //public里面有index.html这个静态html页面
+
+2、.use("虚拟路径",express.static('静态资源的绝对路径'));
+app.use("static",express.static('public'));
+地址栏输入: localhost:3000/static/index.html  //public里面有index.html这个静态html页面
+
+=========================================
+express-art-template模板引擎
+Express框架没有内置模板引擎，但是对其他模板引擎提供了良好的支持，比如art-template。
+为了使art-template模板引擎能够更好的和Express框架配合，模板引擎官方在原art-template模板引擎的基础上封装了express-art-template。
+
+使用`npm install art-template express-art-template`命令进行安装。
+var express = require('express');
+var app = express();
+// 告诉Express框架 使用express-art-template模板引擎渲染art模板
+app.engine('art', require('express-art-template'));
+// 当render方法渲染模板时, 如果模板后缀被省略, 则将art作为默认的文件后缀
+app.set('view engine', 'art');
+// 当render方法渲染模板时, 如果模板所在路径被省略, 则在内部会自动将以下路径进行拼接
+// 设置模板所在目录,第一个参数为配置的模板存在哪个文件夹，第二个参数为该文件夹的路径
+app.set('views', path.join(__dirname, 'views'));
+app.get('/', function (req, res) {
+    //渲染模板
+    //res做了哪些事情
+    //1.拼接模板路径
+    //2.拼接模板后缀
+    //3.哪个模板和哪个数据拼接
+    //4.将拼接结果响应给了客户端
+    res.render('index.art', {
+        user: {
+            name: 'aui',
+            tags: ['art', 'template', 'nodejs']
+        }
+    });
+});
+====================================
+app.locals 对象
+将变量设置到app.locals.user = [{name:10},{age: 18}];对象下面，所有的模板都可以访问到该变量
+
+=====================================

@@ -1,0 +1,366 @@
+在 ES6 中新增加了类的概念，可以使用 class 关键字声明一个类，之后以这个类来实例化对象。类抽象了对象的公共部分，它泛指某一大类（class）对象特指某一个，通过类实例化一个具体的对象
+例：
+//步骤1 使用class关键字
+class name {
+  // class body
+}
+//步骤2使用定义的类创建实例  注意new关键字
+var xx = new name();
+注意哟！！！！！！！！！！！！！！！！！！！
+
+1. 通过class 关键字创建类, 类名我们还是习惯性定义首字母大写
+2. 类里面有个constructor 函数,可以接受传递过来的参数,同时返回实例对象
+3. constructor 函数 只要 new 生成实例时,就会自动调用这个函数, 如果我们不写这个函数,类也会自动生成这个函数
+4. 多个函数方法之间不需要添加逗号分隔
+5. 生成实例 new 不能省略
+6. 语法规范, 创建类 类名后面不要加小括号,生成实例 类名后面加小括号, 构造函数不需要加function
+例：
+//步骤1 使用class关键字
+class Person {
+  constructor(name,age) {   // constructor 构造器或者构造函数
+      this.name = name;
+      this.age = age;
+    }/------------------------------------------->注意,方法与方法之间不需要添加逗号
+   say() {
+      console.log(this.name + '你好');
+   }
+}
+
+//步骤2使用定义的类创建实例  注意new关键字
+var ldh = new Person('刘德华', 18);
+ldh.say()
+---------------------------------------------------------------
+类的继承
+class Father {
+      constructor(surname) {
+        this.surname= surname;
+      }
+      say() {
+        console.log('你的姓是' + this.surname);
+       }
+}
+
+class Son extends Father{  // 这样子类就继承了父类的属性和方法
+}
+var damao= new Son('刘');
+damao.say();      //结果为 你的姓是刘
+
+子类使用super关键字访问父类的方法
+//定义了父类
+class Father {
+   constructor(x, y) {
+   this.x = x;
+   this.y = y;
+   }
+   sum() {
+   console.log(this.x + this.y);
+	}
+ }
+//子元素继承父类
+    class Son extends Father {
+   		 constructor(x, y) {
+    		super(x, y); //使用super调用了父类中的构造函数
+    	}
+    }
+    var son = new Son(1, 2);
+    son.sum(); //结果为3
+
+注意哟！！！！！！！！！！！！！！！！！！！
+
+1. 继承中,如果实例化子类输出一个方法,先看子类有没有这个方法,如果有就先执行子类的
+2. 继承中,如果子类里面没有,就去查找父类有没有这个方法,如果有,就执行父类的这个方法(就近原则)
+3. 如果子类想要继承父类的方法,同时在自己内部扩展自己的方法,利用super 调用父类的构造函数,super 必须在子类this之前调用
+例：
+ // 父类有加法方法
+ class Father {
+   constructor(x, y) {
+   this.x = x;
+   this.y = y;
+   }
+   sum() {
+   console.log(this.x + this.y);
+   }
+ }
+ // 子类继承父类加法方法 同时 扩展减法方法
+ class Son extends Father {
+   constructor(x, y) {
+   // 利用super 调用父类的构造函数 super 必须在子类this之前调用,放到this之后会报错
+   super(x, y);
+   this.x = x;
+   this.y = y;
+
+  }
+  subtract() {
+  console.log(this.x - this.y);
+  }
+}
+var son = new Son(5, 3);
+son.subtract();
+son.sum();
+
+时刻注意this的指向问题,类里面的共有的属性和方法一定要加this使用.
+
+1. constructor中的this指向的是new出来的实例对象
+2. 自定义的方法,一般也指向的new出来的实例对象
+3. 绑定事件之后this指向的就是触发事件的事件源
+在 ES6 中类没有变量提升，所以必须先定义类，才能通过类实例化对象
+
+===============================================================================
+let用来声明变量
+let 声明的变量只在所处于的块级有效
+块级作用域就是{}里面的作用域
+例：
+if(true) {
+    let b = 10;
+    console.log(b); 输出 10
+}
+console.log(b); 报错
+
+1.使用let声明的变量没有变量提升
+例：
+console.log(b); 报错
+let b=0;
+2.使用let声明的变量具有暂时性死区的特性
+例：
+var num = 10;
+if(true) {
+    console.log(num); 报错
+    let num = 20;
+}
+
+let面试题
+let arr = [];
+for(let i = 0; i< 3; i++) {
+    arr[i] = function(){
+        console.log(i);
+    }
+}
+arr[0]();  0
+arr[1]();  1
+===================
+var arr = [];
+for(var i = 0; i< 3; i++) {
+    arr[i] = function(){
+        console.log(i);
+    }
+}
+arr[0]();  2
+arr[1]();  2
+3. 数组结构允许我们按照一一对应的关系给变量赋数组里面的值
+例：
+let arr = [1,2,3];
+let [a,b,c,d] = arr;
+console.log(a,b,c,d);返回 1,2,3,underfined
+4. 按一定的模式，从对象中提取值，将提取出来的值赋值给变量
+例1：
+let obj = {
+    name: "lisi",
+    age: "18"
+}
+let {name,age} = obj;
+console.log(name,age);
+例2：
+let obj = {
+    name: "lisi",
+    age: "18"
+}
+let {name: myname,age: myage} = obj;
+console.log(myname,myage);
+========================================
+const 用来声明常量，常量就值（内存地址）不能改变的量
+例：
+const a = function (){
+    console.log(100);
+
+}
+a = function(){
+    console.log(200);
+}
+console.log(a()); 报错，
+1.const声明的常量也和let一样具有块级作用域
+2.const声明常量时必须要赋值
+3.const也不存在变量提升
+=========================================
+箭头函数:用来简化函数语法
+()=>{}
+1.在箭头函数中，如果函数体中只有一句代码，并且代码的执行结果就是函数的函数值，那么大括号可以省略
+例：
+const fn = (x,y)=>x+y;
+console.log(fn(10,20));
+2.在箭头函数中，如果函数的形参只有一个，那么形参外侧的小括号也可以省略
+例：const fn = x => x+5;
+console.log(fn(5));
+
+=========================
+
+箭头函数的this指向
+
+箭头函数不绑定this，箭头函数没有this关键字，this关键字指向箭头函数定位的位置
+=========================
+剩余参数:实参个数多于形参时，多余参数可以存于一个数组里再传给最后一个形参，最后一个形参用...形参名表示
+例1：
+const sum = (a,...b)=>{
+    console.log(a);  输出10
+    console.log(b);  输出[20,30]
+}
+sum(10,20,30);
+剩余参数和解构配合使用:
+var arr = [1,2,3];
+var [a,...b] = arr;
+console.log(b);  输出的是[2,3]
+==================================
+
+Array扩展方法
+
+1.扩展运算符可以将数组拆分以逗号分隔的序列
+let arr = [1,2,3];
+console.log(...arr); 输出1 2 3
+console.log(arr); 输出[1,2,3]
+
+2.扩展运算符用于数组的合并
+
+例：
+方法1
+var arr1 = [1,2,3];
+var arr2 = [4,5,6];
+var arr3 = [...arr1,...arr2];
+方法2
+var arr1 = [1,2,3];
+var arr2 = [4,5,6];
+arr1.push(...arr2);
+
+3.将伪数组转换为真正的数组
+
+var btn = document.getElementsByTagName("btn");
+var arr = [...btn];
+
+4.构造函数Array.from方法,将一个伪数组转换为数组
+
+例：
+var arraylike = {
+    "0":"1",
+    "1":"2",
+    "length":2
+}
+var ary = Array.from(arraylike,()=>{});
+
+5.Array.find方法
+
+var ary = [{
+    id:1,
+    name:"zx"
+},{
+    id:2,
+    name:"lx"
+}];
+var target = ary.find(item=>item.id==2);
+console.log(target);  返回id为2的那个对象,只返回匹配的第一个对象
+
+6.Array.findIndex方法 返回符合条件的第一个对象的索引，没找到则返回-1
+
+let arr = [1,2,3];
+let index = arr.findIndex(item=>item>2);
+console.log(index);
+
+7.Array.includes方法 判断数组是否包含某个给定的值，是则返回true，没有则返回false
+
+let arr = [1,2,3];
+console.log(arr.includes(1));
+======================================
+
+String 扩展对象
+
+1.模板字符串 ``里面的字符串能够保留其格式
+例1
+let name = "zs";
+let sayhello = `hello${name}`;
+console.log(sayhello); 输出hellozs
+例2
+let people = {
+    name: "zs"
+}
+let sa = `name:$(people.name)`;
+2.str.startsWith(x): 判断str是否以参数是否以参数x开头，是返回true,不是返回false
+str.endWith(x)，判断str是否以参数x结尾，是返回true,不是返回false
+例：
+let str = "zxjssb";
+console.log(str.startsWith("z"));
+console.log(str.endWith("b"));
+3.str.repeat(num)方法，repeat方法表示将str字符串重复num次，返回一个新字符串
+let a = "a";
+let aadd = a.repeat(5);
+console.log(aadd); 输出"aaaaa"
+
+======================================
+Set数据结构
+Set类似于数组，成员都是唯一的，没有重复值
+创建Set数据类型
+const s = new Set();
+例:
+const s = new Set();
+console.log(s.size); //输出0
+const s2 = new Set([1,2]);
+console.log(s2.size); //输出2
+1.数组去重
+const s3 = new Set([1,1,2,2]);
+console.log(s3.size); //输出2
+const s4 = [...s3];
+console.log(s4);
+2.Set 的增删改查
+const x = new Set();
+//添加 可以链式添加
+x.add("a");
+x.add("b").add("c");
+//删除 返回一个boolean值，值存在则返回true
+x.delete("a");
+//查找 判断一个值是否是set数据结构的成员
+x.has("a");
+//清空set数据结构的值
+x.clear();
+3.Set的遍历
+例：
+const s = new Set([1,2,3]);
+s.foreach(value=>{
+    console.log(value);
+});
+
+====================================
+function* 这种声明方式(function关键字后跟一个星号）会定义一个生成器函数 (generator function)，它返回一个  Generator  对象。
+
+生成器函数在执行时能暂停，后面又能从暂停处继续执行。
+
+调用一个生成器函数并不会马上执行它里面的语句，而是返回一个这个生成器的 迭代器 （iterator ）对象。当这个迭代器的 next() 方法被首次（后续）调用时，其内的语句会执行到第一个（后续）出现yield的位置为止，yield 后紧跟迭代器要返回的值。或者如果用的是 yield*（多了个星号），则表示将执行权移交给另一个生成器函数（当前生成器暂停执行）。
+
+next()方法返回一个对象，这个对象包含两个属性：value 和 done，value 属性表示本次 yield 表达式的返回值，done 属性为布尔类型，表示生成器后续是否还有 yield 语句，即生成器函数是否已经执行完毕并返回。
+
+调用 next()方法时，如果传入了参数，那么这个参数会作为上一条执行的  yield 语句的返回值，
+
+例:
+function* foo (x){
+    var y = 2*(yield(x+1))
+    var z = yield(y/3);
+    return (x+y+z)
+}
+var b = foo(5)
+
+
+//执行到var y = 2*(yield(x+1))这一步
+//返回的是 {value: 6, done: false}
+//value表示的是 yield (x+1) 中x+1的值 done：false 表示函数还没有执行到最后一步(可以理解为没有return)
+//注意！ 这时候 var y = ...  这一步还没执行
+console.log(b.next());
+
+
+// 传入的参数 12 将上一个 yield(x+1)替换掉
+// 也就是说 var y = 2*( 12 )
+// 然后执行到 yield(y/3) 这里，返回的是 {value: 6, done: false}
+// 注意这时候 var z = ... 这一步还没有执行
+console.log(b.next(12));
+
+
+// 传入的参数 13 将上一个 yield(y/3)替换掉
+// 也就是说 var z = 13
+// 然后执行 return x+y+z  返回 {value: 42, done: true} 这时候函数已经执行完了，done 返回的是 true
+console.log(b.next(13));
+
+总结: function* 配合 yield 和 next 可以方便的让函数逐步执行操作 (类似之前学过的断点调试时的逐步执行语句) 在每一步都可以传入参数替换 yield，这样能够让函数更加的灵活多变

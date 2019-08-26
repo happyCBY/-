@@ -1,0 +1,20 @@
+这里的api特指客户端向服务器端发送请求的请求地址
+
+传统方式的请求地址:
+
+请求方式   请求地址
+GET http://www.example.com/getUsers  //获取用户列表
+GET http://www.example.com/ghetUser?id=1 //获取某一个用户的信息
+POST http://www.example.com/modifyUser //修改用户信息
+GET http://www.example.com/deleteUser?id=1 //删除用户信息
+
+RESTFul 风格的请求地址:
+
+请求方式   请求地址
+GET   http://www.example.com/users //获取用户列表
+POST  http://www.example.com/users //创建/添加用户列表
+GET  http://www.example.com/users/1 //获取某一个用户的信息
+PUT  http://www.example.com/users/1 //修改某一用户信息
+DELETE  http://www.example.com/users/1  //删除某一个用户的信息
+
+注意users后面的传的参数要用req.params获取

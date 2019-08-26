@@ -1,0 +1,24 @@
+$("div").width()/.Height;  获得div的width/height不包含padding,和border                 如果括号没有值的话就是获得值，主要返回值是数字类型，如果有数值的话就是设置数值
+$("div").innerWidth()/.Height; 获得div的width/height和padding的和                      如果括号没有值的话就是获得值，主要返回值是数字类型，如果有数值的话就是设置数值
+$("div").outerWidth()/.Height; 获得div的width/height和padding和border的和              如果括号没有值的话就是获得值，主要返回值是数字类型，如果有数值的话就是设置数值
+$("div").outerWidth(true)/.Height; 获得div的width/height和padding和margin和border的和  如果括号没有值的话就是获得值，主要返回值是数字类型，如果有数值的话就是设置数值
+
+================================================================
+获取/设置距离文档的位置: 注意该方法总是获得距离文档的距离
+获取:
+$("div").offset();  返回是一个对象，里面存储着left和top值
+设置:
+$("div").offset({
+    left: 100,
+    top: 100
+});
+获取距离带有定位父级位置的偏移:
+$("div").position();  获取距离有定位父级的距离，这个方法只能获取不能设置
+================================================================
+$(window).scroll(function(){}); 页面滚动事件
+$("div").scrollLeft(); 获得被卷曲的Left值     括号没有传值时是获得，传值时是设置
+$("div").scrollTop(); 获得被卷曲的Top值       括号没有传值时是获得，传值时是设置
+可以使用：
+$('body,html').stop().animate({
+    scrollTop: 0
+});  来让页面返回顶部

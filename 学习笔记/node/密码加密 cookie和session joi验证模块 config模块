@@ -1,0 +1,142 @@
+bcrypt密码加密
+需要下载第三方模块 bcrypt
+加密是使用哈希单程加密方式: 1234=>abcd
+在加密过程中加入随机字符串加大密码破解难度
+例:
+//导入bcrypt模块
+const bcrypt = require("bcrypt");
+
+//生成随机字符, bcrypt.genSalt()方法返回是promise对象，可以使用await返回值
+let salt = await bcrypt.genSalt(10);
+
+//使用随机字符串进行加密
+let pass = await bcrypt.hash('明文密码,salt');
+
+//密码比对
+let isEqual = await bcrypt.compare("明文密码"，"加密密码")
+========================
+md5加密
+下载 npm install md5
+
+加密: md5(密码)  返回加密完的密码
+
+
+========================
+cookie: 浏览器在电脑开辟的一块空间，客户端javascript可以向里面存储数据，但主要供服务器端存储数据，
+1.cookie中的数据是以域名划分的
+2.cookie中的数据是有时效性的，超出时间的数据会被浏览器删除
+3.cookie中的数据会随着请求被自动发送到服务器
+
+客户端在最开始请求服务器的时候，服务器会向客户端发送cookie,在客户端第二次或多次请求服务器端的时候每次请求都会将浏览器中的cookie发送给服务器端
+cookie是如何使用的呢?
+
+
+
+///////////////
+session: session也是一个对象，存储在服务器内存中，在session中也可以存储多条数据，每一条数据都有一个唯一的sessionid作为唯一标识
+
+注意！当网站服务器重启的时候,session会失效
+
+session是如何使用的呢?
+//引入express-session模块
+const session = require("express-session");
+
+//配置session secret: "secret key" 加密字符串，使用传入的字符串对cookie进行加密  saveUninitialized: false配置代表当用户没有登录的时候访问服务器不要给用户存一个未初始化cookie
+app.use(session({
+    secret: "secret key",
+    saveUninitialized: false,
+    //设置cookie的生命周期
+    "cookie": {
+            "maxAge": 36000000
+    }
+}));
+
+//将数据存储到session信息中
+req.session.自定义名 = 存入的数据;
+//调用session
+let a = req.session.调用的名字
+
+//清除Session
+req.session.destroy(function(){
+    //删除cookie
+    res.clearCookie('cookie的名字');
+});
+
+总结: 无论cookie 和 session 都是用来存储数据的对象cookie在客户端，session在服务器端，
+当用户第二次请求服务器的时候，会将cookie一起发送过去，服务器端读取用户发送的cookie取出对应的session对象，才能调用该session对象的属性
+
+cookie和session的缺点:
+1.资源浪费
+2.不好跨域
+
+============================
+joi模块: javascript对象的规则描述语言验证器
+
+下载: npm install --save @hapi/joi
+
+//引入Joi模块
+const Joi = require("@hapi/joi");
+//创建验证规则
+const schema = {
+    //string()： 字段是字符串类型
+    //alphanum(): 字段必须是字母字符串或者数字字符串，不能含有特殊字符
+    //min(x) max(y): 字段长度必须大于等于x小于等于y
+    //required(): 代表该字段为必填属性，如果验证对象中没有该属性就会报错
+    //error(new Error(`错误信息`)): 如果验证没有通过，则可以自定义错误信息
+    username: Joi.string().alphanum().min(x).max(y).required().error(new Error(`错误信息`)),
+
+    //regex(正则表达式): 使用正则表达式验证该字段信息
+    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+
+    // [Joi.string(),Joi.number()], 该字段是一个数组，数组里面存的数据类型可以是字符串或者数字
+    access_token: [Joi.string(),Joi.number()],
+
+    //Joi.number().integer(): 该字段必须是数字类型，integer()代表该字段还必须是整数
+    //min(x).max(y): 字段的数值范围在x~y之间，包括x,y
+    birthyear: Joi.number().integer().min(x).max(y),
+
+    //email(): 字段必须是邮箱
+    email: Joi.string().email(),
+
+    //valid("normal","admin") 字段必须为括号里面包含的元素
+    role: Joi.string().valid("normal","admin")
+}
+
+//验证
+//Joi.validate(参数1，参数2) 方法返回一个promise对象
+//参数1为验证的对象，参数2为创建的规则
+//验证失败代码会抛出异常
+Joi.validate({
+    username: "abc",
+    birthyear: "1980"
+},schema);
+
+=====================================
+config模块,抽取系统的配置文件，在不同的系统环境下使用不同的配置文件，config会自动识别系统的环境
+
+下载: npm install config
+
+使用方法:
+在项目的根目录创建config文件夹，里面包含三个json文件，分别时default.json,development.json和production.json文件
+default.json 放置默认的配置信息
+development.json 放置开发环境的配置信息
+production.json 放置生产环境的配置信息
+
+custom-environment-variables.json 将敏感配置信息存储在系统环境变量中，例如数据库的账号密码
+
+调用方法:
+使用模块自带的get方法获取配置信息
+例如:
+当前是开发环境
+default.json:
+{
+    "title": "我是开发环境"
+    "db": {
+        "name": "zhangsan"
+    }
+}
+
+app.js文件中
+const config = require("config");
+console.log(config.get("title"));
+console.log(config.get("db.name"));

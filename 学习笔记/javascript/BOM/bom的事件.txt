@@ -1,0 +1,5 @@
+window.onload: 页面加载完毕时执行的事件
+
+window.onunload: 页面关闭时触发的事件  谷歌不支持  ie8可以
+
+window.onbeforeunload: 页面关闭之前触发事件  谷歌不支持  ie8可以

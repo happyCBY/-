@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: #000;
+        }
+        input {
+            background-color: #fff;
+        }
+        body {
+            width: 1320px;
+            height: 600px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="submit" value="开/关灯" id="btn">
+    <script>
+        function my$(id) {
+            return document.getElementById(id);
+        }
+        var btn = my$('btn');
+        var on_off = document.body;
+        console.log(on_off);
+        btn.onclick = function() {
+            var getbgc = on_off.style.backgroundColor==='rgb(255, 255, 255)'? '#000':'#fff';
+            console.log(on_off.style.backgroundColor);
+            on_off.style.backgroundColor = getbgc;
+            this.style.backgroundColor = getbgc=='#fff'? '#000':'#fff';
+            this.style.color = getbgc=='#fff'? '#fff':'#000';
+        }
+    </script>
+</body>
+
+</html>

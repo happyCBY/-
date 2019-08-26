@@ -1,0 +1,108 @@
+作用域:使用范围
+1.全局变量: 声明的变量是使用var声明的，那么这个变量就是全局变量，全局变量可以在页面
+的任何位置使用
+除了函数以外，其他位置定义的变量都是全局变量
+全局变量如果页面不关闭，就不会释放，就会占空间，消耗内存
+
+2.局部变量: 在函数内部定义的变量，是局部变量，外面不能使用
+
+
+3.全局作用域: 全局变量的使用范围
+
+4.局部作用域: 局部变量的使用范围
+
+
+5.块级作用域:一对大括号就可以看成一块，在这块区域中定义的变量，只能在这块区域内使用，但是
+在js中在这个块级元素定义的作用域中，外边也能调用;
+说明:js没有块级作用域
+
+6.隐式全局变量: 没有用var声明的变量，就叫隐式全局变量，它在函数里面声明可以被外面调用，局部变量不行
+例1:
+function f1 () {
+    number = 1000;
+}
+f1();
+consolo.log(number);
+全局变量是不能被删除的，隐式全局变量是可以被删除的
+var num1 = 10;
+num2 = 20;
+delete num1;
+delete num2;
+num1不会被删除 num2被删除了
+
+
+7.作用域链: 在一个位置使用变量，它会先在当前作用域找，没找到就往父子作用域找，
+一直没找到的话就会报错
+
+例1:
+var num = 10;
+function f1() {
+    var num = 20;
+    function f2() {
+        var num = 30;
+        function f3() {
+            var num = 50;
+            console.log(num);
+        }
+        f3();
+    }
+    f2();
+}
+f1();
+num值为50
+
+！！！！！！！！！！！！！！
+预解析: 就是在解析代码之前，把变量的声明提前了，函数的声明也会提前(变量的声明在函数之前)
+预解析会分段(多对的script标签中函数重名，预解析的时候不会冲突)
+
+案例1:
+var a = 25;
+function abc() {
+    alert(a);
+    var a = 10;
+}
+abc();  输出underfined
+console.log(a); 输出25
+案例2:
+console.log(a);   输出function a(){console.log('aaaaa');}
+function a() {
+    console.log('aaaaa');
+}
+var a = 1;
+console.log(a); 输出1
+
+案例3:
+f1();
+console.log(c);
+console.log(b);
+console.log(a);
+function f1() {
+    var a = b = c = 9;
+    console.log(c);
+    console.log(b);
+    console.log(a);
+}
+输出为 9,9,9,9,9，报错
+分析:
+预解析时:
+function f1() {
+    var a;
+    a = 9;
+    b = 9;
+    c = 9;
+    console.log(c);
+    console.log(b);
+    console.log(a);
+}
+f1();
+console.log(c);
+console.log(b);
+console.log(a);
+
+案例4::
+f1();
+var f1 = function() {
+    console.log(a);
+    var a = 10;
+}
+结果为报错

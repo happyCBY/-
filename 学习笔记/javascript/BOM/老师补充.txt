@@ -1,0 +1,7 @@
+DOM.classList.toggle(类选择器名字);    快速切换选择器，当DOM 的class有这个类选择器，则删除它，没有则添加它
+
+DOM.classList.add(类选择器名字); 添加类选择器
+
+DOM.classList.remove(类选择器名字); 删除类选择器
+
+DOM.classList.contains(类选择器名字); 判断是否有这个类名

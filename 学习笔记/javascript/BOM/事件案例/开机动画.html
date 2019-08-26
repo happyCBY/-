@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 200px;
+        }
+
+        header {
+            float: right;
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+        }
+
+        footer {
+            float: right;
+            width: 200px;
+            height: 100px;
+            background-color: hotpink;
+        }
+
+        span {
+            display: block;
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+        }
+    </style>
+    <script src="js/common.js">
+    </script>
+</head>
+
+<body>
+
+    <div>
+        <span>X</span>
+        <header></header>
+        <footer></footer>
+    </div>
+    <script>
+        var span = document.querySelector("span");
+        var header = document.querySelector("header");
+        var footer = document.querySelector("footer");
+        span.onclick = function(){
+            move(footer,{"height":0},function(){
+                move(header,{"width":0});
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

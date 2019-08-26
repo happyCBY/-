@@ -1,0 +1,36 @@
+使用vant
+下载npm i vant -S
+
+下载这两个插件
+npm i postcss-pxtorem -S
+npm i amfe-flexible -S
+
+=====================================
+在vue-config.js中对CSS做配置：
+const autoprefixer = require('autoprefixer');
+const pxtorem = require('postcss-pxtorem');
+module.exports = {
+    css:{
+      // modules:false,
+      // extract:true,
+      sourceMap:false,
+      loaderOptions: {
+        postcss: {
+          plugins: [
+            autoprefixer(),
+            pxtorem({
+              rootValue: 37.5,
+              propList: ['*']
+            })
+          ]
+        }
+      }
+    }
+}
+===========================
+只配置这一个还不够，只做到这一步是没法自适应的，因为它本身没有对html的font-size进行计算，基本不会变化，我们找到入口文件main.js，引入以下代码即可：
+
+import 'amfe-flexible';
+
+=============================
+重启服务就可以使用了

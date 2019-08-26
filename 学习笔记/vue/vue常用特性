@@ -1,0 +1,242 @@
+1.表单操作
+(1)单选按钮默认选中
+<input type="radio" value="1" v-model = "gender" >1
+<input type="radio" value="2" v-model = "gender" >23
+<input type="radio" value="3" v-model = "gender" >45
+data: {
+    gender:0  //gender的值和对应的单选按钮的value相等时选中,提交时gender的值和选中的radio的value值相等
+}
+(2)复选框按钮默认选中
+<input type="checkbox" value="1" v-model="gender">1
+<input type="checkbox" value="2" v-model="gender">23
+<input type="checkbox" value="3" v-model="gender">45
+<input type="submit" @click.prevent = "handle">
+data: {
+    gender:['1']  //此时gender的值为一个数组，里面存储的元素的值和对应的复选按钮的value相等时选中,提交时gender数组里面元素的个数和选中的checkbox的数量相等，且值等于选中的checkbox的value值
+}
+
+(3)下拉框的选中
+<select v-model = 'model' >
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+</select>
+data: {
+    model: 1 //model的值和option里面的value值相等，就选中这个option
+},
+***下拉框的多选
+//设置multiple属性值为true,则下拉列表将变成多选
+<select v-model = 'model' multiple = true>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+</select>
+data: {
+    model: [1,2,5] //注意这时的model的值必须为数组，option的vlue值只要和数组里面的值匹配就会被选中,不区分顺序，
+}
+
+(4)textarea文本域 : 和text属性一样，就不多做介绍了
+===============================================================
+(5)表单域修饰符
+***.number 将v-model数字形式的字符串传化为数字类型
+例:<input type="text" v-model.number = "app">
+***.trim 将v-model传递字符串的首尾空格去除，中间的不能去除
+例:<input type="text" v-model.trim = "app">
+***.lazy 将input事件转换为change事件,因为 v-model原型就是使用input事件进行监听，可以使用该修饰符让v-model在特定的场合使用change事件
+例:<input type="text" v-model.lazy = "app">
+
+2.自定义指令
+(1)自定义指令基本用法 本质上就是在绑定事件，在对应的时候被触发,在一个自定义指令里面,可以绑定多个不同阶段的方法
+bind: 把属性绑定到对应的元素上面时触发
+inserted: 把元素插入到DOM树上时触发
+updata: 当元素更新时触发
+unbind: 属性解绑时触发
+
+Vue.directive('定义的指令名称(注意，使用指令的时候才加v-)', {
+    bind: function(el) {
+        el.style.color = "red";
+    },
+    inserted: function (el){
+        //el表示指令所绑定的元素
+        el.focus();
+    }
+});
+例:
+Vue.directive('focus', {
+    inserted: function (el){
+        el.focus();
+    }
+});
+(2)带参数的自定义指令
+Vue.directive('定义的指令名称', {
+    inserted: function (el,binding){
+        //binding.value获得传入的值
+        //binding.name获得传入的参数的名称
+    }
+});
+例:
+Vue.directive('color', {
+    inserted: function (el,binding){
+        console.log(binding.value);
+    }
+});
+<input type="text" v-color = "color" >
+
+(3)局部自定义指令
+***添加局部自定义指令需要在Vue定义的实例对象中添加 directives 属性
+directives: {
+    定义指令的名字(同样不加v-): function(el,binding){
+        //定义调用的方法
+    }
+}
+例:
+var vm = new Vue({
+    el: "#hello",
+    data: {
+        color:"red"
+    },
+    directives: {
+        color: function(el,binding){
+
+        }
+    }
+})
+***注意如果局部指令和全局指令定义了同一个指令名，在两个定义指令作用域都能覆盖的地方优先使用局部指令
+
+3.计算属性
+(1)计算属性的基本用法
+//在vue创建的实例对象中添加computed属性，在属性里面添加计算方法,而且方法必须要有返回值,注意调用的时候使用{{方法名}}即可，不用再方法名后面添加(),
+computed: {
+    定义的计算方法名: 计算方法
+}
+例:
+<div v-color = "color">{{add}}</div>
+var vm = new Vue({
+    el: "#hello",
+    data: {
+        num1: 15
+    },
+    computed: {
+        add: function (){
+            return this.num1+20
+        }
+    }
+})
+(2)计算属性和方法的区别
+***计算属性是基于他们的依赖进行缓存的，什么是依赖呢，例如调用了data里面的属性num进行计算，那么num就是依赖，num不变时下次调用这个计算属性会直接给出上次计算的结果，而不会重新计算一次，只有当依赖该变值的时候计算属性才会被重新执行一次
+***方法没有缓存
+例:
+<div v-color = "color">{{add}}{{demo()}}</div>
+<div v-color = "color">{{add}}{{demo()}}</div>
+methods: {
+    demo: function (){
+        console.log("我在demo被执行了");
+    }
+},
+computed: {
+    add: function (){
+        console.log("我在add被执行了");
+        return this.num1+20
+    }
+}
+//此时因为num1数据没有被更改所以 add 方法只被执行一次 而demo方法被执行了两次
+控制台输出为:
+我在add被执行了
+我在demo被执行了
+我在demo被执行了
+
+4.侦听器
+(1)侦听器的基本用法
+在data里面添加一个新的watch属性,在里面设置监听的属性，以及属性值改变时调用的方法
+模板:
+watch: {
+    //监听的名字要和data里面监听的属性相等
+    监听的属性名称: function (val){
+        //val是监听属性最新的值
+        this.num2 =  val+1;
+    }
+}
+
+例:
+<input type="text" v-model.number = 'num1' >
+<div>{{num2}}</div>
+data: {
+    num1: 15,
+    num2: 30
+}
+watch: {
+    //监听的名字要和data里面监听的属性相等
+    num1: function (val){
+        //val是监听属性最新的值
+        this.num2 =  val+1;
+    }
+}
+
+
+5.过滤器
+过滤器的作用就是用来格式化数据
+(1)全局过滤器
+Vue.filter("过滤器名称",function(val(使用了过滤器的变量)) {
+    return  处理好的变量
+})
+<div>{{num2(要处理的变量) | toUp(定义的过滤器名称)}}</div>
+<div>{{num2(要处理的变量) | toUp(定义的过滤器名称) | two(可以使用多个过滤器过滤变量，他获得上一个过滤器返回的值并对其进行新一轮的过滤) }}</div>
+例:
+//过滤器
+Vue.filter("toUp",function (val){
+    return  val.charAt(0).toUpperCase()+val.slice(1);
+})
+Vue.filter("toUpTwo",function (val){
+    return  val.charAt(0).toLowerCase()+val.slice(1);
+})
+<div>{{num2 | toUp}}</div>  //让num2显示的值的第一个字母大写
+<div>{{num2 | toUp | toUpTwo}}</div> //让num2显示的值的先变成大写，再变成小写
+
+(2)局部过滤器
+在vue的实例里面添加一个filters属性，在里面定义过滤器，跟directived差不多
+filters: {
+    过滤器名称: function(要过滤的值){过滤的方法}
+}
+(3)带参数的过滤器
+例:
+//注意过滤器默认的val值可以不写
+<div>{{num2 | toUp(data)}}</div>
+//过滤器
+Vue.filter("toUp",function (val,date){
+    return  val.charAt(0).toUpperCase()+val.slice(1);
+})
+
+6.生命周期
+(1)Vue实例产生过程:
+***beforeCreate: 在实例初始化之后，数据观测和事件配置之前被调用
+***created 实例完成之后被调用
+***beforeMount 在挂载之前被调用
+***mounted el被新创建的vm.$el替换,并挂载到实例上去后调用
+***berfoeUpdate 数据更新时调用，发生在虚拟DOM打补丁之前
+***updated 数据更改导致虚拟DOM重新渲染和打补丁，之后调用
+***beforeDestory 实例销毁之前那调用
+***destroyed 实例销毁之后调用
+
+============================
+7.修改响应式数据:
+
+当用户如果直接使用数组下标修改或添加数组的值的时候，页面不会显示新修改的值
+
+(1)修改数组:
+Vue.set(x,y,z);
+vm.$set(x,y,z);
+x参数表示要处理的数组
+y参数表示要处理的数组的索引
+z参数表示要处理的数组的值
+
+
+当用户如果直接使用对象修改或添加数组的值的时候，页面不会显示新修改的值
+
+(2)修改对象:
+Vue.set(x,y,z);
+vm.$set(x,y,z);
+x参数代表要处理的对象
+y参数代表要添加的属性
+z参数代表添加的属性值

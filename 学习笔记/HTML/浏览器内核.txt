@@ -1,0 +1,7 @@
+﻿IE Trident
+Firefox  Gecko
+Safarl webkit
+chrome Chromium/Blink
+Opera Blink
+
+Android Webkit 安卓一般用Webkit

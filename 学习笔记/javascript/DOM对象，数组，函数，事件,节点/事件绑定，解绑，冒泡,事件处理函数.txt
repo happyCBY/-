@@ -1,0 +1,193 @@
+1.addEventListener(事件类型(String类型)，事件内容，控制事件的阶段(Boolear true为事件处理阶段 false为事件冒泡阶段))  为对象创建多个方法，第一个参数是绑定事件类型,注意事件名字前不加on，第二个是绑定事件执行的内容，第三个参数是布尔类型
+案例:
+one.addEventListener('click',add(one,'p'),false);
+one.addEventListener('click',add(one,'i'),false);
+one.addEventListener('click',add(one,'e'),false);
+one.addEventListener('click',add(one,'s'),false);
+注意:
+ie8及以下不兼容
+2.attachEvent(有on的事件类型，事件内容)  火狐 谷歌不支持，ie8支持
+案例
+one.attachEvent('onclick',add(one,'span'));
+
+兼容代码:
+function addElementOrEvent(element,type,fn) {
+    if(element.addEventListener) {
+        element.addEventListener(type,fn,false);
+    }
+    else if(element.attachEvent) {
+        element.attachEvent("on"+type,fn);
+    }
+    else {
+        element["on"+type] = fn;
+    }
+}
+
+=================================================
+绑定事件的区别:
+addEventListener();
+attachEvent();
+
+相同点:
+都可以为元素绑定事件
+不同点:
+1.方法名不一样
+2.参数个数不一样
+3.addElementListener 支持火狐，谷歌，ie11,ie8及以下不支持
+  attachEvent 不支持火狐，谷歌，ie11, 支持ie8
+4.addElementListener 事件的类型没有带on,attachEvent有带on
+5.this不同,addElementListener里的this是被绑定的对象
+  attachEvent中的this是window
+====================================================================================================
+事件的解绑:
+注意:用什么方式绑定事件，就应该用对应的方式解绑事件
+
+1.obj.onclick = function(){}   绑定
+  obj.onclick = null;  解除绑定
+
+2.obj.addEventListener("click",fn1,false)
+  obj.removeEvernListener("click",fn1,false);
+  注意:用这种方法解除绑定，addEventListener里面添加的方法必须是命名函数，不能是匿名函数，ie8不支持此方法
+3.obj.attachEvent('onclick',fn2)
+  obj.detachEvent('onclick),fn2)
+  注意:用这种方法解除绑定，attachEvent里面添加的方法必须是命名函数，不能是匿名函数，谷歌，火狐，ie8不支持此方法
+
+
+  为任意元素解绑:
+  function removeEventListener(element,type,fnName) {
+      if(element.removeEventListener) {
+          element.removeEventListener(type,fnName,false);
+      }
+      else if(element.detachEvent) {
+          element.detachEvent("on"+type,fnName);
+      }
+      else {
+          element["on"+type] = null;
+      }
+  }
+
+=================================================================
+
+事件冒泡:多个元素嵌套，有层级关系，这些元素都注册了相同的事件，如果里面的元素事件触发了，外面的改时间也会自动触发
+案例：
+var odiv = document.getElementById("dv");
+var p = document.getElementById("p");
+odiv.onclick  = function() {
+    console.log(12);
+};
+p.onclick = function() {
+    console.log(12);
+
+};
+<div id="dv" >
+<p id="p"></p>
+</div>
+p的元素触发了，div的元素也会触发
+
+
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+事件处理对象
+
+DOM.事件类型 = function() {} function里面的参数一般只有一个事件处理对象
+
+my$('dv').onclick = function() {
+  console.log(arguments[0]);
+}
+my$('dv').onclick = function(e) {
+  console.log(e);
+}
+两个案例都输出:MouseEvent {isTrusted: true, screenX: 150, screenY: 159, clientX: 150, clientY: 86, …}
+arguments[0](Dom.事件类型 = function()括号里面没有参数的话，arguments默认长度为1，里面存了一个看不见的对象,
+函数里面的arguments没有这个功能)和e都是事件处理对象，只有在事件触发的时候出现
+
+为一个函数绑定相同的事件，调用相同的事件处理函数，执行不同的内容
+
+var p = document.getElementById("p");
+
+p.onclick = f1;
+p.onmouseover = f1;
+p.onmouseout = f1;
+function f1() {
+    switch (arguments[0].type) {
+        case 'click': console.log('我是点击');
+        break;
+        case 'mouseover': this.style.backgroundColor = 'red';
+        break;
+        case 'mouseout': this.style.backgroundColor = 'green';
+        break;
+    }
+}
+
+常见的事件处理对象方法!!!!!!!
+
+1. e.target返回的是触发事件的对象(被触发的元素)，this返回的是绑定事件的对象 标准！  ie678不支持
+e.srcElement  ie678支持
+案例:
+var dv = document.getElementById("dv");
+var dv2 = document.getElementById("dv2");
+dv.onclick = function(e) {
+    console.log(e.target);
+    console.log(this);
+}
+<div data-index-time-name="10" id="dv">
+    <div id="dv2"></div>
+</div>
+点击在dv上的时候，返回的是两次dv的对象
+点击在dv2上的时候，返回的是dv2的对象和dv的对象
+
+
+2. e.type返回事件类型
+
+3. e.preventDefault(); 方法 阻止默认事件，例如让链接不跳转，让提交表单不提交
+   e.returnValue 属性 低版本浏览器 ie678支持
+   return false; 也能阻止默认行为，没有兼容性问题，return后面代码不执行，而且只限于传统的注册方式
+
+4. e.stopPropagation() 阻止事件冒泡 在哪个事件里面加，冒泡到这个事件时就会停止，不会再向上冒泡
+   windeow.event.cancelBubble = true  ie678使用
+
+5. e.keyCode 返回按键的ASCII码值
+
+！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+
+
+========================================================================
+
+阻止事件冒泡:
+
+方法1:
+windeow.event.cancelBubble = true; 在哪个事件里面加，冒泡到这个事件时就会停止，不会再向上冒泡
+IE支持，谷歌支持，火狐不支持
+案例:
+var odiv = document.getElementById("dv");
+var p = document.getElementById("p");
+odiv.onclick  = function() {
+    console.log(12);
+};
+p.onclick = function() {
+    console.log(12);
+     window.event.cancelBubble = true;
+};
+<div id="dv" >
+<p id="p"></p>
+</div>
+
+方法2:
+arguments[0].stopPropagation(); 火狐，谷歌支持，IE8不支持
+案例:
+var odiv = document.getElementById("dv");
+var p = document.getElementById("p");
+odiv.onclick  = function() {
+    console.log(12);
+};
+p.onclick = function() {
+    console.log(12);
+    arguments[0].stopPropagation();
+};
+<div id="dv" >
+<p id="p"></p>
+</div>
+
+总结: windeow.event和argument[0]都是函数处理对象，一个是IE的标准，一个是火狐的标准，
+arguments[0]在ie8是不存在的，所以此时用window.event代替

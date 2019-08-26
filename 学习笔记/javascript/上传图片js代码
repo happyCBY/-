@@ -1,0 +1,12 @@
+//给上传文件按钮添加onchange事件，让用户选择完文件之后触发该事件
+file.onchange = function(){
+    //创建读取文件对象
+    const reader = new FileReader();
+    //读取文件 this.files读取用户选择的文件列表 是一个数组，返回用户选择的图片信息
+    reader.readAsDataURL(this.files[0]);
+    //监听事件
+    reader.onload = function(){
+        //reader.result 返回读取文件的信息
+        img.src=reader.result;
+    }
+}

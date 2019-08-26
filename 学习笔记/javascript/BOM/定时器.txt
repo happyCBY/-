@@ -1,0 +1,25 @@
+window.setinterval(f1()执行的函数体,b(设置多久执行一次)) 建立定时器,每过b秒执行一次f1()，返回一个数值为定时器的id
+clearInterval(id);关闭第id个定时器
+
+
+
+setTimeout(f1()执行的函数体,b(设置经过多久执行这个函数体))建立定时器，过b秒后执行f1()
+一次性定时器，如果不关闭的话，定时器id占空间
+clearTimeout(id);关闭第id个延时器时器
+
+
+解决定时器页面加载时延迟的问题;现在定时器外面执行一次函数体
+
+
+注意！
+setinterval，使用外部命名函数时，传入参数可以用下面方法
+setinterval(f5,1000,"dog");
+function f5(name) {
+    return name;
+}
+
+
+setinterval(function(){
+    this.name = "name";
+}.bind(that),30);
+这时候的定时器里面的this就是传入的that

@@ -1,0 +1,15 @@
+1.window.getComputedStyle(element,伪类型) 获得某元素的样式  ie8不支持
+
+
+2.element.currentStyle   获得某元素样式  谷歌火狐不支持
+
+
+
+兼容代码:
+function getStyle(element,attr) {
+    return window.getComputedStyle? window.getComputedStyle(element,null)[attr]:element.currentStyle[attr];
+}
+
+
+注意!
+1.当我们没有设置如top,left等样式时，有的浏览器会输出0px，有的浏览器则会输出auto

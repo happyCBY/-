@@ -1,0 +1,37 @@
+缓存的好处:
+1.加快页面的打开速度
+2.降低服务器的压力
+3.减少网络的损耗
+
+form disk catch 硬盘缓存  一般是生命周期到达或者 手动清除时才消失
+from menory catch 浏览器缓存  页面关闭时清除
+chrome浏览器默认硬盘缓存位置: C:\Users\cby\AppData\Local\Google\Chrome\User Data\Default\Cache
+
+
+<META HTTP-EQUIV = "Pragma" CONTENT = "no cache">
+no cache 不是不缓存，但每次都要去服务器端确认下缓存是否为最新，是就返回304,不是返回200以及最新的内容，有兼容性问题
+no store 或 Control:max-age=0等告诉浏览器不用缓存请求
+post请求无法被缓存
+HTTP响应头中不包含 Last-Modified/Etag，并且请求头中不包含Cache-Control/Expires的无法被缓存
+
+
+
+HTTP缓存机制
+Web 缓存大致可以分为：数据库缓存、服务器端缓存（代理服务器缓存、CDN 缓存）、浏览器缓存。
+浏览器缓存也包含很多内容： HTTP 缓存、indexDB、cookie、localstorage 等等。这里我们只讨论 HTTP 缓存相关内容。
+
+
+浏览器缓存分为强缓存和协商缓存，浏览器加载一个页面的简单流程如下：
+
+浏览器先根据这个资源的http头信息来判断是否命中强缓存。如果命中则直接加在缓存中的资源，并不会将请求发送到服务器。
+如果未命中强缓存，则浏览器会将资源加载请求发送到服务器。服务器来判断浏览器本地缓存是否失效。若可以使用，则服务器并不会返回资源信息，浏览器继续从缓存加载资源。
+如果未命中协商缓存，则服务器会将完整的资源返回给浏览器，浏览器加载新资源，并更新缓存。
+
+强缓存
+
+命中强缓存时，浏览器并不会将请求发送给服务器。在Chrome的开发者工具中看到http的返回码是200，但是在Size列会显示为(from cache)。
+
+
+Expires
+
+缓存过期时间，用来指定资源到期的时间，是服务器端的具体的时间点。也就是说，Expires=max-age + 请求时间，需要和Last-modified结合使用。但在上面我们提到过，cache-control的优先级更高。 Expires是Web服务器响应消息头字段，在响应http请求时告诉浏览器在过期时间前浏览器可以直接从浏览器缓存取数据，而无需再次请求

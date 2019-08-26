@@ -1,0 +1,117 @@
+﻿font:综合写法 必须严格按照下边顺序写 font-size和fong-family不能省略
+font: font-style|font-weight|font-size|line-height|font-family
+font-family:设置字体
+font-weight:字体粗细 不带单位100-900 normal==400 bold==700 bolder==900
+font-size：字体大小 网页中一般设置14px
+
+font-style:设置字体样式 值:normal/italic/oblique
+normal:将文本字体样式为正常的字体
+italic:将文本字体样式改为斜体
+oblique:指定文本字体样式为倾斜的字体，人为的倾斜字体
+
+
+text-align:调节水平对齐方式 值:left(左对齐)center(居中对齐)right(右对齐)
+vertical-align:调节垂直对齐方式(对于块级元素无效)，默认基线对齐(一般设置顶线对齐去除img和盒子底线的缝隙)
+baseline(基线)|top(顶线)|midden(中线)|bottom(底线)  加浮动后效果失效
+
+
+
+
+text-indent:首行缩进  一般用em单位，1em为一个字的宽度,两个字符的宽度,跟设置的font-size有关
+
+text-shadow:文字阴影 值h-shadow/v-shadow/blur/color
+h-shadow:水平阴影位置(必须) 允许负值
+v-shadow:垂直阴影位置(必须)允许负值
+blur:模糊距离 （可选）
+color:模糊颜色（可选）
+text-shadow：h-shadow v-shadow blur color 前两个必须填，后两个选填
+text-shadow：h-shadow v-shadow blur color,h-shadow v-shadow blur color; 文字阴影可以设置多组
+
+text-decoration:none 去掉链接下划线
+
+
+
+
+color:字体颜色
+background-color:设置背景颜色
+红 绿 蓝 #00 00 00 16进制
+rgb(red,green,blue ) 每一个取值范围为0-255 或0-100%
+rgba(r,g,b,a) a是ahpha 透明的意思 a取值范围为0~1之间，值越小越透明
+
+background-image 设置背景图片 url()里面一般不加""
+
+background-repeat 设置背景图片是否平铺 值:repeat-x(横向平铺)，repeat-y（纵向平铺），repeat（横纵向平铺，默认值），no-repeat（不平铺）
+
+background-size 设置背景图片大小
+background-size:a b;尽量只改一个值，图片会自动等比例缩放 a,b可以是具体数值，也可以是百分比,还可以是cover(等比例缩放后会填满整个盒子，溢出部分会被隐藏)还可以是contain(等比例缩放，只要宽度或高度一个到达盒子的极限，就不再缩放)
+
+
+background-position 设置背景图片位置，有三种写法
+例1:使用方位名词
+background-position:left top; 照片在左上角
+background-position:top left; 照片在左上角，这种写法位置顺序可以调换
+background-position:right bottom 照片在右下角
+background-position:center center 照片在正中间
+background-position:left 照片在左侧正中间 当方位名词只有一个时，另一个默认为center
+例2:使用具体像素定位 第一个值是设置x轴，第二个是y轴
+background-position:10px 10px;
+例3:混搭 也有写法顺序
+background-position:10px center;
+
+
+background-attachment:背景附着 默认值是scroll(跟随页面滚动) fixed 背景固定
+
+
+background:背景综合样式
+background:背景颜色|背景图片地址|背景平铺|背景滚动|背景位置
+例1:
+background:red url() no-repeat scroll left 50px;
+例2:
+background:red url() no-repeat scroll left 50px,
+green url() no-repeat scroll right 50px;
+可以添加多组设置背景，如果设置的多重背景有重叠关系，前面设置的背景图会覆盖后面设置的背景图，为了避免背景色被图像盖住，背景色一般定义在最后一组上(css3)
+
+
+背景渐变: 由于背景渐变兼容性问题比较差，所以必须要加浏览器前缀才起作用
+background: 浏览器前缀-linear-gradient(起始位置，起始颜色，结束颜色);
+background: -webkit-linear-gradient(bottom left,red,green);
+background: 浏览器前缀-linear-gradient(起始位置,颜色 位置，颜色 位置，颜色 位置,...);
+
+
+line-height:设置行间距  一般情况下行间距比字号大七八像素就可以了
+行高分为三部分:上边距，文本内容，下边距，行高等于盒子高度能使文本内容垂直居中
+letter-spacing:字间距 一般用px单位  letter(字)-spacing(间距),对所有字符有效
+word-spacing:单词间距 该属性用于定义单词之间的间距，对中文字符无效
+例如:
+
+p{
+	word-spacing:20px;
+}
+<p> hel lo world</p>  会把hel lo 和world三个之间的间距改为20px
+
+
+
+word-break: 自动换行
+值:normal 	使用浏览器默认的换行规则，单词不会被拆分，使用-才会被拆分。
+break-all: 允许在单词内换行  即在div中一个单词超过了div本身的宽度，单词会被拆分，强制换行，默认的不会
+keep-all:(默认执行) 只能在半角空格或连字符处换行(不能给单词拆分	显示，除非有连字符-)。
+
+white-space:设置或检索对象内文本显示方式，通常用于	强制一行显示内容
+white-space:normal:默认处理方式
+white-space:nowrap:强制在同一行内显示所有文本，直到文本结束或遇到br标签才换行
+text-overflow 文字溢出
+text-overflow:clip(不显示省略标记...直接裁剪)|ellipsis(当对象溢出时显示...省略符号)
+注意:一般和white-space:nowrap和overflow:hidden配套使用，先强制文本在一行显示，再把显示溢出部分用省略号表示
+
+
+cursor:鼠标样式
+属性: default 小白| pointer 小手| move 移动| text文本 |not-allowed 禁用
+
+
+outline: outline-color|outline-style|outline-width 边框轮廓线
+用于绘制元素周围的一条线，位于边框外围，可起到突出元素的作用，平时一般不用
+
+resize:none
+防止拖拽，textarea右下角的小图标
+
+opacity: 透明度 值为0~1

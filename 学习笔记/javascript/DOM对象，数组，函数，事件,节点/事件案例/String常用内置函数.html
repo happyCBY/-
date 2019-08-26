@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        var str = "今天天气真不错，我想早起去晨跑，可惜没能睡起来，浪费一早好时光";
+        //str.charAt(x) 从str字符串中返回第x-1个索引位置的字符串，如果x超过str.length-1,或者x<0，则返回一个空字符
+        console.log(typeof str.charAt());
+        //将String.fromCharCode(x,y,...)将括号里面的数字转化为UTF-16里对应的字符，并连接这些字符成一个字符串返回
+        //静态方法
+        console.log(String.fromCharCode(50,98));
+        //连接字符串，并把连接后的字符串返回，原数组不变
+        console.log( str.concat("！好诗，好诗啊") );
+        console.log(str);
+        //返回indexOf括号里字符串在str中第一次寻找到的位置，寻找路线是从索引位置0开始
+        console.log(str.indexOf('天气'));
+        //返回lastIndexOf括号里字符串在str中第一次寻找到的位置，寻找路线是从索引位置str.length位置开始
+        console.log(str.lastIndexOf('天气'));
+        //str.replace(x,y) 先在字符串中寻找x，寻找到了将x替换成y，并返回替换后的字符串，没找到则返回原来的字符串
+        console.log( str.replace("今天 ","明天") );
+        //slice（x,y）从str索引x位置开始截取字符串直到y-1索引位置结束，返回截取的字符串,如果y的值大于str.length-1,则返回从x位置开始到末尾的字符串
+        console.log(str.slice(1,50));
+        //str.split(x) 在str中寻找x字符，并以这个字符为界拆成左右两边并装入数组中返回
+        console.log( str.split('今') );
+        // str.substr(x) 从x索引位置开始截取字符串直到末尾，并返回截取的字符串
+        console.log( str.substr(5) );
+         // str.substr(x,y) 从x索引位置开始截取y个字符，并返回截取的字符串
+        console.log(str.substr(5,6));
+
+        //大写转小写，小写转大写
+        console.log( 'afB'.toLocaleLowerCase());
+        console.log( 'afB'.toLowerCase());
+        console.log('aaa'.toLocaleUpperCase());
+        console.log('aaa'.toUpperCase());
+        //清除两端空格   清除左端空格  清除右端空格  并把清除空格后的字符串返回，原字符串不变
+        console.log( " d  a  ".trim() );
+        console.log( " d  a  ".trimLeft() );
+        console.log( " d  a  ".trimRight() );
+    </script>
+</head>
+<body>
+
+</body>
+</html>

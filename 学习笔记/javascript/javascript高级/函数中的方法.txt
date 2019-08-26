@@ -1,0 +1,13 @@
+function.name  获得函数的名字，name属性是只读的不能修改
+function.arguments 获取传入实参并存储在一个伪数组中
+function.length 获取函数形参的个数
+function.caller 获得函数的调用者
+function f1() {
+    console.log(f1.caller());
+}
+f1(); 返回null
+function f2() {
+    f1();
+}
+f2(); 返回f2
+如果f1在f2中调用了，那么调用者就是f2

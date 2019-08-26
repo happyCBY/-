@@ -1,0 +1,66 @@
+小程序常用的UI组件、
+1. text文本
+属性名     	  类型	  默认值	说明
+selectable	Boolean	false	 文本是否可选，除了text组件之外，其它组件都无法长按选中
+space	    String	false	 显示连续空格，可选值：ensp（text里面的空格占一个英文字符的大小）、emsp（text里面的空格占一个中文字符的大小）、nbsp（text里面的空格占设置样式font-size的大小）
+decode	    Boolean	false	 是否解码，可解析  &nbsp;  &lt;  &gt;  &amp;  &apos;  &ensp;  &emsp;
+
+2. view视图容器
+属性名	                 类型	 默认值	              说明
+hover-class	String	    none	指定按下去的样式类    当 hover-class="none" 时，没有点击态效果
+hover-stop-propagation	Boolean	false	            指定是否阻止本节点的祖先节点出现点击态（阻止冒泡）
+hover-start-time	    Number	50	                按住后多久出现点击态，单位毫秒
+hover-stay-time     	Number	400	                手指松开后点击态保留时间，单位毫秒
+
+
+3. button按钮
+属性名       类型	      默认值	  说明
+size	    String	    default	    按钮的大小
+type	    String	    default	    按钮的样式类型
+plain	    Boolean	    false	    按钮是否镂空，背景色透明
+disabled	Boolean	    false	    是否禁用
+loading	    Boolean	    false	    名称前是否带 loading 图标
+
+4. input输入框
+属性名	     类型	     默认值	      说明
+value	    String		            输入框的初始内容
+type	    String	    "text"	    input 的类型
+password	Boolean	    false	    是否是密码类型
+placeholder	String	    	        输入框为空时占位符
+disabled	Boolean	    false	    是否禁用
+maxlength	Number	    140	        最大输入长度，设置为 -1 时不限制最大长度
+
+
+5. image图片
+常见的属性：
+src ：支持本地和网络上的图片
+mode ：指定图片裁剪、缩放的模式
+
+注意：image组件默认宽度300px、高度225px
+
+更多属性用法请翻阅 image 官方文档：
+https://developers.weixin.qq.com/miniprogram/dev/component/image.html
+
+
+2.2 WXSS目前支持的选择器
+标签选择器
+id选择器
+class选择器
+伪类选择器
+data-*属性选择器  wxss中 [data-color="red"] {color: red} wxml中 <view data-color = "red"></view>
+:nth-of-type() 等常用的 css3 选择器
+etc…
+
+2.3 什么是rpx尺寸单位
+rpx（responsive pixel）: 是微信小程序独有的、解决屏幕自适应的尺寸单位。
+可以根据屏幕宽度进行自适应。不论大小屏幕，规定屏幕宽为750rpx。
+通过rpx设置元素和字体的大小，小程序在不同尺寸的屏幕上，可以实现自动适配。
+
+2.4 rpx与px之间的换算
+
+以 iPhone6 为例，iPhone6 的屏幕宽度为375px，共有750个物理像素，则750rpx = 375px = 750物理像素，1rpx = 0.5px = 1物理像素。
+
+设备	        rpx换算px (屏幕宽度/750)	px换算rpx (750/屏幕宽度)
+iPhone5	        rpx = 0.42px	            1px = 2.34rpx
+iPhone6	        rpx = 0.5px	                1px = 2rpx
+iPhone6plus	    1rpx = 0.552px	            1px = 1.81rpx

@@ -1,0 +1,108 @@
+==========================================================================
+ajax的请求限制:
+ajax只能想自己的服务器发送请求，比如现在有一个A网站，有一个B网站，A网站中的html页面只能向A站的服务器端发送ajax请求，b网站也是如此，A网站不能向B网站发送ajax请求,b网站也是如此
+//////////////////////////
+同源政策:
+如果两个页面拥有相同的协议，域名和端口，那么这两个页面就属于相同的一个源，但凡有一个不同，他们就是不同源
+
+该政策主要是为了保证用户信息的安全，防止恶意网站窃取数据，最初的同源设置是:A网站设置的 cookie B网站是不能访问的
+
+比如某用户在A网站登录了存储了A网站用来检验登录状态的cookie，如果没有同源政策的话，它在访问B网站的时候，B网站就能获取到该用户的cookie,那么B网站利用这个cookie就能去A网站浏览该用户登录之后所能访问到的个人信息了。
+
+同源政策中有一项规定，ajax向非同源网站发送请求时浏览器会报错， ajax请求非同源网站时，请求可以发送，非同源的服务器端也可以接受和响应请求，但是浏览器拒绝接收服务器端返回的请求，所以最终请求还是失败的
+
+========================================================================
+使用JSONP解决同源限制问题:
+jsonp是json with padding的缩写，它不属于ajax请求，但可以模拟ajax请求
+
+1.script标签的src属性不受同源政策的影响，可以将不同源的服务端请求写在script的src标签属性里面
+例: <script src="http://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"> </script>
+注意！加载完的文件将放在script标签里面当成script文件来执行
+
+2.封装jsonp方法
+function jsonp(options) {
+    //创建一个script标签
+    var script = document.createElement("script");
+
+    //创建一个随机数用来生成不同的方法
+    var num = Math.random().toString().replace(".","");
+    var jsonp = "jsonp"+`${num}`;
+
+    //将这个方法升级到全局变量里面
+    window[jsonp] = options.success;
+
+    //将要发送的请求填写到新创建的script标签的src属性里面
+    var callback = `callback=${jsonp}`;
+    //将请求的参数转化为字符串的形式
+    for(var attr in options.date) {
+        callback += "&"+attr+"="+options.date[attr];
+    }
+    script.src = options.url+"?"+callback;
+
+    //将该script标签挂在body标签里面
+    document.body.appendChild(script);
+
+    //在新建的script执行完毕后删除
+    script.onload = ()=>{
+        document.body.removeChild(script);
+    }
+}
+================================================
+使用script的src属性获得腾讯天气内容
+jsonp({
+    url: "https://wis.qq.com/weather/common",
+    date: {
+        source: "pc",  //必填，验证是pc端还是移动端
+        weather_type: "forecast_1h", //获得未来48小时天气
+        province: "福建省",  //查找的省份
+        city: "莆田市"  //查找的城市
+    },
+    success: function (result) {
+
+        var html = template("tpl", { result: result.data.forecast_1h })
+
+        box.innerHTML = html;
+    }
+});
+==============================================
+CORS跨域资源共享,解决同源政策问题
+CORS： 全称为 Cross-origin resource sharing ，即跨域资源共享,它允许浏览器向跨域服务器发送Ajax请求，克服了Ajax只能同源使用的限制
+这种方式主要是在服务器端设置，客户端正常使用ajax请求
+例:
+一般情况下该设置放在 app.use里面，拦截所有请求并判断
+app.use((req,res,next)=>{
+    //设置哪些客户端可以访问我，当前设置为*代表所有客户端都可以
+    res.header("Access-Control-Allow-Origin",'*');
+    //允许客户端使用哪些请求访问我  多种请求方式使用 , 隔开
+    res.header("Access-Control-Allow-Methods","get,post");
+    next();
+})
+==============================================
+访问非同源设置，服务器端的解决方案  （代理）
+使用第三方模块 request
+下载 npm install request
+
+//err为返回的错误信息，如果请求成功则为null
+//response服务器端响应的一些信息
+//body 为返回的主体内容，即访问服务器地址返回的send里面的内容
+request("请求非同源服务器端的地址",(err,response,body) {
+
+})
+========================================================
+跨域请求数据时携带cookie信息
+
+客户端设置
+xhr.withCredentials = true;
+服务器端设置
+res.header('Access-Control-Allow-Credentials', true);
+
+之前都有这样一个理解：
+ajax请求时是不会自动带上cookie的，要是想让他带上的话，必须要设置withCredential为true。
+这个说法会让人产生完全扭曲的误解，我就是其中之一。
+完整的无歧义的表述应该是这样：
+1.ajax会自动带上同源的cookie，不会带上不同源的cookie
+2. 可以通过前端设置withCredentials为true， 后端设置Header的方式让ajax自动带上不同源的cookie，但是这个属性对同源请求没有任何影响。会被自动忽略。
+
+注意！！！！！！！！
+如果用户携带cookie信息访问时，Access-Control-Allow-Origin必须制定特定的URL，不能是*
+res.header("Access-Control-Allow-Origin", 'http://localhost:3000');

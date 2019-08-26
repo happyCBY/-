@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" value="隐藏">
+    <div>
+
+    </div>
+    <script>
+        var input = document.querySelector("input");
+        var odiv = document.querySelector('div');
+
+        input.onclick = function(){
+            //不占位
+            odiv.style.display = "none";
+            //占位
+            odiv.style.visibility = "hidden";
+            //占位
+            odiv.style.opacity = "0";
+            //占位
+            odiv.style.height = "0";
+            odiv.style.border = "none";
+        }
+    </script>
+</body>
+</html>

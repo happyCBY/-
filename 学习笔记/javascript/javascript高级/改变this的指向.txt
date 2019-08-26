@@ -1,0 +1,24 @@
+apply和call方法中如果没有传入参数，或者传入的参数为null，那么调用该方法的函数对象的this就是默认的window\
+function.apply(object,Array) object里面传入的是this指向的对象 Array里面存的是传入的参数
+function.call(object,args,args,...) object里面传入的是this指向的对象 args存的是参数
+
+注意！
+1.apply和call只能由函数或者对象的方法调用
+2.apply和call是Function里面的方法
+案例:
+function Person(name) {
+    this.name = name;
+}
+
+var per = new Person("小明");
+per.sayhi();
+function Student(name) {
+    this.name = name;
+}
+var stu = new Student("小红");
+console.log(per.call(stu));  输出为小红
+console.log(per.call(stu));  输出为小红
+
+
+bind方法是复制一份函数或者对象的方法，然后再返回一个函数
+bind(object，参数1，参数2)， object是this新指向的对象

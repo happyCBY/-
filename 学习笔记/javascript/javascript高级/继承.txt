@@ -1,0 +1,77 @@
+1.改变__proto__指向来实现继承
+继承: 首先继承是一种关系，类(class)与类之间的关系，js里面没有类，但是可以通过构造函数模拟类，然后通过原型来实现继承，继承是为了数据共享，js的继承也是为了实现数据共享
+案例1:
+function Person(name,sex,age) {
+    this.name = name;
+    this.sex = sex;
+    this.age = age;
+}
+Person.prototype.eat =function() {
+    console.log("我在吃");
+}
+Person.prototype.sleep = function(){
+    console.log("我在睡");
+}
+function Student(score) {
+    this.score = score;
+}
+Student.prototype = new Person("小明","男","18");
+Student.prototype.constructor=Student;  //注意继承完后constructor会指向实例化的构造函数，要给它改回原先的构造函数
+Student.prototype.study = function(){
+    console.log("我在学习");
+}
+var student = new Student(100);
+console.log(student.name);  //输出:小明
+console.log(student.sex);   //输出:男
+console.log(student.age);   //输出:18
+student.eat();              //输出:我在吃
+student.sleep();            //输出:我在睡
+console.log(student.score); //输出:100
+student.study();            //输出:我在学习
+2.借用构造函数实现继承
+//借用构造函数:构造函数名字.call(当前对象,属性,属性,属性....);
+//解决了属性继承,并且值不重复的问题
+//缺陷:父级类别中写在原型prototype里面的方法和属性不能继承
+案例:
+function Person(name, age, sex, weight) {
+    this.name = name;
+    this.age = age;
+    this.sex = sex;
+    this.weight = weight;
+}
+Person.prototype.sayHi = function () {
+    console.log("您好");
+};
+function Student(name,age,sex,weight,score) {
+    //借用构造函数
+    Person.call(this,name,age,sex,weight);
+    this.score = score;
+}
+var stu1 = new Student("小明",10,"男","10kg","100");
+console.log(stu1.name, stu1.age, stu1.sex, stu1.weight, stu1.score);
+
+var stu2 = new Student("小红",20,"女","20kg","120");
+console.log(stu2.name, stu2.age, stu2.sex, stu2.weight, stu2.score);
+
+var stu3 = new Student("小丽",30,"妖","30kg","130");
+console.log(stu3.name, stu3.age, stu3.sex, stu3.weight, stu3.score);
+3.组合继承
+改变__proto__指向+借用构造函数
+4.拷贝继承
+浅拷贝: 就是把对象中需要共享的属性或者方法，直接遍历的方式复制到另一个对象中
+
+5.逆推继承看原型
+案例1：
+function F1(age) {
+    this.age = age;
+}
+function F2(age) {
+    this.age = age;
+}
+function F3(age) {
+    this.age = age;
+}
+F2.prototype = new F1(10);
+F3.prototype = new F2(20);
+var a = new F3(30);
+console.log(a.age);

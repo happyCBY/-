@@ -1,0 +1,49 @@
+事件处理对象.clientX  获得鼠标在可视区的横坐标  ie8不支持事件处理对象
+事件处理对象.clientY  获得鼠标在可视区的纵坐标
+
+window.event.clientX 获得鼠标在可视区的横坐标   ie8支持
+window.event.clientY 获得鼠标在可视区的纵坐标
+
+事件处理对象.pageX 获得相对于页面顶部的横坐标
+事件处理对象.pageY 获得相对于页面顶部的纵坐标
+
+pageX和pageY在ie8不支持
+
+
+鼠标移动事件兼容
+最终代码:
+
+var evt = {
+
+// window.event和e的兼容代码
+getEvent: function(evt) {
+    return evt||window.event;
+},
+
+// 可视区域横纵坐标兼容代码
+
+getClientX: function(evt) {
+    return this.getEvent(evt).clientX;
+},
+getClientY: function(evt) {
+    return this.getEvent(evt).clientY;
+},
+
+// 获得横纵弯曲距离兼容代码
+
+getScrollTop: function(evt) {
+    return window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0;
+},
+getScrollLeft: function() {
+    return window.pageXOffset||document.documentElement.scrollLeft||document.body.scrollLeft||0;
+},
+
+// 相对于页面的横纵坐标兼容代码
+
+getPageX: function(evt) {
+    return this.getEvent(evt).pageX? this.getEvent(evt).pageX:this.getScrollLeft()+this.getClientX(evt);
+},
+getPageY: function(evt) {
+    return this.getEvent(evt).pageY? this.getEvent(evt).pageY:this.getScrollTop()+this.getClientY(evt);
+}
+}

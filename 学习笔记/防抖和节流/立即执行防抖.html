@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 300px;
+            height: 100px;
+            border: 1px solid #000;
+            margin: 100px auto;
+            padding: 100px;
+            text-align: center
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <script>
+        var div = document.querySelector('#app')
+        var num = 0
+        div.innerHTML = num
+
+        function debounce(fn, wait) {
+            var timeout = null;
+            return function () {
+                if (timeout !== null) clearTimeout(timeout);
+                let flag = !timeout
+                timeout = setTimeout(()=>{timeout=null}, wait);
+                if(flag) {
+                    handle()
+                }
+            }
+        }
+        // 处理函数
+        function handle() {
+            num++
+            div.innerHTML = num
+        }
+        // 滚动事件
+        div.addEventListener('mousemove', debounce(handle, 1000));
+    </script>
+</body>
+
+</html>

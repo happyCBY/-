@@ -1,0 +1,71 @@
+======================================================
+自定义属性的获取:
+
+自定义属性不能通过 DOM对象.自定义属性名 获取自定义属性的值
+只能通过 DOM对象.getAttribute('自定义属性名')来获得自定义属性的值
+
+
+案例1
+<div id="area" myname = "cby"> <div>
+var area = document.getElementById('area');
+console.log(area.myname);
+返回 underfined
+
+因为area.myname是获得DOM对象里面的myname属性，而 myname是定义在li标签上的属性，所以不能获得
+而且DOM对象里面没有定义这个属性，所以返回underfined
+
+案例2
+<div id="area" myname = "cby"> <div>
+var area = document.getElementById('area');
+console.log(area.getAttribute('myname'));
+返回cby
+
+=======================================================
+
+自定义属性的动态设置:
+
+通过setAttribute('自定义属性名','自定义属性的值')来设置
+案例1
+var btn = document.getElementById('btn');
+var uu = document.getElementById('uu');
+var li = uu.getElementsByTagName('li');
+btn.onclick = function() {
+    for(var i = 0;i < li.length;i++) {
+        li[i].sorce = (i+1)*10;
+    }
+}
+
+没有效果，li[i].sorce = (i+1)*10;是设置在DOM对象里面的，不会体现在li标签属性上
+
+案例1
+var btn = document.getElementById('btn');
+var uu = document.getElementById('uu');
+var li = uu.getElementsByTagName('li');
+btn.onclick = function() {
+    for(var i = 0;i < li.length;i++) {
+        li[i].setAttribute('score',(i+1)*10);
+    }
+}
+可以
+
+========================================
+属性的移除:
+语法
+DOM对象.removeAttribute('自定义属性名');
+DOM对象.removeAttribute('元素自带属性名');
+
+========================================
+自定义属性命名:
+h5规定自定义属性data-开头作为自定义属性名
+<div data-name = "zxl>  </div>
+
+h5新增获取自定义属性方法:
+div.dataset 获得的是一个集合，获得所有以data-开头的自定义属性  ie11以上才支持
+案例1
+<div data-index = "10" id = "dv"></div>
+var dv = document.getElementById("dv");
+console.log(dv.dataset.index);
+案例2
+<div data-index-time="10" id="dv"> </div>
+var dv = document.getElementById("dv");
+console.log(dv.dataset.indexTime);

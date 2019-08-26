@@ -1,0 +1,207 @@
+内置对象
+
+Date
+改实例用来处理日期和时间，从1970-01-01开始
+
+要使用必须创建实例对象
+var dt = new Date();
+console.log(dt);//字符串
+不传值---当前的时间---当前服务器的时间
+
+var dt = new Date("2017-08-12");----"2017/08/12"
+console.log(dt);//字符串
+传值就是传入值得时间
+var dt = new Date("2017,08,12");这样写不会报错，但是时间不对
+
+var dt = Date.now();
+console.log(dt);//1970-现在时间的毫秒数---数字类型的
+字符串之间不能进行计算
+
+例子(以下都是数字类型的)
+var dt = new Date();
+
+获取年份--1970-现在的年份
+console.log(dt.getYear());
+console.log(dt.getFullYear());//获取当前的年份
+
+获取月份
+console.log(dt.getMonth()); 是从0开始的  获取真实的月份需要+1
+
+获取日期（日
+console.log(dt.getDate());
+
+获取小时
+console.log(dt.getHours());
+
+获取分钟
+console.log(dt.getMinutes());
+
+获取秒
+console.log(dt.getSeconds());
+
+获取星期几
+console.log(dt.getDay());星期从0开始
+
+
+console.log(dt.toDateString());英文日期
+console.log(dt.toLocalDateString());数字格式-日期
+
+总结date对象的方法
+//不支持h5的浏览器的写法  只适用于data对象
+var dt =+ new Date();
+dt.getFullYear();//年
+dt.getMonth();//月---从0开始
+dt.getDate();//日
+dt.getHours();//小时
+dt.getMinutes();//分钟
+dt.getSeconds();//秒
+dt.getDay();//星期---从0开始
+dt.toDateString();//日期
+dt.toLocaleDateString();//日期
+dt.toTimeString();//时间
+dt.toLocaleTimeString();//时间
+dt.valueOf();//毫秒
+
+格式化日期和时间---封装成一个函数
+function getDate() {
+    var dt = new Date();
+    //年
+    var year = dt.getFullYear();
+    //月
+    var month = dt.getMonth();
+    //日
+    var day = dt.getDate();
+    //小时
+    var hour = dt.getHours();
+    //分钟
+    var minute = dt.getMinutes();
+    //秒
+    var second = dt.getSeconds();
+    month=month<10?"0"+mouth:mouth;
+    day=day<10?"0"+day:day;
+    hour=hour<10?"0"+hour:hour;
+    minute=minute<10?"0"+minute:minute;
+    second=second<10?"0"+second:second;
+
+    return  year+"年"+mouth+"月"+day+"日"+hour+"："+minute+"："+second+"：";
+}
+
+============================================================================
+String  字符串对象   用于字符串或一个字符序列的构造函数
+补充：char只能存一个-----char ch='h';
+js中没有字符类型
+
+字符串可以看成一个字符数组---他也可以通过for进行遍历
+字符串不可变性，字符串的值是不能改变的。
+var str="123456";
+str = "abcdef";----重新赋值
+console.log(str);---输出abcdef ---重新赋值是可以覆盖的
+
+var str="hello";
+str[1]="w";
+console.log(str);
+输出
+字符串可以通过索引访问字符串中的某个值
+但是  只是可以访问读取-----只读
+
+字符串的属性
+.length------字符串的长度
+.charAt（索引）返回值是指定索引位置的字符串，超出索引，结果是空字符串
+.String.formCharCode静态方法
+.String.formCharCode(数字值)返回的是ASCII码
+.concat(string1,string2,....)将一个或多个字符串与原字符串连接合并，组成一个新的字符串并返回 原来的字符串不会被覆盖，而是创建一个新的空间来存储这个字符串
+.indexOf(要找的字符串[,从某个位置开始的索引])返回查找到的位置(数字--索引值)，没有的话返回-1
+.lastIndexOf()从后向前找，但是索引仍然是从左到右的方式，找不到则返回-1；若是一个字符串里有两个要查找的字符，只会返回最先找到的那个字符的索引
+.replace(原来的字符串，新的字符串) 替换字符串 会覆盖原来的字符串
+.slice(开始位置，结束位置) [开始位置，结束位置)  截取开始的索引到结束的索引的前一个，返回一个新的数组，不会改变原来数组的值
+.split(要干掉的字符，切割留下的个数) 切割  返回的是数组
+.substr(开始的位置,长度) --长度可不写--返回截取后新的字符串
+.substring(开始的索引，结束的索引) 截取开始的索引到结束的索引的前一个
+.toLocaleLowerCase();转小写
+.toLowerCase();转小写
+.toLocaleUpperCase();转小写
+.toUppeCase();转小写
+.trim();切掉两端的空格
+补充：静态方法只能通过构造函数.使用，不能通过实例化后.使用
+
+=====================================================================
+Array
+var arr = new Array();
+var arr = [];
+只要是数组就是对象
+
+
+数组的属性
+.isArray()是否是数组-------关键字----instanceof(Array)是不是数组
+.from  静态方法
+.concat(数组，数组，数组) 添加数组 返回一个新数组
+.every(callback)  返回布尔类型（可以进行筛选）测试数组的所有元素是否都通过了指定函数的测试  数组中只要一个没满足就返回false
+    callback 函数作为参数使用   被调用时传入的三个参数：元素值，元素的索引，（原数组（谁调用了这个方法就是谁）没用）
+.filter(函数); 返回的是数组中的每一个元素都符合条件的元素，组成了一个新的数组
+.push(值);   把值追加到了数组中，加到末尾--返回值是追加后的长度
+.pop();  删除数组中最后一个元素的，返回值就是删除的这个元素
+.shift(); 删除数组中第一个元素，返回值就是删除的这个元素
+.unshift(); 向数组的第一个元素前面插入一个新的元素，返回值是插入后的长度
+.forEach(callback)  遍历数组用---相当于for循环
+.indexOf()  与String对象的方法一样
+.join(字符串);返回的是一个字符串，在数组的每个元素后都插入一个字符串
+.map(函数); 数组中的每个元素都要执行这个函数，把执行后的结果全部放在新的数组中
+.reverse(); 反转数组
+.sort() 返回的是排序后的新数组--直接覆盖原数组，不稳定，可能不会排序
+.slice(开始位置，结束位置) [开始位置，结束位置)  截取开始的索引到结束的索引的前一个，返回一个新的数组，不会改变原来数组的值
+解决方案：
+var arr = [1,6,8,5,2,9,6];
+arr.sort(function (a,b) {
+    if(a>b) {
+        return 1;
+    }
+    else if(a==b) {
+        return 0;
+    }
+    else {
+        return -1;
+    }
+});
+
+------------固定写法-------------
+.slice(x,y) [x,y)  把截取后的存在一个新数组中
+.splice(开始的位置，要删除的个数，替换的元素的值);一般使用于删除数组中的元素，或者是替换元素，或者是插入元素
+例子：
+var myFish = ['angel', 'clown', 'mandarin', 'sturgeon'];
+ myFish.splice(2, 0, 'drum');
+// 在索引为2的位置插入'drum'
+// myFish 变为 ["angel", "clown", "drum", "mandarin", "sturgeon"]
+myFish.splice(2, 1);
+// 从索引为2的位置删除一项（也就是'drum'这一项）
+// myFish 变为 ["angel", "clown", "mandarin", "sturgeon"]
+
+=========================================
+基本包装类型
+
+--本身是基本类型，但是在执行代码额过程中，如果这种类型的标量调用了属性或者方法，那么这种类型就不再是基本类型了，而是基本包装类型，这个变量也不是普通的类型了，而是基本包装类型了
+
+普通变量不能直接调用属性和方法
+对象可以直接调用属性和方法
+例子：
+var str="hello"; -----普通变量
+str=str.replace("ll","hh"); -----调用后变成了对象
+console.log(str);
+
+||||||||||||||||||||||||||||
+|||||||浏览器内部做的事||||||
+var str=new String("hello");
+str=str.replace("ll","hh");
+console.log(str);
+||||||||||||||||||||||||||||
+
+例子2：
+var flag=new Boolean(false);
+var result=true&&flag;
+console.log(result);
+如果是一个对象&&true，那么结果是true
+如果是一个true&&对象，那么结果是对象
+
+例子3
+var num = 10; ----基本类型
+var num2=Number("10");---类型转换
+var num3=new Number("10");---基本包装类型

@@ -1,0 +1,12 @@
+﻿window.open打开一个窗口
+window.close关闭一个窗口
+window.navogator.userAgent显示浏览器版本信息
+window.location显示当前页面位置
+document.docunentElement.clientWidth/height可视区的尺寸
+document.documentElement.scrollTop其他浏览器
+可视区距离页面顶部的距离
+document.body.scrollTop谷歌下
+onscroll滚动时事件发生
+onresize浏览器重置大小时执行事件
+confirm提示框有确定和取消返回true和false
+prompt（a,b）输入框返回输入的元素a为解释说明，b为默认输出

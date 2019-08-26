@@ -1,0 +1,78 @@
+﻿input标签:
+属性:type
+值: text      文本框
+	password	隐藏字符的密码框
+	search 搜索框（在某些浏览器中输入内容会出现叉形标记，用于快速删除输入的内容）
+
+	checkbox	多选框
+	radio	单选按钮
+
+	button	普通按钮
+	submit	提交按钮
+	reast	重置按钮
+	image	图片提交按钮
+
+	number 只能输入数字的框（定义带有 spinner 控件的数字字段，边框最右边带有调节数字按钮）
+	range 只能选择在一个指定范围的滑块控件，min，max设置滑块的最大值和最小值 step设置每次跳转的数值(ie9及以前不支持)
+
+	color 该输入类型允许您从拾色器中选取颜色
+	date 日期和时间选择器
+	E-mail 输入类型用于应该包含电邮地址的输入字段(输入符合E-mail字符串的话会提醒)
+
+	file 文件域
+	tel  输入类型用于应该包含电话号码的输入字段。
+	url  输入类型用于应该包含 URL 地址的输入字段。会在提交表单时对 url 字段的值自动进行验证
+
+属性: name 表单的名字
+属性: value 表单默认文本
+属性: checked 默认选中 checked = "checked"
+属性: placeholder=""：占位符主要用于设置文本框和密码框的占位符提示信息
+属性: list  用于搜索框搜索字符提示，后跟datelist
+<input type="text" list="src">
+<datalist id="src">
+	<option value="你好"></option>
+	<option value="我也好"></option>
+</datalist>
+
+label:当点击label中的文字时，光标定位到绑定的表单文本框中,只适用于text
+作用:用于绑定一个表单元素，获取表单文本框的焦点
+第一种方法:
+<label> hallo world<input type = "text"> </label>
+第二种方法:
+<label for="text">hallo world</label>
+<input id = "text" type = "text">
+
+
+textarea：文本域
+textarea输入任何内容 都会保留在文本域内
+<textarea>
+	hello world
+</textarea>
+
+select 下拉列表
+  option selected="selected" 下拉选项 默认选项
+
+<select>
+	<option selected = "selected"></option>
+	<option></option>
+	<option></option>
+</select>
+
+form:表单域
+属性:action  提交到action中路径的位置
+属性:method  值:get/post 提交的方式
+属性:name 表单的名称
+<form action="" method="" name="">
+
+</fieldset> fieldset定义和用法fieldset 元素可将表单内的相关元素分组。
+<fieldset> 标签将表单内容的一部分打包，生成一组相关表单的字段。
+当一组表单元素放到 <fieldset> 标签内时，浏览器会以特殊方式来显示它们，
+它们可能有特殊的边界、3D 效果，或者甚至可创建一个子表单来处理这些元素。
+<fieldset> 标签没有必需的或唯一的属性。
+<legend>健康信息：</legend>在边框上加文本信息
+<fieldset style="width:200px;">
+<legend>健康信息：</legend>
+<form>
+<label>身高：<input type="text" /></label>
+<label>体重：<input type="text" /></label>
+</form>

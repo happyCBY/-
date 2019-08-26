@@ -1,0 +1,26 @@
+﻿
+table 
+ 
+width:表格的宽度
+height:表格的高度
+cellspacing表格行间距 类似margin
+cellpadding表格和字之间的间距 类似padding
+align:表格的对齐方式
+colspan合并列
+rowspan合并行
+caption 表格的名字
+<table>
+<caption>学生信息表</caption>
+<tbody>
+	<tr>
+	      <td></td>
+	</tr>
+</tody>
+</table>
+
+thead tr th 头 thead里面的td不能和tbody里面的td合并
+tbody tr to 身体 tbody里面的td不能和tfoot里面的td合并
+tfoot tr td 脚 tbody里面的td不能和其他tbody里面的td合并
+
+css补充: tr可以设置高度不能设置宽度
+

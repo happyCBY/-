@@ -1,0 +1,84 @@
+https://www.jianshu.com/p/c8b86b09daf0 介绍节流和防抖
+防抖（debounce）
+所谓防抖，就是指触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间。
+1、非立即执行防抖
+<div id="app">
+</div>
+<script>
+    var div = document.querySelector('#app')
+    var num = 0
+    div.innerHTML = num
+
+    function debounce(fn, wait) {
+        var timeout = null;
+        return function () {
+            //利用废弃 上一个return执行的 延时器的tiemr达到只执行最后一次延时器
+            if (timeout !== null) clearTimeout(timeout);
+            timeout = setTimeout(fn, wait);
+        }
+    }
+    // 处理函数
+    function handle() {
+       num++
+        div.innerHTML = num
+    }
+    // 滚动事件
+    //注意 当触发时间的时候是执行 debounce return的函数，debounce函数只执行一次
+    div.addEventListener('mousemove', debounce(handle, 1000));
+</script>
+
+2、立即执行防抖
+
+function debounce(fn, wait) {
+    var timeout = null;
+    return function () {
+        if (timeout !== null) clearTimeout(timeout);
+        //只有当第一次触发的时候timeout为null flag为true 执行一次handle()
+        let flag = !timeout
+        timeout = setTimeout(()=>{
+            //当一秒内没有触发事件时，timeout重置为null
+            timeout=null
+        }, wait);
+        if(flag) {
+            handle()
+        }
+    }
+}
+
+
+节流（throttle）
+所谓节流，就是指连续触发事件但是在 n 秒中只执行一次函数。节流会稀释函数的执行频率。
+
+1、时间戳节流
+function throttle(wait) {
+    var time = 0;
+    return function () {
+        //获得当前时间
+        var now = new Date()
+        //now - time 获得当前和上一次触发handle()事件的间隔事件，大于wait时再次触发handle()事件
+        if(now - time > wait) {
+            handle()
+            //触发handle()后重置 time 为当前时间
+            time = new Date()
+        }
+    }
+}
+function handle() {
+    num++
+    div.innerHTML = num
+}
+2、定时器节流
+function throttle(wait) {
+    var timer = null
+    return function () {
+        //判断timer是否为null 如果为null,则延迟一秒执行一次handle()函数，当一秒内多次触发事件是，只有第一次timer值为null，等到一秒过后 timeout 重置为null 再次触发事件时才能再一次触发handle()函数
+        if(!timer) {
+            timer = setTimeout(()=>{
+                //重置timer值为null
+                timer = null
+                handle()
+            },wait)
+        }
+
+    }
+}

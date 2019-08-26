@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        //Date: 实例用来处理日期和时间，Date对象基于1970年1月1日(世界标准时间)起的毫秒数
+        //Date是一个构造函数，需要创造对象去用它
+        var date = new Date();
+        //输出当前时间
+        console.log(date);
+        // 获得1970年到现在的毫秒数,  对象名.valueOf  获得1970年到现在的毫秒数
+        console.log(Date.now());
+        console.log(date.valueOf());
+        //
+        function gettime() {
+            var date = new Date();
+            var year = date.getFullYear();
+            console.log(year);
+            //获得的月份比实际月份少一个月
+            var month = parseInt(date.getMonth()) + 1;
+            console.log(month);
+            var day = date.getDate();
+            console.log(day);
+            var hour = date.getHours();
+            console.log(hour);
+            var minute = date.getMinutes();
+            console.log(minute);
+            var second = date.getSeconds();
+            console.log(second);
+            month = month < 10 ? ("0" + month) : month;
+            day = day < 10 ? ("0" + day) : day;
+            minute = minute < 10 ? ("0" + minute) : minute;
+            second = second < 10 ? ("0" + second) : second;
+            return year + "年" + month + "月" + day + "日 " + hour + ":" + minute + ":" + second;
+        }
+        console.log(gettime());
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -1,0 +1,374 @@
+1.组件的注册
+(1)全局组件注册模板
+
+Vue.component('组件的名称',{
+    data: 组件数据(组件的数据必须是一个函数，而且函数必须有返回值，且返回值必须是一个对象，用户调用对象里面的属性时要使用this.属性名来调用),
+    template: '组件模板内容（可以在里面写vue的支持的语法）'
+})
+例:
+<div id="hello">
+    <!-- 组件的重用 -->
+    <input-demo> </input-demo>
+    <input-demo> </input-demo>
+</div>
+//子组件
+Vue.component('input-demo',{
+    data: function(){
+        return {
+            count:0
+        }
+    },
+    template: '<input type="text" :value="count" >'
+})
+//父组件
+var vm = new Vue({
+    el: "#hello"
+})
+
+(2)注册组件的注意事项
+***1)data属性必须是一个函数，返回值必须是一个对象
+***2)template模板只能包含一个根元素  ！！！！！！！！！！！
+比如:  下面这样是不行的，包含了两个根元素
+template: "<button></button><button></button>"
+这样是可以的，只包含一个div的根元素
+template: "<div><button></button><button></button></div>"
+
+***3)当模板比较复杂的时候可以使用es6的模板字符串，当然，前提是浏览器要支持模板字符串
+例:
+template:
+`
+<div>
+    <button></button>
+    <button></button>
+</div>
+
+***4)组件的命名方式
+普通命名:
+Vue.component('demo',{...});
+短横线方式:  推荐！
+Vue.component('input-demo',{...});
+驼峰命名法:  注意这种方式命名的话，在调用的时候要改回短横线方式,且字母必须要小写
+Vue.component('inputDemo',{...});
+调用时: <input-demo></input-demo>
+
+***5)注意:全局组件里面可以套用全局组件
+例:
+// 组件的注册
+Vue.component('input-demo', {
+    data: function () {
+        return {
+            count: 0
+        }
+    },
+    template: `<div>0</div>`
+})
+Vue.component('input-demos', {
+    data: function () {
+        return {
+            count: 1
+        }
+    },
+    template: `<div><input-demo></input-demo>{{count}}</div>`
+})
+
+
+(3)局部组件注册
+在vue实例化对象里面添加一个components属性，在里面实现局部组件的注册，和filters以及directived差不多,调用方法和全局组件一样
+注意:局部组件只能在注册它的父组件里面使用
+components: {
+    "注册组件名称": {
+        data: {
+            function(){
+                return ...
+            }
+        }
+    },
+    template: "模板内容"
+}
+例:
+components: {
+    "input-demo": {
+        data:function() {
+            return {
+                count: 1
+            }
+        },
+        template: '<input type="text" :value="count" >'
+    },
+}
+
+2.父组件向子组件传值
+在component中引入props属性，props是一个数组，在其中定义接收父元素传入的值
+***props的命名规则: 在props里面使用驼峰命名法时，模板中需要使用短横线方式(如props里面一个变量名定义为getTime,则在父组件传值的时候要使用get-time传值)，字符串形式的模板没有这个限制规则(如template模板)，原因是由于html对大小写不敏感
+
+注意:  :title = "13" 传递到子组件的时候是数字13 而 title = "13"传递到子组件的时候是字符串"13"
+注意: props是单向传递数据的，子组件能够操作props里面的数据，比如props里面有一个数组arr,则子组件可以直接使用arr.push()向数组里面填数据
+
+例:
+<div id="app">
+    <cs1 :title="say"></cs1>
+</div>
+Vue.component("cs1",{
+    //接收父组件传来的title值，注意数组里面接收的变量的名称要和父元素传进来的变量名称一致
+    props: ['title'],
+    data:
+        function (){
+            return {
+                count: "我是一级"
+            }
+        }
+    ,
+    template: "<div>{{title}}</div>"
+})
+var vm = new Vue({
+    el: "#app",
+    data: {
+        say: "父组件是我"
+    }
+})
+
+3.子组件向父组件传值
+(1)子组件向父组件传递信息
+***子组件 使用 $emit(方法名) 自定义方法，父组件监听方法
+例:
+<div id="app">
+    <div :style="{color: fontSize}" aaa> 哈哈哈  </div>
+    <cs1 :title="say" @big = "handel" ></cs1>
+</div>
+Vue.component("cs1",{
+    template: `
+    <div>
+    <input type = 'button' @click = " $emit('big') " value = '切换颜色' >
+    </div>
+    `
+})
+ methods: {
+    handel: function (){
+        var arr = [1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
+        var color = "";
+        for(var i = 0; i < 6; i++) {
+            var num = Math.floor(Math.random()*arr.length);
+            color += arr[num];
+        }
+        this.fontSize = "#"+color;
+    }
+}
+(2)子组件向父组件传递参数
+***子组件使用 $emit('自定义方法名','传递的参数'), 父组件监听方法 @子组件定义的方法名 = "父组件执行的方法($event)" 此时的$event就是子组件传递过来的参数,固定写法
+例:
+<div id="app">
+    <div :style="{color: fontSize}" aaa> {{msg}}  </div>
+    <cs1 :title="say" @big = "handel($event)" ></cs1>
+</div>
+Vue.component("cs1",{
+    template: `
+    <div>
+        <input type = 'button' @click = " $emit('big','我是参数') " value = '切换颜色' >
+    </div>
+    `
+})
+methods: {
+    handel: function (msg){
+        this.msg = msg;
+    }
+}
+(3)子组件向父组件传递多个参数
+***子组件使用 $emit('自定义方法名','传递的参数1','传递的参数2'), 父组件监听方法 @子组件定义的方法名 = "arguments" 此时的arguments就是子组件传递过来的参数的集合,arguments是个伪数组
+例:
+template: `
+<div>
+    <input type = 'button' @click = " $emit('big','我是参数','我也是参数') " value = '切换颜色' >
+</div>
+`
+<cs1 :title="say" @big = "handel(arguments)" ></cs1>
+
+
+4.兄弟组件之间传值
+var hub = new Vue() 创建一个事件处理中心,使用 hub.$on("事件名",事件处理函数) 监听事件， 使用hub.$emit("事件名",参数) 触发事件，并传递参数，然后使用 hub.$off( "事件名")来销毁事件
+例:
+<div id="app">
+    <cs1></cs1>
+    <cs2></cs2>
+</div>
+//设置事件处理中心
+var hub = new Vue();
+
+//兄弟组件A
+Vue.component("cs1", {
+
+    data: function () {
+        return {
+            num: 0
+        }
+    },
+    template: `
+    <div>
+        <div>A的数值: {{num}} </div>
+        <input type = 'button' @click = " hubs " value = '触发B事件' >
+    </div>
+    `,
+    methods: {
+        hubs: function(){
+            console.log(this);
+
+            hub.$emit("B", 1)
+        }
+    },
+    mounted: function () {
+        hub.$on("A", (num) => {
+            console.log(this);
+
+            this.num += num;
+        });
+    }
+})
+
+//兄弟组件B
+Vue.component("cs2", {
+
+    data: function () {
+        return {
+            num: 0
+        }
+    },
+
+    template: `
+    <div>
+        <div>B的数值: {{num}} </div>
+        <input type = 'button' @click = " hubs " value = '触发A事件' >
+    </div>
+    `,
+    methods: {
+        hubs: function(){
+            hub.$emit("A",2);
+        }
+    },
+    mounted: function () {
+        hub.$on("B", (arr) => {
+            this.num += arr
+        });
+    }
+})
+
+var vm = new Vue({
+    el: "#app",
+    data: {
+        li: [1, 2, 3]
+    },
+    methods: {
+        handel: function (msg, fontSize) {
+            Vue.set(vm.li, 2, "hh");
+        },
+        //注销事件A
+        del: function (){
+            hub.$off("A");
+        }
+    }
+})
+
+5.组件插槽的基本用法
+子组件的template模板中使用 <slot></slot> 来接收 父组件 传递过来的参数，父组件传递的值为组件标签的 innerHTML,
+如果父组件没有传值过来，子组件 <slot>默认内容</slot>  里面有默认的内容则会显示默认的内容，如果父元素有传值则会将默认内容替换成父组件传递的值
+(1)普通插槽模板:
+<demo-s>父组件传递的值</demo-s>
+Vue.component("demoS",{
+    template: `
+        <div>
+            //<slot></slot>就相当于父元素传递的参数显示
+            <slot></slot>
+        </div>
+    `
+});
+例:
+<demo-s>我是父组件传递的值</demo-s>
+Vue.component("demoS",{
+    template: `
+        <div>
+            <slot>默认内容</slot>
+        </div>
+    `
+});
+
+结果模板输出为:
+<div>
+    父组件传递的值
+</div>
+
+(2) 具名插槽模板
+<demo-s>
+    <p slot = "x(子组件定义接收参数的名字)" >我是x</p>
+    <p slot = "y(子组件定义接收参数的名字)" >我是y</p>
+    <!-- template标签是vue提供的一个标签，往插槽添加多个标签  -->
+    <template slot = "c" >
+        <p>我是c</p>
+        <p>我也是c</p>
+    </template>
+</demo-s>
+Vue.component("demoS",{
+    template: `
+        <div>
+            <slot name="x(自定义名称)" ></slot>
+            <slot name="y(自定义名称)" ></slot>
+            <slot name="c(自定义名称)" ></slot>
+        </div>
+    `
+});
+
+(3)作用域插槽
+该插槽一般用于父组件对子组件进行加工
+Vue.component("demoS",{
+    props: ['arr'],
+    template: `
+        <div>
+            <ul>
+                <li v-for = "attr in arr" >
+                    <!-- item是自定义属性，attr是要传递的值,可以传递多个参数 -->
+                    <slot :item = "attr" :a = "我是传递的第二个参数" ></slot>
+                </li>
+            </ul>
+        </div>
+    `
+});
+<demo-s :arr = "fruits" >
+    <!-- slotProps是自定义名字，是一个对象，里面存储着子组件传递过来的参数,子组件传递多个参数的话，slotProps用一个数组接收多个参数-->
+    <template slot-scope = "slotProps" >
+        <strong v-if = "slotProps.item.id==3" > {{slotProps.item.name}}  </strong>
+        <span class="color" v-else >{{slotProps.item.name}}</span>
+    </template>
+</demo-s>
+data: {
+    fruits: [
+        {
+            id: 1,
+            name: "apple"
+        },
+        {
+            id: 2,
+            name: "banana"
+        },
+        {
+            id: 3,
+            name: "lemon"
+        }
+    ]
+
+}
+
+6.component标签
+将component标签替换成 is的值所代表的组件中template的内容
+<component is = "组件名称" > </component>
+
+例:
+<div id="app">
+    <component is = "cpt" > </component>
+</div>
+
+
+var vm = new Vue({
+    el: "#app",
+    component: {
+        cpt: {
+            template: "<h1> 我是替换的组件 </h1>"
+        }
+    }
+})

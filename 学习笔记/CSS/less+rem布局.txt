@@ -1,0 +1,128 @@
+rem是个相对单位: 相对于html元素 字体大小来设置的
+rem的优点就是可以修改html里面的文字大小来改变页面中元素大小来整体控制
+
+媒体查询:
+- 使用 @media查询，可以针对不同的媒体类型定义不同的样式
+- @media 可以针对不同的屏幕尺寸设置不同的样式
+- 当你重置浏览器大小的过程中，页面也会根据浏览器的宽度和高度重新渲染页面
+- 目前针对很多苹果手机、Android手机，平板等设备都用得到多媒体查询
+
+媒体查询书写规范:
+- 用 @media开头 注意@符号
+- mediatype  媒体类型
+值:
+all: 适用所有设备
+print: 用于打印机和打印预览
+screen: 适用于电脑屏幕，平板电脑，智能手机等
+
+- 关键字 and  not  only
+
+
+- 关键字 and  not  only
+- and：可以将多个媒体特性连接到一起，相当于“且”的意思。
+- not：排除某个媒体类型，相当于“非”的意思，可以省略。
+- only：指定某个特定的媒体类型，可以省略。
+
+
+- media feature 媒体特性必须有小括号包含
+
+
+语法！screen还有and 不能省略
+@media mediatype and|not|only (media feature) {
+    CSS-Code;
+}
+
+案例1: 页面970px>宽度>=540px时，执行下面的代码
+@media screen and (min-width:540px) and (max-width:969px) {
+    .div1 {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+    }
+}
+
+媒体查询书写规则:
+注意： 为了防止混乱，媒体查询我们要按照从小到大或者从大到小的顺序来写,但是我们最喜欢的还是从小到大来写，大的会覆盖小的样式，这样代码更简洁
+
+
+媒体查询，引入文件
+语法:
+根据屏幕尺寸导入不同的css文件
+<link rel="stylesheet" media = mediatype and|not|only (media feature) href="文件路径">
+
+案例1:
+ <link rel="stylesheet" media="screen and (min-width: 640px) " href="base.css">
+
+less！！！！！！！！
+
+维护css的弊端:
+CSS 是一门非程序式语言，没有变量、函数、SCOPE（作用域）等概念。
+- CSS 需要书写大量看似没有逻辑的代码，CSS 冗余度是比较高的。
+- 不方便维护及扩展，不利于复用。
+- CSS 没有很好的计算能力
+- 非前端开发工程师来讲，往往会因为缺少 CSS 编写经验而很难写出组织良好且易于维护的 CSS 代码项目。
+
+Less（LeanerStyle Sheets 的缩写）是一门 CSS扩展语言，也成为CSS预处理器
+
+html导入less文件:需要先导入xx.less文件，再导入less.xx.js文件
+less导入less文件:
+语法:
+@import "其他less文件名";
+
+
+
+
+less变量:
+语法:
+@变量名: 值;
+声明规范:
+- 必须有@为前缀
+- 不能包含特殊字符
+- 不能以数字开头
+- 大小写敏感
+案例1
+less文件:
+@color: green;
+body {
+    background-color: @color;
+}
+css文件:
+.div {
+  background-color: green;
+}
+
+
+
+less嵌套和伪元素写法:
+less文件:
+@color: green;
+.div {
+    background-color: @color;
+    .a {
+        &:hover {
+          background-color: #fff;
+        }
+      }
+}
+css文件:
+.div {
+  background-color: green;
+}
+.div .a:hover {
+  background-color: #fff;
+}
+
+less运算:
+注意：
+1.我们运算符的左右两侧必须敲一个空格隔开
+2.两个数参与运算如果只有一个数有单位，则最后结果就以这个单位为准
+3.两个数参与运算如果两个数都有单位，则最后结果以前面那个单位为准
+
+rem适配方案:
+1.让一些不能等比自适应的元素，达到当设备尺寸发生改变的时候，等比例适配当前设备。
+2.使用媒体查询根据不同设备按比例设置html的字体大小，然后页面元素使用rem做尺寸单位，当html字体大小变化元素尺寸也会发生变化，从而达到等比缩放的适配。
+
+技术方案：
+
+1.less+rem+媒体查询
+2.lflexible.js+rem(推荐)

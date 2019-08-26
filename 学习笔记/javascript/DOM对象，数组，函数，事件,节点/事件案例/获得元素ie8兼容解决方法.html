@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = function() {
+            var uu = document.getElementById('uu');
+            console.log(getfirstElementChild(uu));
+
+        }
+        //获得父元素第一个子元素
+        function getfirstElementChild(element) {
+            if(element.firstElementChild) {
+                return element.firstElementChild;
+            }
+            else {
+                //如果第一个节点不是标签节点，则向下查找，如果都没有标签节点则返回null
+                var node = element.firstChild;
+                while(node&&node.nodeType!=1) {
+                    node = node.nextSibling;
+                }
+                return node;
+            }
+        }
+         //获得父元素最后一个子元素
+         function getlasttElementChild(element) {
+            if(element.lastElementChild) {
+                return element.lastElementChild;
+            }
+            else {
+                var node = element.lastChild;
+                while(node&&node.nodeType!=1) {
+                    node = node.previousSibling;
+                }
+                return node;
+            }
+        }
+         //获得元素前一个子元素
+         function getpreviousElementChild(element) {
+            if(element.previousElementSibling) {
+                return element.previousElementSibling;
+            }
+            else {
+                var node = element;
+                while(node&&node.nodeType!=1) {
+                    node = node.previousSibling;
+                }
+                return node;
+            }
+        }
+         //获得元素后一个元素
+         function getnextElementChild(element) {
+            if(element.nextElementSibling) {
+                return element.nextElementSibling;
+            }
+            else {
+                var node = element;
+                while(node&&node.nodeType!=1) {
+                    node = node.nextSibling;
+                }
+                return node;
+            }
+        }
+    </script>
+</head>
+<body>
+    <ul id = "uu">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+    </ul>
+</body>
+</html>

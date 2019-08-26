@@ -1,0 +1,389 @@
+1.vue是一个渐进式的javascript框架，它是为数不多的国内框架
+
+2.vue使用步骤
+1、提供一个容器标签，用于填充数据
+2、导入vue.js库文件
+3、使用vue语法写功能
+4、将vue提供的数据插入到容器标签内
+
+3.vue基本语法
+el: 元素挂载位置，可以说DOM元素或者Css选择器
+data: 模型数据，值是一个对象
+var vm = new vue({
+el: "标签或选择器名称",
+data: {
+填充的数据
+}
+})
+例:
+<!-- 这是容器标签 -->
+<div id="hello">
+<!-- 这是vue提供的数据 -->
+{{msg}}
+</div>
+<!-- vue基础语法 -->
+var vm = new Vue({
+<!-- 元素挂载位置 -->
+el:"#add",
+<!-- 填充的数据 -->
+data: {
+
+msg: "hello world"
+}
+})
+
+4.插值法表达式用法:
+1、将数据填充到HTML标签里面
+2、插值表达式提供简单的算法运算
+例:
+<div id="add">{{1+2}}</div>
+div里面的值为3
+
+5.vue代码运行原理
+vue代码 ---------------->vue框架---------------->原生js代码
+
+6.前端页面渲染方式
+1、字符串拼接
+2、前端模板引擎 比如art-template模板
+3、vue特有的模板语法
+
+！！！重点
+7.vue模板语法
+1、插值表达式
+2、指令
+(1)指令的本质就是自定义属性(自定义属性就是标签内部自己定义的属性，一般规范是以 data- 名字定义)，vue自定义属性格式是以 v- 开头，比如v-cloak
+(2)v-cloak指令
+*用来解决插值表达式的闪动问题(闪动问题指得是浏览器是先将{{msg}}这样的差值表达式显示在页面上，然后再将其替换为对应的值，如果浏览器运行速度较慢时，用户将会看见{{msg}}差值表达式)
+*v-cloak的用法:
+提供样式，在插值表达式所在的标签里面添加v-cloak指令
+例:
+<style>
+[v-cloak] {
+    display: none
+}
+</style>
+<div v-cloak>{{1+2}}</div>
+
+*解决闪动问题的原理: 先把标签隐藏，在内存中替换好插入的值后再显示
+
+(3)数据指令 v-text,v-html,v-pre
+***v-text: 填充纯文本,可以解决闪动问题
+例:
+<div>{{msg}}</div> <!-- 可以改成 -->
+<div v-text='msg'></div>
+<!-- 注意！哪个标签里面添加v-text 他会将标签里面的所有内容都替换为 v-text='msg' 里面msg的内容 -->
+***v-html:
+填充html片段，它可以解析{{msg}}插值里面的html标签，注意该指令存在安全问题，网站渲染任意html是很危险的，容易导致xss攻击(跨站脚本攻击)，只在可信任的内容上使用v-html指令，永远不要用在用户提交的内容上，注意！和v-text一样，它会将标签里面的内容也全部替换成
+v-html="msg" 里面msg的内容
+***v-pre: 填充原始信息， 它可以跳过vue.js库编译，将{{msg}}原文输出出来
+注意！！在v-pre标签里面如果有标签带有 v-text='msg' 将会失效
+例
+<div v-pre>
+<!-- 此时的msg不会输出数据 -->
+<div v-text='msg'></div>
+</div>
+
+(4)数据响应式
+***数据响应式: 指得是数据的变化导致显示到页面的内容发生变化，例如之前的{{msg}}当msg数据发生改变时，读取的值也会发生改变
+***数据绑定: 数据绑定就是将数据填充到标签里面
+***v-once指令: 只编译一次，只有添加了这个指令的标签只在最开始的时候编译一次，后面就算传入的内容发生变化也不会改变页面显示的值
+
+(5)双向数据绑定
+***什么是双向数据绑定？ 在vue里面双向数据绑定就是修改标签里面的传入的值，其data里面对应的值也会发生改变，反之修改data里面的值，传入的值也会发生改变
+***v-model 双向数据绑定(运用事件), 只能在 input里面使用
+例: 修改了input里面的msg1,data里面的msg1也会发生改变，导致div里面的msg1也发生了改变
+<div id="hello">
+<input type="text" v-model='msg1'>
+<div v-cloak v-text='msg1'>{{msg1}}</div>
+</div>
+
+<script>
+var vm = new Vue({
+    el: "#hello",
+    data: {
+        msg1: "ss",
+    }
+})
+</script>
+！！！！！！！！！！！！！！！！
+v-model 实现原理
+<input type="text" :value='num1' @input='handle' id="num1">
+    methods: {
+    handle: function (event){
+    //event.target获取的是触发这个函数的DOM元素
+    this.num1 = event.target.value;
+    }
+}
+
+！！！！！！！！！！！！！！！！
+(6)MVVM设计思想
+***M(model) 提供数据
+***V(view) 数据展示
+***VM(view-model) 控制逻辑
+***
+V                                           VM                                              M
+                                            |
+view(DOM)--------------------------->DOM listeners(事件监听) ------------------------>model(普通的js对象，就是data对象)
+view(DOM)<---------------------------Data Bindings(数据绑定) -------------------------model(普通的js对象，就是data对象)
+                                            |
+                                            vue
+***
+
+3、事件绑定
+(1)事件绑定的基本语法
+***v-on:绑定的事件名称 = "绑定事件的处理方法"
+***简写: @绑定事件名称 = "绑定事件的处理方法"
+***vue方法一般创建在methods属性里面，计算方法放在computed属性里面
+例:
+<div id="hello">
+    <input type="text" v-model='num'>
+    <input type="button" v-on:click='say' value="点击1">
+    <input type="button" @click='say' value="点击2">
+    <input type="button" @click='say()' value="点击2">
+</div>
+<script>
+    var vm = new Vue({
+        el: "#hello",
+        data: {
+            num: 0,
+        },
+        methods: {
+            say: function () {
+                // 这里的this指得是vue创建的实例对象
+                this.num++;
+            }
+        }
+    })
+</script>
+(2)函数传参
+***
+函数传参分为两种方式:
+第一种是标签内部定义的事件为 @click = 'say' 类型，就是事件直接绑定函数名称，这时候默认会传递事件对象为函数的第一个参数
+在 methods 属性里面定义的方法接收event参数: function(event){}
+
+第二种是标签内部定义的事件为 @click = "say()" 类型，就是事件绑定函数调用，事件对象必须作为最后一个参数显示传递，并且事件对象的名称是固定的$event
+这样的函数传递方式为:
+标签内部:
+<input type="button" @click='say(123,450,$event)' value="点击2">
+methods属性里面:
+methods: {
+say: function (a,b,event){
+console.log(a),
+console.log(b),
+console.log(event),
+}
+}
+***
+
+(3)事件修饰符
+***.stop 阻止事件冒泡 例:@click.stop = '事件'
+***.prevent 阻止事件的默认行为 例如a标签的跳转事件 例: <a href="www.baidu.com" @click.prevent='事件'>跳转</a>
+
+(4)按键修饰符
+***.enter 点击enter 触发事件
+例: <input type="password" @keyup.enter='say' v-model='pwd'>
+***.delete 点击delete 触发事件
+例: <input type="text" v-model='num' @keyup.delete='clear'>
+(5)自定义修饰符
+***Vue.config.keyCodes.自定义修饰符名 = 按键对应的enter.keyCode值
+***<input type="text" v-model='num' @keyup.b='clear'>
+*** Vue.config.keyCodes.b = 66; //按下b键的时候触发
+
+4、属性绑定
+v-bind:属性名 = data里面的数据名
+简写: :属性名 = data里面的数据名
+
+5、样式绑定
+【注意：v-bind:class指令可以与普通的class特性共存】
+(1)class绑定对象样式方法
+例:
+<style>
+    .cs {
+        border: 1px solid #000;
+        height: 200px;
+        width: 200px;
+    }
+</style>
+
+<div :class=' {cs:isCs}'></div>
+<input type="button" @click='add' value="切换">
+<script>
+    methods: {
+        add: function () {
+            this.isCs = !this.isCs
+        }
+    }
+</script>
+
+(2)class绑定数组样式方法
+<style>
+    .cs {
+        border: 1px solid #000;
+        height: 200px;
+        width: 200px;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+
+<div :class='[cs,error]'></div>
+<input type="button" @click='add' value="切换">
+<script>
+    data: {
+        cs: 'cs',
+        error: 'error'
+    }
+</script>
+
+(3)class绑定对象和数组
+<div :class='[cs,{error:ifError}]'></div>
+
+data: {
+cs: 'cs',
+isError: true
+}
+
+(4)class绑定值简化操作
+//绑定数组简化操作
+<div :class='arr'></div>
+data: {
+arr:['article','error']
+}
+//绑定对象简化操作
+data: {
+obj: {
+    article: true,
+    error: true
+}
+}
+
+(5)style样式处理
+***对象语法:
+<div :style='{color: color,fontSize: size}'>dsds</div>
+data: {
+    color: 'red',
+    size: '18px',
+}
+对象语法简化:
+<div :style='all'>dsds</div>
+data: {
+    all:{
+        color: 'red',
+        size: '18px',
+    }
+}
+***数组语法:
+<div :style='[color,size]'>dsds</div>
+data: {
+    color:{
+        color: 'red'
+    },
+    size:{
+        size: '18px',
+    }
+}
+
+
+6、分支循环结构
+(1)分支结构用法
+***v-if v-else-if v-else v-show
+*** v-if v-else-if v-else
+例:
+<div v-if='score>90'>测试1</div>
+<div v-else-if='score<90'>测试1</div>
+<div v-else>测试3</div>
+data: {
+score: 90
+}
+*** v-show
+例:
+<div v-show='flog'>测试1</div>
+data: {
+flog: true
+}
+
+*** v-if 和 v-show的区别: v-if不显示的时候DOM元素是不存在的，v-show不显示的时候DOM元素存在但display设置为none隐藏了
+*** v-if运用在操作不频繁的地方，v-show可以运用在操作频繁的地方提高性能
+(2)循环结构用法
+======
+遍历数组
+======
+***第一种写法
+v-for = '自定义变量名 in 要遍历的数组名'
+例:
+<ul>
+    <li v-for="attr in fruits">{{attr}}</li>
+</ul>
+data: {
+fruits: ["苹果","香蕉"]
+}
+
+***第二种写法
+v-for = '自定义变量名 in 要遍历的数组名'
+例:
+<ul>
+    <li v-for="(attr,index) in fruits">{{attr}}</li>
+</ul>
+data: {
+fruits: ["苹果","香蕉"]
+}
+使用:key = '唯一值' 提高性能
+例:
+<li :key='index' v-for="(attr,index) in fruits">{{attr}}</li>
+***v-for 和 v-if配套使用
+例:
+//只显示数组下标为0的元素
+<li :key='index' v-if='index==0' v-for="(attr,index) in fruits">{{attr}}</li>
+
+
+=========
+遍历对象
+=========
+*** v-for = '(value (接收遍历属性对应的值),name(接收遍历属性名),index(接收遍历属性对应的下标) ) in 遍历的对象名'
+例:
+<li v-for = "(value,name,index) in people">{{value}}--{{name}}--{{index}}</li>
+data: {
+    people: {
+        name: "zhangsan",
+        age: "18"
+    }
+}
+输出结果为:
+zhangsan--name--0
+18--age--1
+*** 和v-if配套使用
+<li v-if = "name=='age'" v-for = "(value,name,index) in people">{{value}}--{{name}}--{{index}}</li>
+输出 属性名为age的那一项
+================================================
+v-for为啥不推荐和v-if一起使用?
+原因：v-for比v-if优先，如果每一次都需要遍历整个数组，将会影响速度，尤其是当之需要渲染很小一部分的时候。
+<ul>
+    <li
+        v-for="user in users"
+        v-if="user.isActive"
+        :key="user.id"
+    >
+        {{ user.name }}
+    </li>
+</ul>
+
+如上情况，即使100个user中之需要使用一个数据，也会循环整个数组。
+
+应该换成下面这种
+computed: {
+activeUsers: function () {
+    return this.users.filter(function (user) {
+            return user.isActive
+        })
+    }
+}
+<ul>
+    <li
+        v-for="user in activeUsers"
+        :key="user.id"
+    >
+        {{ user.name }}
+    </li>
+</ul>

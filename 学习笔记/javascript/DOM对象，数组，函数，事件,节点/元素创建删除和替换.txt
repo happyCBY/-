@@ -1,0 +1,58 @@
+元素创建的4种方式:
+1.document.write;
+2.document.innerHTML;
+3.document.createElement();
+4.var li = <li></li>
+ul.insertAdjacentHTML('beforeend',li);
+insertAdjacentHTML方法第一个参数值:  代表插入的位置
+beforebegiin:元素自身的前面
+afterbegin: 插入元素内部第一个子节点之前
+beforeend: 插入元素内部第一个子节点之后
+afterend: 元素自身后面
+insertAdjacentHTML方法第二个参数值: 代表插入的元素
+
+
+创建多个元素时，innerHTML用拼接字符串的效率比document.createElement低，innerHTML用数组方法添加元素比document.createElement高
+
+例1:
+for(var i = 0; i < 100;i++){
+    DOM.innerHTML += "<a></a>;
+}
+例2:
+var arr = [];
+for(var i = 0; i < 100;i++){
+    arr[i] = "<a></a>"l
+}
+DOM.innerHTML  = arr.join("");
+------------------------------
+1.document.write("<p></p>");
+缺点:如果在页面加载完毕后，用这种方式创建元素会把页面原来所有的内容全部删掉
+
+
+------------------------------
+2.对象名.innerHTML = "<p></p>"
+
+------------------------------
+3. var tag = document.createElement('标签名'); 创建一个标签  生孩子
+    obj.appendChild(tag); 将标签添加到父元素里面 上户口
+案例:
+var one = document.getElementById('one');
+var str = document.createElement('li');
+one.appendChild(str);
+
+4. 在某元素前插入一个元素
+var obj = document.getElementById('id');
+var tag1 = document.createElement('标签名');
+var tag2 = document.createElement('标签名');
+obj.appendChild(tag);
+obj.insertBefore(tag2,obj.firstElementChild);
+
+5. 替换元素
+obj.replaceChild(newchild,oldchild);
+newchild为新的元素，oldchild为要替换的元素
+
+6.删除元素
+obj.removeChild(oldchild);  用父亲删除
+oldchild为要删除的元素
+
+要删除的元素.remove(); 自己删除自己

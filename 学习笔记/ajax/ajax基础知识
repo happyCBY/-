@@ -1,0 +1,159 @@
+ajax中文名为 阿贾克斯
+它是浏览器提供的一套方法，主要功能是实现页面无刷新更新数据，提高用户的体验
+
+ajax应用场景
+1.页面上拉加载更多数据
+2.列表数据无刷新分页
+3.表单离开焦点数据验证
+4.搜索框提示文字下拉列表
+
+ajax的运行环境:
+ajax技术需要运行在网站的环境中才能生效
+
+===================================
+ajax使用方法:
+
+//创建ajax对象
+const xml = new XMLHttpRequest();
+
+//ajax以什么请求方法向哪里发送请求 第一个参数为请求参数 第二个参数为请求地址
+xml.open("get","localhost:3000/index");
+
+//发送请求
+xml.send()
+
+//接收服务器返回的数据  onload事件是当服务器返回的数据接收完毕后触发
+xml.onload(function(){
+    const str = JSON.parse(xml.responseText);
+    console.log(str);
+});
+
+注意！服务器响应返回的数据类型是字符串类型的json对象，客户端在接收完服务端发送的数据后一般将其通过JSON.parse(接收到字符串)转换为对象类型使用
+=================================
+ajax发送Get请求:
+使用字符串拼接的方法将需要传入的参数放到open方法的第二个参数里面
+如: xml.open("get","localhost:3000/index?name=张三");
+=================================
+ajax发送Post请求:
+post请求和get请求不同的地方是:
+1.post请求必须设置参数的设置类型
+2.post传入的参数形式和get一样但是传入的参数要放在 .send(post传入的参数) 里面
+//设置请求参数的数据类型 固定写法 post请求必须写
+xml.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+//发送post请求
+xml.send("name=张三&age=18");
+=================================
+ajax发送json类型的参数
+注意！
+1. 必须是post请求才能发送json类型的数据，而且表单提交也不能发送json类型的数据
+2. 如果post请求发送json类型的参数时要设置服务器端post接收参数的数据类型 如下:
+app.use(bodyparser.json({extended: false}));
+
+例:
+//发送json 类型的参数
+xml.open("post","http://localhost:3000/index");
+//设置请求参数的数据类型 post请求必须写 当前设置为json类型
+xml.setRequestHeader("Content-Type","application/json");
+//将params转成字符串类型
+let str_params = JSON.stringify(params);
+//发送post请求
+xml.send(str_params);
+
+=================================
+封装ajax函数
+function ajax (options) {
+	// 默认值
+	var defaults = {
+		type: 'get',
+		url: '',
+		async: true,
+		data: {},
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
+		success: function () {},
+		error: function () {}
+	}
+	// 使用用户传递的参数替换默认值参数
+	Object.assign(defaults, options);
+	// 创建ajax对象
+	var xhr = new XMLHttpRequest();
+	// 参数拼接变量
+	var params = '';
+	// 循环参数
+	for (var attr in defaults.data) {
+		// 参数拼接
+		params += attr + '=' + defaults.data[attr] + '&';
+		// 去掉参数中最后一个&
+		params = params.substr(0, params.length-1)
+	}
+	// 如果请求方式为get
+	if (defaults.type == 'get')  {
+		// 将参数拼接在url地址的后面
+		defaults.url += '?' + params;
+	}
+
+	// 配置ajax请求
+	xhr.open(defaults.type, defaults.url, defaults.async);
+	// 如果请求方式为post
+	if (defaults.type == 'post') {
+		// 设置请求头
+		xhr.setRequestHeader('Content-Type', defaults.header['Content-Type']);
+		// 如果想服务器端传递的参数类型为json
+		if (defaults.header['Content-Type'] == 'application/json') {
+			// 将json对象转换为json字符串
+			xhr.send(JSON.stringify(defaults.data))
+		}else {
+			// 发送请求
+			xhr.send(params);
+		}
+	} else {
+		xhr.send();
+	}
+	// 请求加载完成
+	xhr.onload = function () {
+		// 获取服务器端返回数据的类型
+		var contentType = xhr.getResponseHeader('content-type');
+		// 获取服务器端返回的响应数据
+		var responseText = xhr.responseText;
+		// 如果服务器端返回的数据是json数据类型
+		if (contentType.includes('application/json')) {
+			// 将json字符串转换为json对象
+			responseText = JSON.parse(responseText);
+		}
+		// 如果请求成功
+		if (xhr.status == 200) {
+			// 调用成功回调函数, 并且将服务器端返回的结果传递给成功回调函数
+			defaults.success(responseText, xhr);
+		} else {
+			// 调用失败回调函数并且将xhr对象传递给回调函数
+			defaults.error(responseText, xhr);
+		}
+	}
+	// 当网络中断时 触发onerror事件
+	xhr.onerror = function () {
+		// 调用失败回调函数并且将xhr对象传递给回调函数
+		defaults.error(xhr);
+	}
+}
+===============================
+ajax状态码:
+在创建ajax对象，配置ajax对象，发送请求，以及接收完服务器端响应的数据，这个过程中每一个步骤都会对应一个数值，这个数值就是ajax状态码
+
+0: 请求未初始化 (还没调用open)
+1: 请求已经建立，但是还没有发送 (还没有调用send)
+3: 请求去正在处理中，通常响应中有部分数据可以使用了
+4：响应已经完成，可以获取并使用服务器的响应
+
+ajax对象名.readyState 获取ajax状态码
+
+onreadustatechange 事件  能够兼容ie低版本浏览器
+当ajax状态码发生改变时触发该事件
+
+可以使用该事件来监听请求是否完成，来决定要不要接收服务器端响应的数据
+例:
+xml.onreadustatechange = function(){
+	if(xml.readyState==4) {
+		console.log(xml.responseText);
+	}
+}

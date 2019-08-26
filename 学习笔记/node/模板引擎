@@ -1,0 +1,131 @@
+模板引擎
+模板引擎可以让将数据和HTML模板更加友好的结合，省去繁琐的字符串拼接，使代码更加易于维护。
+高性能 JavaScript 模板引擎，使用`npm install art-template`命令下载。
+通过调用模板引擎提供的template函数，告知模板引擎将特定模板和特定数据进行拼接，最终返回拼接结果。
+例:
+//引入template模块
+const template = require("art-template");
+//引入path模块
+const path = require("path");
+//获得art文件的绝对路径
+const views = path.join(__dirname,"views","index.art");
+console.log(views);
+
+//template方法拼接字符串
+//第一个参数: 模板的路径
+//第二个参数: 要显示在模板的数据
+//返回拼接好的字符串
+const html = template(views,{
+    name:"张三",
+    age: 18
+})
+console.log(html);
+
+art-template支持两种语法：原始语法和标准语法
+标准语法让模板更加容易的读写    {{数据}}
+原始语法具有强大的逻辑处理能力  <%=数据%>
+
+
+在语法中还能进行简单的加减运算,括号里面输出的是运算后的值
+标准语法:
+{{a}}
+{{a ? b : c}}
+{{a+b}}
+原始语法:
+<%=a%>
+<%=a? b : c%>
+<%=a+b%>
+
+一般情况下，如果传入模板的数据变量中含有html标签时，模板引擎不会解析
+如果想要正常显示html标签，用下面的方法
+标准语法:
+{{@数据}}
+原文语法:
+<%-数据%>
+
+=============================
+条件判断
+模板中可以根据条件来确定显现哪块代码
+标准语法:
+{{if 条件}}...{{else}}...{{/if}} //如果条件成立，则显示 ... 内容
+{{if 条件1}}...{{else if 条件2}} ... {{/if}} //多条件判断
+原始语法:
+单条件查询
+<%
+    if(条件1) {
+%>
+        显示的内容
+<%
+    }
+%>
+多条件查询
+<%
+    if(条件1) {
+%>
+        显示的内容1
+<%
+    }else if(条件2){
+%>
+        显示的内容2
+<%
+    }
+%>
+===========================
+数据循环  只能循环数组
+标准语法:
+{{each 数据1}} {{$value}} {{/each}} //循环输出数据1中的内容，每次获得的内容都用{{$value}}输出
+原始语法:
+<%
+    for(var i = 0;i<数据1.length;i++){
+%>
+        <%=数据1[i]%>
+<%
+    }
+%>
+==========================
+子模板（抽离公共部分）
+========================
+{{include '模板路径'}}
+<% include ('模板路径') %>
+
+=========================
+模板继承
+=========================
+使用模板继承可以将网站的html骨架抽离到单独的文件中，其他的模板可以继承骨架文件
+例:
+骨架模板:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    {{block 'head'}} {{/block}}  //block为预留位置，继承者可以向预留位置填充内容，预留暗号为head
+</head>
+<body>
+    {{block 'content'}} {{/block}} //block为预留位置，继承者可以向预留位置填充内容,预留暗号为content
+</body>
+</html>
+继承者:
+{{extend './index.art'}}  //继承骨架模板
+{{block 'head'}} <style></style> {{/block}} //向block预留位置暗号匹配成功的地方填充内容
+{{block 'content'}}<p>我是继承者 {{/block}}  //向block预留位置暗号匹配成功的地方填充内容
+===================================
+向模板导入变量
+===================================
+向模板中导入变量 template.defaults.imports.变量名 = 变量值
+例:
+//获得时间模块
+const datas = require("dateformat");
+//导入模板变量
+template.defaults.imports.datas = datas;
+const html = template(views,{
+    time: new Date()
+}
+
+art文件:
+{{datas(time,"yyyy-mm-dd-hh-MM")}}
+
+
+模板配置:
+配置模板默认后缀
+template.defaults.extname = ".art";

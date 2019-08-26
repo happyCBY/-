@@ -1,0 +1,41 @@
+标签除了自带的属性例如: class id src等还可以自定义属性，以便js用来更好的获得对象
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        div[user] {
+            color: red;
+        }
+    </style>
+    <!-- <script>
+        var a = parseInt(prompt("请输入数字"));
+        switch (a) {
+            case 1:
+                console.log(a);
+            case 2:
+                console.log(a);
+            case 3:
+                console.log(a);
+            case 4:
+                console.log(a);
+            case 5:
+                console.log(a);
+            case 6:
+                console.log(a);
+            default:
+                console.log(7);
+        }
+    </script> -->
+</head>
+
+<body>
+    <div>sdad</div>
+    <div user="name">sdad</div>
+    <div>sdad</div>
+    <div>sdad</div>
+</body>
+
+</html>

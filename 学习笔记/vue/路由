@@ -1,0 +1,397 @@
+1.后端路由
+概念：根据不同的url用户请求，返回不同的内容
+本质: URL请求地址和服务器资源的对应关系
+
+*后端渲染，就是在后端先将字符串模板拼接好以后再返回到前端(存在性能问题)
+*Ajax前端渲染 (前端渲染提高性能，但是不知此前进和后退操作)
+*SPA(Single Page Application) 单页面应用程序,整个网站只有一个页面，内容的变化通过AJax局部更新实现，同时支持浏览器地址栏的前进和后退功能
+*SPA实现原理之一: 基于URL地址的hash(hash的变化会导致浏览器记录访问历史的变化、但是hash的变化不会触发新的URL请求)
+*实现SPA最重要就是前端路由
+
+
+
+2.前端路由
+概念：根据不同的用户事件，显示不同的页面内容
+本质: 用户事件和事件处理函数之间的对应关系
+
+(1)使用hash值简单实现前端路由
+
+<div id="app">
+    <!-- 改变浏览器地址栏的哈希值 -->
+    <a href="#/keji">科技</a>
+    <a href="#/shenghuo">生活</a>
+    <a href="#/caijing">财经</a>
+    <a href="#/ziran">自然</a>
+
+    <!-- 用来占位，替换不同的组件tamplate模板,is的值为模板的名称 -->
+    <component :is = "type" ></component>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+    //组件模板
+    const keji = {
+        template: `<h1>我是科技</h1>`
+    };
+    const shenghuo = {
+        template: `<h1>我是生活</h1>`
+    };
+    const caijing = {
+        template: `<h1>我是财经</h1>`
+    };
+    const ziran = {
+        template: `<h1>我是自然</h1>`
+    };
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            type: "keji"
+        },
+        //局部组件
+        components: {
+            keji,
+            shenghuo,
+            caijing,
+            ziran
+        }
+    })
+    //hash值改变的时候触发
+    window.onhashchange = function (){
+        var hash = location.hash;
+        switch(hash){
+            case "#/keji": vm.type = "keji";break;
+            case "#/shenghuo": vm.type = "shenghuo";break;
+            case "#/caijing": vm.type = "caijing";break;
+            case "#/ziran": vm.type = "ziran";break;
+        }
+    }
+</script>
+
+
+3.Vue Router 官方的路由管理器
+Vue Router 包含的功能有:
+*支持HTML5历史模式和hash模式
+*支持嵌套路由
+*支持路由参数
+*支持编程式路由
+*支持命名路由
+
+(1)路由的基本使用步骤
+*引入相关库文件  注意引用router文件前要先引用vue文件
+*添加路由连接
+*添加路由填充位
+*定义路由组件
+*配置路由规则并创建路由实例
+*将路由挂载到Vue的根实例中
+
+例:
+<!-- *引入相关库文件  -->
+<script src="../js/vue.js" ></script>
+<script src="../js/vue-router_3.0.2.js"></script>
+
+<div id="app">
+    <!-- 添加路由链接，解析时 router-link标签会被浏览器渲染成 a标签，to属性会被渲染为href属性并且to属性的值会默认加上 #/ 前缀 -->
+    <router-link to= "/keji" > 科技 </router-link>
+    <router-link to= "/shenghuo" > 生活 </router-link>
+    <router-link to= "/caijing" > 财经 </router-link>
+    <router-link to= "/ziran" > 自然 </router-link>
+    <!-- 路由填充位，将匹配到的组件模板显示在这里 -->
+    <router-view></router-view>
+</div>
+<script>
+//定义路由组件
+var keji = {
+    template: `<h1>我是科技</h1>`
+}
+var shenghuo = {
+    template: `<h1>我是生活</h1>`
+}
+var caijing = {
+    template: `<h1>我是财经</h1>`
+}
+var ziran = {
+    template: `<h1>我是自然</h1>`
+}
+
+//配置路由规则并创建路由实例
+var router = new VueRouter({
+    //routes就是路由规则数组
+    routes: [
+        //每个路由规则都是一个配置对象，必须包含path和component属性
+        //path为路由匹配的hash地址，compoonent为匹配的路由组件
+
+        {path: "/keji",component: keji},
+        {path: "/shenghuo",component: shenghuo},
+        {path: "/caijing",component: caijing},
+        {path: "/ziran",component: ziran}
+    ]
+})
+
+var vm = new Vue({
+    el: "#app",
+    //将路由挂载在vue实例对象里面
+    router: router
+})
+</script>
+
+(2)路由的重定向
+在路由规则里面添加一个 {path: "访问地址", redirect: "跳转的地址" }
+例:
+//配置路由规则并创建路由实例
+var router = new VueRouter({
+    //routes就是路由规则数组
+    routes: [
+        //每个路由规则都是一个配置对象，必须包含path和component属性
+        //path为路由匹配的hash地址，compoonent为匹配的路由组件
+        {path: "/",redirect: "/user" }
+        {path: "/keji",component: keji},
+        {path: "/shenghuo",component: shenghuo},
+        {path: "/caijing",component: caijing},
+        {path: "/ziran",component: ziran}
+    ]
+})
+(3)路由的嵌套
+在父组件的template下添加 子组件对应的 <router-link> </router-link> 和 <router-view></router-view>,然后在路由规则下，父组件的那个规则对象里面添加 children 属性，该属性是一个数组，在数组里面写入子组件对象，里面包含子组件的 path 和 component
+
+var tab1 = {
+    template: "<p>我是tab1</p>"
+}
+var tab2 = {
+    template: "<p>我是tab2</p>"
+}
+
+var ziran = {
+    template: `
+        <div>
+
+
+        </div>
+    `
+}
+
+
+var router = new VueRouter({
+    //routes就是路由规则数组
+    routes: [
+        //每个路由规则都是一个配置对象，必须包含path和component属性
+        //path为路由匹配的hash地址，compoonent为匹配的路由组件
+        {path: "/",redirect: "/user" }
+        {path: "/keji",component: keji},
+        {path: "/shenghuo",component: shenghuo},
+        {path: "/caijing",component: caijing},
+        {
+            path: "/ziran",
+            component: ziran,
+            children: [
+                {path:"/ziran/tab1",component: tab1}
+                {path:"/ziran/tab2",component: tab2}
+            ]
+        }
+    ]
+})
+
+(4)路由传参
+方法1: params传参 使用$route.params.传入的参数名
+例:
+链接:
+<router-link to="/kj/1">科技</router-link>
+模板
+var kj = {
+    template: `<h1>我是科技---id为 {{$route.params.id}}</h1>`
+}
+路由规则
+var router = new VueRouter({
+    routes: [
+        { path: "/kj:id", component: kj },
+    ]
+})
+
+
+方法二: 路由规则添加 props: true 属性，路由路径path: /kj/:id  模板使用 props: {"id"}接收传入的参数
+例:
+链接:
+<router-link to="/kj/1">科技</router-link>
+模板
+var kj = {
+    props: ["id"]
+    template: `<h1>我是科技---id为 {{id}}</h1>`
+}
+路由规则
+var router = new VueRouter({
+    routes: [
+        {
+            path: "/kj:id",
+            component: kj ,
+            props: true
+        }
+    ]
+})
+
+方法三: 在路由规则里面使用 props { x:"参数1", y: "参数2" } 模式传参， 在模板里面使用 props: ["x","y"]接收参数,注意这时候使用 path: /kj/:id  然后在 模板里面使用 props:["id"]就会失效, $route.params.id才能获得 id的值
+例:
+链接:
+<router-link to="/kj/1">科技</router-link>
+模板
+var kj = {
+    props: ["name","age"]
+    template: `<h1>我是科技---id为 {{$route.params.id}}</h1>`
+}
+路由规则
+var router = new VueRouter({
+    routes: [
+        {
+            path: "/kj:id",
+            component: kj ,
+            props: {name: "张三", age: "18"}
+        }
+    ]
+})
+方法四: 在规则里面使用 props: function(route){ return {name: "张三",age: "18", id:route.params.id}}，这样的话在模板里面就可以使用 props:["name","age","id"] 接收 props 和 /:id 传递过来的参数了
+例:
+<router-link to="/kj/1">科技</router-link>
+模板
+var kj = {
+    props: ["name","age","id"]
+    template: `<h1>我是科技---id为 {{id}}</h1>`
+}
+路由规则
+var router = new VueRouter({
+    routes: [
+        {
+            path: "/kj:id",
+            component: kj ,
+            props: function (route){
+                return {name: "张三", age: "18", id: route.params.id }
+            }
+        }
+    ]
+})
+
+(5)命名路由
+命名路由就是给路由起个名字, 在路由规则里面 添加name属性， 在router-link里面 使用:to = "{name: "路由规则起的名字",params:{id:18}}",其中params:{id:18} 这样的方式相当于之前的 /kj/18
+例:
+
+<router-link  :to = "{name: 'kj',params: {id: 18}}" >科技</router-link>
+var router = new VueRouter({
+    routes: [
+    {
+        path: "/kj/:id",
+        component: kj,
+        name: "kj",
+        props: {
+            name: "zs",
+            age: 18
+        }
+
+}]
+})
+
+(6)编程式路由
+声明式导航: 声明式路由就是由 点击a链接标签进行导航的方法
+例如 普通网页中的a标签  和vue 中的 router-link 标签
+编程式路由: 就是使用javascript形式api的方法实现导航
+例如 location.href
+
+常见的编程式导航:
+this.$router.go(1(前进)/-1(后退));  //相等于浏览器的前进后退按钮
+this.$router.push("hash地址");     //相当于a链接的跳转功能
+例:
+<div id="app">
+    <router-link  :to = "{name: 'kj'}" >科技</router-link>
+    <router-link  :to = "{name: 'zr'}" >自然</router-link>
+
+    <router-view></router-view>
+</div>
+
+<script>
+
+    var kj = {
+        template: `
+        <div>
+            <input type="button" value="后退" @click = "goback" >
+            <input type="button" value="前进" @click = "goon" >
+            <input type="button" value="跳转到自然页面" @click = "gozr" >
+            <h1>我是科技</h1>
+        </div>
+        `,
+        methods: {
+            goback: function (){
+                this.$router.go(-1);
+            },
+            goon: function (){
+                this.$router.go(1);
+            },
+            gozr: function(){
+                this.$router.push("/zr");
+            }
+        }
+    }
+    var zr = {
+        template: `
+        <div>
+            <input type="button" value="后退" @click = "goback" >
+            <input type="button" value="前进" @click = "goon" >
+            <h1> 我是自然 </h1>
+        </div>
+        `,
+        methods: {
+            goback: function (){
+                this.$router.go(-1);
+            },
+            goon: function (){
+                this.$router.go(1);
+            }
+        }
+    }
+
+
+    var router = new VueRouter({
+        routes: [
+            {
+                path: "/kj",
+                component: kj,
+                name: "kj"
+
+            },
+            {
+                path: "/zr",
+                component: zr,
+                name: "zr",
+            }
+        ]
+    });
+
+    var vm = new Vue({
+        el: "#app",
+        router
+    });
+</script>
+
+***router.push()方法的参数规则
+//字符串
+router.push("/home")  //跳转哈希地址为 /home 的页面
+//对象
+router.push({path: "/home"});
+//命名路由
+router.push({name: "/home",params:{id:18}})
+接收参数: 可以直接在模板里面使用 $route.params.id 接收
+或者 在/home路由里面定义 props: true 然后在模板里面 用 props: ["id"] 接收参数
+
+//带查询参数
+router.push({path: "/home"},query: {name: "张三",age:18})
+接收参数:  data.query里面存储的就是传递的query对象
+在/home的路由里面 添加 props: function( data ){ return data.query }
+
+
+
+========================
+导航守卫:  通过 router.beforeEach 来实现路由跳转拦截
+router.beforeEach((to, from, next) => {
+	//to 代表要访问的路径 to.path 获得访问的路径
+	//from 代表从哪个路径跳转 from.path 获得访问的路径
+	//next 代表放行 next() 直接放行  next('/login') 强制跳转
+	if (to.path === '/login') return next()
+	if (!window.sessionStorage.getItem('token')) return next('/login')
+	next()
+
+})

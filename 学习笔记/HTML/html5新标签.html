@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 在ie9及其他一些低版本浏览器中要转成display:block，因为在这些浏览器中这些新标签为行内元素 -->
+    <header> 语义:定义网页的头部，页眉</header>
+    <nav>语义:定义导航栏</nav>
+    <footer>语义: 定义页面底部</footer>
+    <article>语义: 定义文章</article>
+    <section>语义: 定义文档中的节,块级标签</section>
+    <aside>语义: 定义其所处内容之外的内容 侧边栏</aside>
+    <!-- datalist的用法: -->
+    <input type="text" list="star" />
+    <!-- input里面用list链接datalist -->
+    <datalist id="star">  <!-- datalist里面用id来实现和input的链接 -->
+        <option >郭富城</option>
+        <option >郭富</option>
+        <option >郭</option>
+        <option >郭富城郭富城</option>
+        <option>郭富城郭富</option>
+    </datalist>
+
+    <fieldset> 用来打包表单内相关的分组一般和legend搭配使用
+        <legend>用户登录</legend>
+        用户名: <input type="text"> 密 码: <input type="password">
+    </fieldset>
+    <form action="#">
+        <!-- 用来输入邮箱的格式 -->
+        <input type="email"><br />
+        <!-- 用来输入手机号码的格式 -->
+        <input type="tel"><br />
+        <!-- 输入url格式 -->
+        <input type="url"><br />
+        <!-- 输入数字格式 -->
+        <input type="number"><br />
+        <!-- 搜索框 -->
+        <input type="search"><br />
+        <!-- 自动拖动滑块 -->
+        <input type="range"><br />
+        <!-- 小时分钟 -->
+        <input type="time"><br />
+        <!-- 年月日 -->
+        <input type="date"><br />
+        <!-- 时间 -->
+        <input type="datetime"><br />
+        <!-- 月年 -->
+        <input type="month"><br />
+        <!-- 星期年 -->
+        <input type="week"><br />
+        <!-- 拾色器 -->
+        <input type="color"><br />
+        <input type="submit"><br />
+    </form>
+    <!-- embed引入网上的视频 -->
+    <embed src="" type="">
+    <!-- audio音频播放 -->
+    <!--
+        属性:autoplay  自动播放 (谷歌不支持自动播放)
+            controls  是否显示控件
+            loop  循环播放(默认播放一次)
+    -->
+    <!-- source做浏览器兼容处理 -->
+    <audio autoplay="autoplay" controls loop>
+        <!-- source的作用是从上往下 先看第一个source 如果支持就执行 不支持就执行下面那个 -->
+        <source src="韩红,林俊杰 - 飞云之下.mp3" type="audio/mpeg" />
+        <source src="韩红,林俊杰 - 飞云之下.ogg" type="audio/ogg" />
+        对不起你的浏览器太低级了，不支持播放音频
+    </audio>
+
+    <!-- vidio视频播放 -->
+    <!--
+        属性:autoplay  自动播放 (谷歌不支持自动播放)
+            controls  是否显示控件
+            loop  循环播放(默认播放一次)
+            muted  静音播放,添加后谷歌可以自动播放
+            poster  加载等待的画面图片
+            width 设置播放窗口宽度
+            height 设置播放窗口的高度
+            video.duration是视频的时长
+    -->
+    <video controls loop width="200" height="200" muted poster="xxx/xxx.jjpg" >
+        <source src="韩红,林俊杰 - 飞云之下.mp4" />
+        <source src="韩红,林俊杰 - 飞云之下.ogg" />
+        你的浏览器不支持视频播放
+    </video>
+</body>
+
+</html>
