@@ -1,0 +1,194 @@
+npm i react react-dom 
+
+在入口文件中引入
+import React from 'react'
+import ReactDom from 'react-dom'
+
+//创建虚拟Dom
+//参数1 创建元素的类型 字符串 表示元素的名称
+//参数2 是一个对象或者null 表示当前这个dom元素的属性
+//参数3 子节点 (包括其他 虚拟dom 获取 文本子节点)
+//参数n 其他子节点
+const h2 = React.createElement( 'h2', null, 'ss' )
+const h1 = React.createElement( 'h1', {id: 'dd'}, '哈哈',h2 )
+
+//将虚拟dom渲染到页面上
+//参数1 要渲染的虚拟dom
+//参数2 要加载到哪个容器上
+ReactDom.render(h1,document.getElementById('app'))
+
+
+
+jsx语法： 在js中使用html代码，注意jsx里面的html代码要遵守xml代码规范
+
+const  a = "123"
+//类似Vue的插值表达式
+cosnt b = <div> {a} </div>
+//添加属性的也是直接用{ 插入的值 }
+const c = <input title={a} >
+//添加数组
+方法1:
+const
+
+ReactDom.render(b,document.getElementById('app'))
+
+=================================
+在react中创建组件：
+第一种方法：
+注意： 组件名首字母必须大写，props为传递的参数,props是只读的
+function Happy(props) {
+    return <div> {props.name}{props.age} </div>
+}
+
+const people = {
+    name: '小红',
+    age: 18
+}
+
+const test = <Happy name = { people.name } age = {people.age} ></Happy>
+//还可以这么写,两者是等价的
+const test = <Happy {...people} ></Happy>
+ReactDom.render(test,document.getElementById('app'))
+
+==================================
+
+class的基本用法：
+
+class Animal {
+    //构造器，每个类都有一个构筑器，没手动写也有一个隐藏的构造器
+    //每次new一个实例，都会优先执行构造器的代码
+    //实例属性不能通过 类名加 . 的方式访问，只能通过实例对象访问
+    //注意1 在类里面只能写 构造器(实例属性)、静态方法、实例方法和静态属性
+    //注意2 class内部还是用原来的配方(function括号里面)实现，就相当于给function包装了下，让程序员用的更加顺手，就是一颗语法糖
+    constructor(name,age){
+        this.name = name
+        this.age = age
+    }
+    //静态属性，new出来的实例不能使用 . 的方式访问，只能通过 class类 . 的方式访问
+    static info = '我是静态属性'
+    //实例方法
+    jiao(){
+        console.log('')
+    }
+    //静态方法
+    static run() {
+        console.log('我在跑')
+    }
+}
+
+继承：extends关键字
+class Perple(){
+    constructor(){
+        this.name = name
+        this.age = age
+    }
+}
+class American extends People {
+    constructor(name,age){
+       //这里的super就相当于父类的构造器，必须写在 this.  的前面
+       super(name,age)
+       //这里覆盖了父类构造器的属性
+       this.name = name 
+       this.age = age+1
+    }
+}
+
+=========================
+在react中创建组件：
+第二种方法： 使用es6的 class
+class Test extends React.Component {
+    //必须要有render方法
+    render(){
+        //this.props.name = 'ss' 这样写是不行的
+        //注意！不论是function还是class创建 react组件  props都是只读的，不能修改
+
+        //必须要有返回值
+        //传递参数这里不用 props 接收，直接调用即可
+        return <div>我是class创建的组件 {this.props.name} </div>
+    }
+}
+//注意这里的 <Test> </Test>相当于 Test的一个实例对象
+const test = <div> <Test name = {'哈哈'} ></Test> </div>
+
+ReactDom.render(test,document.getElementById('app'))
+
+==================================
+两种创建组件方式对比：
+1.使用 class创建的组件有自己的私有数据和生命周期函数，使用function创建的组件只有props，没有私有数据和生命周期函数
+例：
+class demo extends React.Component{
+    constructor(){
+        super()
+        //这里的state就相当于 vue 的data
+        this.state = {
+            msg: '我是私有数据'
+        }
+    }
+}
+
+===============================
+在jsx语法中使用for循环渲染列表
+function Children (props){
+    return <div><h1>{props.name}</h1><p>{props.age}</p></div>
+}
+class For extends React.Component{
+    constructor(){
+        super()
+        this.state = {
+            list: [
+                {
+                    name:'张三',
+                    age: 18
+                },
+                {
+                    name:'张三',
+                    age: 18
+                },
+                {
+                    name:'张三',
+                    age: 18
+                },
+                {
+                    name:'张三',
+                    age: 18
+                },
+                {
+                    name:'张三',
+                    age: 18
+                }
+            ]
+        }
+    }
+    render(){
+        return <div> 
+        //注意！在jsx里的标签添加style属性不行直接 style='color:red' 而是应该写成这样 style = {{ color: 'red' }} ，
+        //注意！{{}} 外面一层{} 是代表要写js语法了，里面一层{} 代表样式的对象
+        <h1 style = {{color:'red'}} >我是列表</h1>
+        {this.state.list.map((item)=>{
+            return <Children {...item} ></Children>
+        })} </div>
+    }
+} 
+注意！添加样式类名时要用 className = "类名"，不能直接使用class="类名" 因为 class是关键字
+
+==========================
+react中的样式模块化：
+配置文件 
+roles: [ 
+    {
+        test: /\.css$/,
+        //这里的?modules就是让css实现模块化
+        //模块化只对类选在和id选择器有效
+        use: ['style-loader','css-loader?modules'],
+    }
+]
+例：
+import objcss from '@/css/index.css'
+render(){
+    return <div>
+        //这里的className的值将是一堆随机字符串
+        <h1 className={objcss.colorRed} >我是列表</h1>
+            {this.state.list.map((item)=>{
+        return <Children {...item} ></Children>
+    })} </div>
+}

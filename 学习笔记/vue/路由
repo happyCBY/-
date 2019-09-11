@@ -164,11 +164,9 @@ var ziran = {
     template: `
         <div>
 
-
         </div>
     `
 }
-
 
 var router = new VueRouter({
     //routes就是路由规则数组

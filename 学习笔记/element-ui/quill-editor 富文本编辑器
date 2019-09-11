@@ -1,6 +1,6 @@
 下载：
-vue-quill-editor
-npm install quill
+npm install -s vue-quill-editor 
+npm install -s quill
 在main.js中进行引入
 
 import VueQuillEditor from 'vue-quill-editor'

@@ -9,13 +9,36 @@
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="app" @click = 'dd' >
+        <button ref = 'aa' >dsdssds</button>
+        <demo ref="ss" >
+            dsds
+        </demo>
+    </div>
     <script src="js/vue.js"></script>
-    <script>
+    <!-- <script>
         var vm = new Vue({
             template:`<div>hello vue</div>`,
         }).$mount('#app')
         console.log(Vue.compile(`<div>hello vue</div>`).render)
+    </script> -->
+    <script>
+        const demo = {
+            template: `<div ref = "dd" ><span>dsds</span></div>`,
+        }
+
+        var vm = new Vue({
+            el: '#app',
+            components: {
+                demo
+            },
+            methods: {
+                dd(){
+                    console.log(this.$refs.ss);
+                    this.$refs.aa.innerText = 'aaa'
+                }
+            }
+        })
     </script>
 </body>
 

@@ -75,6 +75,10 @@ github 远程仓库
 git push 远程仓库地址 要推送的分支名称
 //给远程仓库起别名
 git remote add 要取的别名 远程仓库地址
+//查看远程仓库信息
+git remote show
+//查看远程仓库具体信息
+git remote show 远程仓库名
 //记住推送地址及分支
 git push -u 取的别名 要推送的分支名称
 //记住推送地址后只要使用git push就可以直接将分支推送到远程仓库中

@@ -372,3 +372,25 @@ var vm = new Vue({
         }
     }
 })
+
+============================
+ref和$refs的使用
+<div id="app">
+  <h1>{{ message }}</h1>
+  <button ref="myButton" @click="clickedButton">点击偶</button>
+</div>
+let app = new Vue({
+    el: '#app',
+    data () {
+        return {
+            message: 'Hi!大漠'
+        }
+    },
+    methods: {
+        clickedButton: function () {
+            console.log(this.$refs)
+            this.$refs.myButton.innerText = this.message
+        }
+    }
+})
+点击按钮之后，按钮的文本将更改变“Hi,!大漠”：

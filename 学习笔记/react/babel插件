@@ -1,0 +1,31 @@
+安装 babel插件
+cnpm i babel-core babel-loader babel-plugin-transform-runtime -D
+//安装语法插件 babel-preset-react能够识别jsx语法
+cnpm i babel-preset-env babel-preset-stage-0 babel-preset-react -D
+
+在webpack.config.js中配置modeles
+module: {
+    //第三方匹配规则
+    roles: [
+        {
+            //匹配文件
+            test: /\.js|.jsx$/,
+            //加载器
+            use: 'babel-loader',
+            //排除项 排除 node_modules 文件
+            exclude: /node_modules/
+        },
+        {   //css加载器
+            test: /\.css$/,
+            use: ['style-loader','css-loader']
+        }
+    ]
+}
+
+在.babelrc文件里面配置插件
+{
+    //语法规则
+    "presets": ["env","stage-0","react"],
+    //插件
+    "plugins": ["transform-runtime"]
+}
