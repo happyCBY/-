@@ -1,0 +1,23 @@
+ span {
+    font-family: "微软雅黑";
+    font-size: 22px;
+    line-height: 50px;
+
+    /*关键代码*/
+    background-image: -webkit-linear-gradient(left, #147B96, #E6D205 25%, #147B96 50%, #E6D205 75%, #147B96);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-background-size: 200% 100%;
+    -webkit-animation: masked-animation 4s infinite linear;
+}
+
+/*关键代码*/
+@-webkit-keyframes masked-animation {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}

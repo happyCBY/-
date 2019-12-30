@@ -1,0 +1,6 @@
+可以在main.js里面注册全局异常处理
+Vue.config.errorHandler = function (err, vm, info) {
+  console.log(err);
+  console.log(vm);
+  console.log(info);
+}

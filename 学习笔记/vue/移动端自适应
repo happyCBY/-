@@ -2,8 +2,8 @@
 下载npm i vant -S
 
 下载这两个插件
-npm i postcss-pxtorem -S
-npm i amfe-flexible -S
+npm i postcss-pxtorem -S ( sudo cnpm i postcss-pxtorem -S )
+npm i amfe-flexible -S  ( sudo cnpm i amfe-flexible -S )
 
 =====================================
 在vue-config.js中对CSS做配置：
@@ -34,3 +34,34 @@ import 'amfe-flexible';
 
 =============================
 重启服务就可以使用了
+
+
+
+============================
+单独使用 postcss-pxtorem 实现自适应
+
+npm i postcss-pxtorem -S
+创建一个新的js文件 加入：
+(function (window, document) {
+  function resize () {
+    var ww = window.innerWidth
+    console.log(ww);
+    console.log(window.screen.width);
+    
+    if (ww > window.screen.width) {
+      //requestAnimationFrame h5版本新增定时器
+      window.requestAnimationFrame(resize)
+    } else {
+      if (ww > 750) {
+        ww = 750
+      }
+      document.documentElement.style.fontSize = ww * 100 / 750 + 'px'
+    }
+  }
+
+  resize()
+
+  window.addEventListener('resize', resize)
+})(window, document)
+
+在项目入口文件中 import 这个新的js文件

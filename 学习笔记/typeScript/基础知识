@@ -1,0 +1,25 @@
+全局下载
+npm install -g typescript 
+查看版本号  tsc -v
+
+=============
+基础例子：
+创建一个index.ts文件
+里面输入： 
+const hello : string = "Hello World!"
+console.log(hello)
+在该文件夹中打开终端，以上代码首先通过 tsc 命令编译：
+tsc index.ts
+在该文件夹下生成一个index.js文件,如果已经有该文件则更新文件的内容
+=============
+tsc 常用编译参数：
+	
+--out
+编译多个文件并合并到一个输出的文件
+例： 将tsc index.ts demo.ts里面的内容合并到 index.js文件里面
+tsc index.ts demo.ts --out index.js
+
+--removeComments 
+输出的文件不包含原ts文件的注释内容
+
+===============

@@ -1,0 +1,45 @@
+下载npm i vue-i18n -S
+
+在main中导入 
+import Vuei18n from 'vue-i18n'
+Vue.use(Vuei18n)
+const i18n = new VueI18n({
+  locale: "zh",
+  messages: {
+    "zh": require('@/languages/zh.json'), //中文语言包路径
+    "en": require('@/languages/en.json')  //英文语言包路径
+  }
+})
+
+new Vue({
+  router,
+  i18n,
+  render: h => h(App)
+}).$mount('#app')
+
+zh.json文件：
+{
+    "common": {
+        "china":"中国"
+    }
+}
+en.jsin文件：
+{
+    "common": {
+        "china":"China"
+    }
+}
+
+使用：
+html部分
+<div class="bg" >
+    <div id="down">{{$t('common.china')}}</div>
+    <div @click="changeLang" > 切换语言 </div>
+</div>
+
+js部分
+changeLang(){
+    //改变 语言
+    var lang = this.$i18n.locale==="zh"? "en":"zh"
+    this.$i18n.locale = lang
+},

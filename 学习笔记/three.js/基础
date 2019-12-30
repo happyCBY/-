@@ -1,0 +1,52 @@
+https://www.techbrood.com/threejs/docs/
+引入three.js文件
+cdn： <script src="https://cdn.bootcss.com/three.js/92/three.js"></script>
+
+1、创建一个场景
+var scene = new THREE.Scene();
+2、创建一个相机
+这里使用远景相机，类似于人眼
+构造器
+PerspectiveCamera( fov, aspect, near, far )
+（1）视角fov：这个最难理解,我的理解是,眼睛睁开的角度,即,视角的大小,如果设置为0,相当你闭上眼睛了,所以什么也看不到,如果为180,那么可以认为你的视界很广阔,但是在180度的时候，往往物体很小，因为他在你的整个可视区域中的比例变小了。
+（2）近平面near：这个呢，表示你近处的裁面的距离。补充一下，也可以认为是眼睛距离近处的距离，假设为10米远，请不要设置为负值，Three.js就傻了,不知道怎么算了,
+（3）远平面far：这个呢，表示你远处的裁面,
+（4）纵横比aspect：实际窗口的纵横比，即宽度除以高度。这个值越大，说明你宽度越大，那么你可能看的是宽银幕电影了，如果这个值小于1，那么可能你看到的是如下的图中的LED屏幕了。
+
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+3.创建渲染器
+var renderer = new THREE.WebGLRenderer();
+设置渲染器的大小为窗口的内宽度，也就是内容区的宽度
+renderer.setSize(window.innerWidth, window.innerHeight);
+将元素挂在body下面 
+document.body.appendChild(renderer.domElement);
+
+4、添加一个物体
+这里添加的是一个几何体
+var geometry = new THREE.CubeGeometry(1,1,1); 
+CubeGeometry构造器：
+CubeGeometry(width, height, depth, segmentsWidth, segmentsHeight, segmentsDepth, materials, sides)
+width：立方体x轴的长度
+height：立方体y轴的长度
+depth：立方体z轴的深度，也就是长度
+
+
+5、渲染
+renderer.render(scene, camera);
+render 构造器：
+render( scene, camera, renderTarget, forceClear )
+scene：前面定义的场景
+camera：前面定义的相机
+renderTarget：渲染的目标，默认是渲染到前面定义的render变量中
+forceClear：每次绘制之前都将画布的内容给清除，即使自动清除标志autoClear为false，也会清除。
+
+6、渲染循环
+function render() {
+    cube.rotation.x += 0.1;
+    cube.rotation.y += 0.1;
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+}
+requestAnimationFrame 这个函数就是让浏览器去执行一次参数中的函数这样通过上面render中调用requestAnimationFrame()函数，
+requestAnimationFrame()函数又让rander()再执行一次，就形成了我们通常所说的游戏循环了。

@@ -108,6 +108,9 @@ E:nth-of-type(n) : 指定类型E的第n个
 注意:
 nth-child(2n+1)这样是可以的
 nth-child(1+2n)这样是不行的，不能数字打头
+:not(:nth-child(2n)) 排除偶数，
+:not(:nth-child(4n)) 排除4的倍数
+
 
 
 目标伪类选择器:设置当前选中目标的样式

@@ -242,7 +242,7 @@ v-bind:属性名 = data里面的数据名
 
 data: {
 cs: 'cs',
-isError: true
+ifError: true
 }
 
 (4)class绑定值简化操作

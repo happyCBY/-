@@ -1,0 +1,17 @@
+下载 npm i html2canvas -S
+导入 import html2canvas from 'html2canvas'
+html2canvas(document.body,{
+    //设置海报的大小和宽度
+    height: document.body.offsetHeight+50,
+    width: document.body.offsetWidth,
+    //海报里面的图片是否允许跨域，即访问外链图片
+    allowTaint: true,
+}).then(canvas=>{
+//将画布转化为base64的图片,图片跨域时无法转化为图片(暂未解决这个问题)
+var url = canvas.toDataURL();
+console.log(canvas);
+//将画布添加到body元素上
+document.body.appendChild(canvas)
+});
+
+https://www.jianshu.com/p/ab4a93eb0884  html2canvas的坑

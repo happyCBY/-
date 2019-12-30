@@ -1,0 +1,134 @@
+首先
+下载 svg-sprite-loader
+npm i svg-sprite-loader -S
+其次
+配置vue.config.js ( vue-cli3 )
+
+这里注意路径问题,跟后面创建的文件位置有关
+const path = require('path')
+function resolve (dir) {
+  console.log(path.join(__dirname, dir))
+  return path.join(__dirname, dir)
+}
+
+module.exports = {
+
+  chainWebpack: config=>{
+     config.module
+      .rule('svg')
+      .exclude.add(resolve('src/icons'))
+      .end()
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('src/icons'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icon-[name]'
+      })
+      .end()
+  },
+}
+
+再次
+在components创建SvgIcon文件夹 里面放一个index.vue文件
+文件内容：
+
+<template>
+  <svg :class="svgClass" aria-hidden="true">
+    <use :xlink:href="iconName" />
+  </svg>
+</template>
+
+<script>
+export default {
+  name: 'SvgIcon',
+  props: {
+    iconClass: {
+      type: String,
+      required: true
+    },
+    className: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    iconName () {
+      return `#icon-${this.iconClass}`
+    },
+    svgClass () {
+      if (this.className) {
+        console.log('svg-icon ' + this.className)
+        return 'svg-icon ' + this.className
+      } else {
+        return 'svg-icon'
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.svg-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+</style>
+
+再再次
+在src文件夹下面创一个icons文件夹
+icons文件夹下面新建一个 svg文件夹和 index.js文件还有 svgo.yml文件
+svg文件夹存放你网上下载的 .svg文件
+index.js文件内容：
+
+import Vue from 'vue'
+import SvgIcon from '@/components/SvgIcon'// svg组件
+
+// register globally
+Vue.component('svg-icon', SvgIcon)
+
+const req = require.context('./svg', false, /\.svg$/)
+
+const requireAll = requireContext => requireContext.keys().map(requireContext)
+console.log(requireAll)
+requireAll(req)
+
+svgo.yml文件内容
+# replace default config
+
+# multipass: true
+# full: true
+
+plugins:
+
+  # - name
+  #
+  # or:
+  # - name: false
+  # - name: true
+  #
+  # or:
+  # - name:
+  #     param1: 1
+  #     param2: 2
+
+- removeAttrs:
+    attrs:
+      - 'fill'
+      - 'fill-rule'
+
+最后在main.js文件中导入
+import './icons/index'
+
+
+然后在要使用的地方使用
+ <svg-icon icon-class="user" />
+ 大功告成
+
+

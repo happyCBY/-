@@ -172,7 +172,7 @@ class For extends React.Component{
 注意！添加样式类名时要用 className = "类名"，不能直接使用class="类名" 因为 class是关键字
 
 ==========================
-react中的样式模块化：
+react中的css样式模块化：
 配置文件 
 roles: [ 
     {
@@ -192,3 +192,79 @@ render(){
         return <Children {...item} ></Children>
     })} </div>
 }
+
+注意： 如果css文件里面使用 :global(类选择器|id选择器)的话，也不会被模块话，而是全局生效
+
+==================================
+react中的事件处理
+例：
+render() {
+    return (
+      <div>
+        //这里的事件要遵循 驼峰命名法 如 onMouseOver onMouseOut 等
+        <button onClick={ this.jiao } ></button>
+      </div>
+    )
+}
+
+事件传参：
+render() {
+    return (
+      <div>
+        //这里的事件要遵循 驼峰命名法 如 onMouseOver onMouseOut 等
+        <button onClick={ ()=>{this.jiao('我是参数')} } ></button>
+      </div>
+    )
+}
+
+jiao = (props)=>{
+    console.log(props)
+}
+
+============================
+使用 react 中的 setState 方法改变state的数据,注意 setState 方法是异步的
+第一个参数是要修改的state的属性，第二个参数是回调函数，当修改完后执行
+this.setState({},callback)
+例：
+constructor(){
+    super()
+    this.state = {
+        msg: '我要改变了'
+    }
+}
+render() {
+return (
+    <div>
+        <div>{this.state.msg}</div>
+        <button onClick={ ()=>{this.jiao()} } >改变这个div的值</button>
+    </div>
+)
+}
+
+jiao = ()=>{
+    this.setState({
+        msg: '我被改变了'
+    },function(){
+        console.log(this.state.msg)
+    })
+}
+
+==================
+react中实现双向数据绑定：
+在input中使用 setState 和 onChange事件 
+方法一： 使用 e 获取input 的 value 值，在onChange中 更新state的值
+<input type="text" value={this.state.msg} onChange={(e)=>{this.changeMsg(e)}}  />
+changeMsg = (e)=>{
+    this.setState({
+        msg: e.target.value
+    })  
+}
+方法二： 使用 ref 获取input的value值
+<input type="text" value={this.state.msg} onChange={()=>{this.changeMsg()}} ref='txt' />
+changeMsg = ()=>{
+    this.setState({
+        msg: this.refs.txt.value
+    })  
+}
+===================
+react的生命周期函数：

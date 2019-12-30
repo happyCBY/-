@@ -1,0 +1,54 @@
+1.any: 任意类型 var any:any= "任意类型"
+2.number: 数字类型 var num:number= "数字类型"
+3.string: 字符串类型 var hello:any= "字符串类型"
+4.boolean: 任意布尔类型类型 var flag:boolean= "布尔类型"
+
+5.Array: 数组类型 var arr:Array<number|any|string|boolean>= "数组类型"
+或者写成 var arr:number[] = "数组类型" 这样的形式
+
+6.元组：各元素的类型不必相同，对应位置的类型需要相同。
+let x: [string, number];
+x = ['Runoob', 1];    // 运行正常
+x = [1, 'Runoob'];    // 报错
+console.log(x[0]);    // 输出 Runoob
+
+7.枚举类型：enum
+枚举类型用于定义数值集合。
+enum Color {Red, Green, Blue};
+let c: Color = Color.Blue;
+console.log(c);    // 输出 2
+
+8.void 用于标识方法返回值的类型，表示该方法没有返回值。
+function hello(): void {
+    alert("Hello Runoob");
+}
+
+9. null 表示对象值缺失。
+
+10. undefined 用于初始化变量为一个未定义的值
+
+11. never 是其它类型（包括 null 和 undefined）的子类型，代表从不会出现的值。
+
+注意！如果声明的一个变量可能存在多个类型 则用 var test:number|string|boolean|... = "..." 这样的形式
+
+==============
+类型断言
+类型断言可以用来手动指定一个值的类型，即允许变量从一种类型更改为另一种类型。
+语法格式： <类型>值 或者  值 as 类型
+例：
+var str = '1' 
+var str2:number = <number> <any> str   //str、str2 是 string 类型
+//或者 var str2:number = str as number|any
+
+console.log(str2)
+
+
+类型推断
+当类型没有给出时，TypeScript 编译器利用类型推断来推断类型。
+
+如果由于缺乏声明而不能推断出类型，那么它的类型被视作默认的动态 any 类型。
+例：
+var flag = true
+flag = "12"  //报错，因为在第一行代码已经推断出了flag是boolean类型，后面再赋值string类型数据时就会报错
+
+=============

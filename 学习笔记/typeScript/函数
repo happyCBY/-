@@ -1,0 +1,128 @@
+函数传参
+function a(a:number,b:string){}
+===============
+可选参数和默认参数
+在 TypeScript 函数里，如果我们定义了参数，则我们必须传入这些参数，除非将这些参数设置为可选，可选参数使用问号标识 ？。
+例：
+//这里firstName是必传参数，lastName是默认参数 默认参数可以不传
+function buildName(firstName: string, lastName?: string) {
+    if (lastName)
+        return firstName + " " + lastName;
+    else
+        return firstName;
+}
+注意！可选参数必须跟在必需参数后面。 如果上例我们想让 firstName 是可选的，lastName 必选，那么就要调整它们的位置，把 firstName 放在后面。
+如果都是可选参数就没关系。
+
+
+我们也可以设置参数的默认值，这样在调用函数的时候，如果不传入该参数的值，则使用默认参数，语法格式为：
+function calculate_discount(price:number,rate:number = 0.50) { 
+    var discount = price * rate; 
+    console.log("计算结果: ",discount); 
+} 
+calculate_discount(1000) 
+calculate_discount(1000,0.30)
+===============
+剩余参数
+有一种情况，我们不知道要向函数传入多少个参数，这时候我们就可以使用剩余参数来定义。
+剩余参数语法允许我们将一个不确定数量的参数作为一个数组传入。
+例：
+function buildName(firstName: string, ...restOfName: string[]) {
+    return firstName + " " + restOfName.join(" ");
+}
+let employeeName = buildName("Joseph", "Samuel", "Lucas", "MacKinzie");
+
+
+===============
+TypeScript 接口
+接口是一系列抽象方法的声明，是一些方法特征的集合，这些方法都应该是抽象的，需要由具体的类去实现，然后第三方就可以通过这组抽象方法调用，让具体的类执行具体的方法。
+TypeScript 接口定义如下：
+interface interface_name { 
+}
+例：
+interface IPerson { 
+    firstName:string, 
+    lastName:string, 
+    sayHi: ()=>string 
+} 
+ 
+var customer:IPerson = { 
+    firstName:"Tom",
+    lastName:"Hanks", 
+    sayHi: ():string =>{return "Hi there"} 
+} 
+ 
+console.log("Customer 对象 ") 
+console.log(customer.firstName) 
+console.log(customer.lastName) 
+console.log(customer.sayHi())  
+ 
+var employee:IPerson = { 
+    firstName:"Jim",
+    lastName:"Blakes", 
+    sayHi: ():string =>{return "Hello!!!"} 
+} 
+ 
+console.log("Employee  对象 ") 
+console.log(employee.firstName) 
+console.log(employee.lastName)
+需要注意接口不能转换为 JavaScript。 它只是 TypeScript 的一部分。
+
+上面代码转化为javascript代码为：
+var customer = {
+    firstName: "Tom",
+    lastName: "Hanks",
+    sayHi: function () { return "Hi there"; }
+};
+console.log("Customer 对象 ");
+console.log(customer.firstName);
+console.log(customer.lastName);
+console.log(customer.sayHi());
+var employee = {
+    firstName: "Jim",
+    lastName: "Blakes",
+    sayHi: function () { return "Hello!!!"; }
+};
+console.log("Employee  对象 ");
+console.log(employee.firstName);
+console.log(employee.lastName);
+==================
+接口继承
+接口继承就是说接口可以通过其他接口来扩展自己。
+
+Typescript 允许接口继承多个接口。
+
+继承使用关键字 extends。
+
+单接口继承语法格式：
+Child_interface_name extends super_interface_name
+例：
+interface Person { 
+   age:number 
+} 
+ 
+interface Musician extends Person { 
+   instrument:string 
+} 
+ 
+var drummer = <Musician>{}; 
+drummer.age = 27 
+drummer.instrument = "Drums" 
+console.log("年龄:  "+drummer.age)
+console.log("喜欢的乐器:  "+drummer.instrument)
+
+
+多接口继承语法格式：
+Child_interface_name extends super_interface1_name, super_interface2_name,…,super_interfaceN_name
+例：
+interface IParent1 { 
+    v1:number 
+} 
+ 
+interface IParent2 { 
+    v2:number 
+} 
+ 
+interface Child extends IParent1, IParent2 { } 
+var Iobj:Child = { v1:12, v2:23} 
+console.log("value 1: "+Iobj.v1+" value 2: "+Iobj.v2)

@@ -1,0 +1,19 @@
+
+globalComponents.js文件
+//引入
+import BaseComponentA from '@/components/BaseComponentA'
+import BaseComponentB from '@/components/BaseComponentA'
+ 
+const plugins = {
+   //注册
+    install(Vue) {
+        Vue.component('BaseComponentA',BaseComponentA); //第一个参数:组件名称,第二个参数:要注册的组件
+        Vue.component('BaseComponentB',BaseComponentB);
+    }
+}
+export default plugins;
+
+然后在main.js中
+
+import GL_Component from '@/utils/globalComponents'
+Vue.use(GL_Component);

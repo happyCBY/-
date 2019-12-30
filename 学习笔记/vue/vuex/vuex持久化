@@ -1,0 +1,12 @@
+下载vuex-persistedstate
+npm i vuex-persistedstate -S
+
+
+在vuex初始化的时候引入
+
+import persistedState from 'vuex-persistedstate'
+export default new Vuex.Store({
+    // ...
+    plugins: [persistedState()]
+})
+vuex-persistedstate默认使用localStorage来固化数据，一些特殊情况要如何应对呢？（如：safari的无痕浏览模式）

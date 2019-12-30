@@ -1,5 +1,7 @@
 ### 5.0移动端常见布局
 
+
+
 移动端单独制作
 
 - 流式布局（百分比布局）
@@ -24,6 +26,10 @@
 
 
 display: flex 伸缩布局模式
+
+参考网址
+http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
+
 min-width:xpx  宽缩到xpx时不再缩放
 max-width:xxp 宽放大到xpx时不再放大
 flex-direction: row|column;

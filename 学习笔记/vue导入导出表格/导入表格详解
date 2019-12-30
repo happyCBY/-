@@ -1,0 +1,30 @@
+使用封装的uploadExcel组件
+使用时注意要下载 xlsx 插件
+组件传递两个方法 on-success 和 before-upload
+on-success 是导入成功时的函数 回调参数 data里面包含了导入的表格的数据和 头部，以此来制作表格
+before-upload 是将要导入时执行的方法，可以省略
+
+例：
+<upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" />
+<el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
+    <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" />
+</el-table>
+
+beforeUpload(file) {
+    // 判断文件是否小于一M，如果小于则允许上传
+    const isLt1M = file.size / 1024 / 1024 < 1
+
+    if (isLt1M) {
+    return true
+    }
+
+    this.$message({
+    message: 'Please do not upload files larger than 1Mb in size.',
+    type: 'warning'
+    })
+    return false
+},
+handleSuccess({ results, header }) {
+    this.tableData = results
+    this.tableHeader = header
+}

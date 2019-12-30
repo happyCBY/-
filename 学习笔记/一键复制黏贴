@@ -1,0 +1,25 @@
+方法一： 原生js  不兼容ios
+DOM.select()
+document.execCommand("copy"); 
+
+方法二：
+使用 clipboard 插件
+下载 npm i clipboard -S
+在要使用的文件中导入
+import clipboard from 'clipboard'
+
+例：
+js：
+//.invitation_button获得点击复制的按钮
+var copyBtn = new clipboard(".invitation_button")
+copyBtn.on("success", function(e) {
+    alert('复制成功')
+});
+copyBtn.on("error", function(e) {
+    alert('复制失败')
+});
+html:
+
+ <input type="text" id="text" v-model="copyValue" readonly value="我是要复制的值" />
+ 注意！ 这里的 data-clipboard-target="#text" 可以让你获取到 id为text的 input框的value值
+ <button class="invitation_button" ref="copy" @click="getInvitationLink" data-clipboard-target="#text">点击获取邀请链接</button>

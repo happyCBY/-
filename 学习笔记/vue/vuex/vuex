@@ -134,3 +134,19 @@ this.$store.dispatch('方法名'，参数)
 调用 getter 中的属性
 this.$store.getter.属性名
 ...mapGetters(['属性名']) this.属性名
+
+
+
+======================
+自动导入同文件夹中./modules里面的文件
+const modulesFiles = require.context('./modules', true, /\.js$/)
+
+// you do not need `import app from './modules/app'`
+// it will auto require all vuex module from modules file
+const modules = modulesFiles.keys().reduce((modules, modulePath) => {
+  // set './app.js' => 'app'
+  const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
+  const value = modulesFiles(modulePath)
+  modules[moduleName] = value.default
+  return modules
+}, {})

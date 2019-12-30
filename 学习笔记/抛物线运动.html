@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+            margin: 0;
+        }
+
+        div {
+            position: relative;
+            width: 400px;
+            height: 200px;
+            margin: 200px auto;
+        }
+
+        .div1 {
+            left: 0;
+            top: 0;
+        }
+
+        .div2 {
+            left: 200px;
+            top: -80px;
+        }
+
+        .div3 {
+            left: 400px;
+            top: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <p class="div1"></p>
+        <p class="div2"></p>
+        <p class="div3"></p>
+    </div>
+
+
+    <script>
+
+        function runCar(begin, end, top) {
+            var qiu = document.createElement('div')
+            var bdqiu = document.createElement('div')
+            qiu.style.width = '20px'
+            qiu.style.height = '20px'
+            qiu.style.backgroundColor = 'red'
+            qiu.style.position = 'absolute'
+            qiu.style.left = begin.x + 'px'
+            qiu.style.top = begin.y + 'px'
+            qiu.style.borderRadius = '50%'
+            document.documentElement.appendChild(qiu)
+            var a = ((begin.y - end.y) * (begin.x - top.x) - (begin.y - top.y) * (begin.x - end.x)) / ((begin.x * begin.x - end.x * end.x) * (begin.x - top.x) - (begin.x * begin.x - top.x * top.x) * (begin.x - end.x));
+            var b = ((end.y - begin.y) - a * (end.x * end.x - begin.x * begin.x)) / (end.x - begin.x);
+            var c = begin.y - a * begin.x * begin.x - b * begin.x;
+            var x = begin.x
+            var y = begin.y
+            var flag = true
+            var timer = setInterval(function () {
+                //根据抛物线方程 确定抛物线轨迹坐标
+                x = x + 3;
+                y = a * x * x + b * x + c;
+                if (x > end.x) {
+                    clearInterval(timer);
+                    qiu.remove();
+                    // shopNum.innerHTML = ++num;
+                } else {
+                    if (flag) {
+                        flag = false
+                    }
+
+                    qiu.style.left = x + "px";
+                    qiu.style.top = y + "px";
+                }
+            }, 10)
+        }
+        runCar(
+            {
+                x: 0,
+                y: 200,
+            },
+            {
+                x: 400,
+                y: 200
+            },
+            {
+                x: 200,
+                y: 0
+            }
+        )
+    </script>
+</body>
+
+</html>

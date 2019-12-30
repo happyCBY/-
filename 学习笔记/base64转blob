@@ -1,0 +1,19 @@
+    //code是传入的base64字符串
+    base64ToBlob(code) {
+      let parts = code.split(";base64,");
+      let contentType = parts[0].split(":")[1];
+      //base64解码
+      let raw = window.atob(parts[1]);
+      let rawLength = raw.length;
+      console.log(parts);
+      console.log(contentType);
+      console.log(raw);
+      console.log(rawLength);
+      //生成一个 rawLength 长度的无符号整型数组
+      let uInt8Array = new Uint8Array(rawLength);
+
+      for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+      }
+      return new Blob([uInt8Array], { type: contentType });
+    }

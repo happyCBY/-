@@ -1,0 +1,67 @@
+				
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>	
+		<input type="file" onchange="show(this)"/>
+		<img id="img" src="">
+		<script>		
+			function show(file){	
+				var reader = new FileReader();	// 实例化一个FileReader对象，用于读取文件
+				var img = document.getElementById('img'); 	// 获取要显示图片的标签
+				
+				//读取File对象的数据
+				reader.onload = function(evt){
+					img.width  =  "80";
+			        img.height =  "80";
+					img.src = evt.target.result;
+				}
+			    reader.readAsDataURL(file.files[0]);
+			}	
+		</script>	
+	</body>
+
+</html>
+
+
+vue版：
+<template>
+  <div>
+      <input type="file" id="file" @change="imgChange($event)" >
+      <img :src="imgSrc" id="img" alt="">
+  </div>
+</template>
+
+<script>
+export default {
+    data () {
+        return {
+            imgSrc: ''
+        }
+    },
+    methods:{
+        imgChange(e){
+            var that=this
+            var file = e.target.files[0]
+            let reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = function(e){
+                console.log(e);
+                img.width  =  "800";
+			        img.height =  "800";
+                that.imgSrc = e.target.result
+                console.log(that.imgSrc);
+                
+            }
+        }
+    }
+}
+</script>
+
+<style>
+
+</style>

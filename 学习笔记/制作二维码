@@ -1,0 +1,37 @@
+使用QRCode.js 制作二维码
+
+安装 npm install qrcodejs2 --save
+页面使用 import QRCode from "qrcodejs2"; // 引入qrcode
+
+html代码
+ <div id="qrcode"></div>
+
+ js代码
+
+qrCode() {
+this.$nextTick(function() {
+document.getElementById("qrcode").innerHTML = "";
+let qrcode = new QRCode("qrcode", {
+    width: 132,
+    height: 132,
+    text: "此处为二维码的内容", // 二维码内容 也可以放url
+    //text: "https://www.jianshu.com/p/2458f7672fbc", 
+    colorDark: "#000",
+    colorLight: "#fff"
+});
+});
+//qrcode._oDrawing._elImage.currentSrc可以获得生成二维码图片的src,要注意异步
+
+
+css代码
+
+#qrcode {
+  display: inline-block;
+  img {
+    width: 132px;
+    height: 132px;
+    background-color: #fff; //设置白色背景色
+    padding: 6px; // 利用padding的特性，挤出白边
+  }
+}
+

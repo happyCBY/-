@@ -9,6 +9,7 @@ normal:将文本字体样式为正常的字体
 italic:将文本字体样式改为斜体
 oblique:指定文本字体样式为倾斜的字体，人为的倾斜字体
 
+text-transform: capitalize(首字母大写) | uppercase(大写) | lowercase(小写) | none(无)
 
 text-align:调节水平对齐方式 值:left(左对齐)center(居中对齐)right(右对齐)
 vertical-align:调节垂直对齐方式(对于块级元素无效)，默认基线对齐(一般设置顶线对齐去除img和盒子底线的缝隙)

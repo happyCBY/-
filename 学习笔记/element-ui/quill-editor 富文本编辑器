@@ -1,6 +1,6 @@
 下载：
-npm install -s vue-quill-editor 
-npm install -s quill
+npm install vue-quill-editor -S
+npm install quill -S
 在main.js中进行引入
 
 import VueQuillEditor from 'vue-quill-editor'
@@ -17,6 +17,7 @@ Vue.use(VueQuillEditor)
     //在富文本编辑器中写入的文本
     v-model="content" 
     ref="myQuillEditor" 
+    //富文本主题
     :options="editorOption" 
     @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
     @change="onEditorChange($event)">
